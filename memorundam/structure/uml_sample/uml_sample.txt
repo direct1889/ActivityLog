@@ -1,0 +1,46 @@
+@startuml uml_sample.png
+
+title <size:18> Class Structure </size>
+
+package Package1 {
+ClassA -- ClassB : relation{--}
+ClassC <-- ClassD : reference{,--}
+Super <|-- Sub : expand{<|--}
+Interface <|.. SubClass : implement{<|..}
+Object <.. Dependent : dependency{<..}
+}
+
+package Package2 {
+Parent o-- Child : composite{o--}
+Outline *-- Piece : component{*--}
+ClassK --- ClassM : long relation{---}
+ClassK -up- ClassN : above relation{-up-}
+ClassK -left- ClassB : left relation{-left-}
+}
+
+class ClassK {
+	-m_privateField
+	#ProtectedMethod()
+	~InternalMethod()
+	+PublicMethod()
+}
+
+interface Interface {
+	{abstract} void AbstractMethod()
+	{static} float StaticMethod(ClassK arg)
+}
+
+enum Enum {
+	Hoge
+	Hage
+	Hige
+	Huge
+	Hege
+}
+
+note right of Enum : This Enum is ...
+
+STDImplementable ()-- SubClass
+
+@enduml
+
