@@ -70,7 +70,8 @@ namespace du.App {
             Test.DebugAssistant.Instance.gameObject.SetActive(m_isDebugMode);
             di.RxTouchInput.Initialize();
 
-            Cursor.visible = m_mcmode == MouseCursorMode.Visible;
+            // Cursor.visible = m_mcmode == MouseCursorMode.Visible;
+            Cursor.visible = m_mcmode != MouseCursorMode.Invisible;
             // OSUI.Instance.SetEnable(m_mcmode == MouseCursorMode.Detail);
 
             // DG.Tweening.DOTween.Init();

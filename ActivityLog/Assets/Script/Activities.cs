@@ -1,51 +1,41 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Main {
+namespace Main.Graph {
 
-	public interface IActivities {
-
+	public interface IActivitiesCylinder {
 		Vector2 RectSize { get; }
-
 	}
 
-	public class Activities : MonoBehaviour, IActivities {
+	public interface IActivities {
+		void CreateBlock(IActivity act);
+	}
 
+	public class Activities : MonoBehaviour, IActivitiesCylinder, IActivities {
 
 		#region field
-
 		RectTransform m_rect = null;
 		[SerializeField]GameObject m_prefActBlock = null;
-
 		#endregion
 
 		#region getter
-
 		public Vector2 RectSize { get { return m_rect.sizeDelta; } }
-
 		#endregion
 
 		#region mono
-
-		void Start() {
+		void Awake() {
 			m_rect = GetComponent<RectTransform>();
 		}
-
-		void Update() { }
-
 		#endregion
 
-		#region private
-
-		private void CreateBlock(IActivity act) {
+		#region public
+		public void CreateBlock(IActivity act) {
 			GameObject goBlock = Instantiate(m_prefActBlock);
 			goBlock.transform.SetParent(transform);
 			IActivityBlock block = goBlock.GetComponent<ActivityBlock>();
-			block.Initialize(act);
+			block.Initialize(act, this);
 		}
-
 		#endregion
-
 
 	}
 

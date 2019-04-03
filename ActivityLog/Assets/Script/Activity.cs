@@ -1,6 +1,6 @@
 ﻿
 
-namespace Main {
+namespace Main.Graph {
 
 	public interface IActivity {
 
@@ -16,24 +16,21 @@ namespace Main {
 
 	public class Activity : IActivity {
 
-		//! ----- property -----
-
+		#region property
 		public IProject	Project		{ get; private set; }
 		public string	Name		{ get; private set; }
 		public bool		IsEffective	{ get; private set; }
 		public float	BeginTime	{ get; private set; }
 		public float?	EndTime		{ get; private set; }
 		public float	Duration	{ get { return (float)EndTime - BeginTime; } }
+		#endregion
 
-
-		//! ----- ctor/dtor -----
-
+		#region ctor/dtor
 		public Activity(string proj, string name) {
 			Project = ProjectsDB.At(proj);
 			Name = name;
 			IsEffective = Project.IsEffectiveDefault;
 		}
-
 		public Activity(string proj, string name, float begin) : this(proj, name, begin, null) {}
 
 		public Activity(string proj, string name, float begin, float? end) {
@@ -43,10 +40,7 @@ namespace Main {
 			BeginTime = begin;
 			EndTime = end;
 		}
-
-
-		//! ----- public -----
-
+		#endregion
 
 	}
 

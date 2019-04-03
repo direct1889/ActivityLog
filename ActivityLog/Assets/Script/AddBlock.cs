@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Main {
+namespace Main.Graph {
 
 	public class AddBlock : MonoBehaviour {
 
@@ -9,12 +9,20 @@ namespace Main {
 		[SerializeField] InputField m_IFActivity = null;
 		[SerializeField] InputField m_IFDuration = null;
 
-		[SerializeField] IActivities m_acts = null;
+		[SerializeField] Activities m_acts = null;
 
 		public void CreateActivity() {
-			Activity act = new Activity(m_IFProject.text, m_IFActivity.text);
-			string log = string.Format("{0}::{1} at {2}", m_IFProject.text, m_IFActivity.text, m_IFDuration.text);
-			Debug.Log(log);
+			if (m_IFProject.text == "") {
+				CreateActivityBlockImpl("TestSample", "Test", "25");
+			}
+			else {
+				CreateActivityBlockImpl(m_IFProject.text, m_IFActivity.text, m_IFDuration.text);
+			}
+		}
+		private void CreateActivityBlockImpl(string proj, string actName, string duration) {
+			IActivity act = new Activity(proj, actName, 0f, float.Parse(duration));
+			m_acts.CreateBlock(act);
+			du.Test.LLog.Debug.Log($"{proj}::{actName} at {duration}");
 		}
 
 	}

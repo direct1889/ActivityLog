@@ -4,7 +4,7 @@ using UnityEngine;
 using UColor = UnityEngine.Color;
 using System.Linq;
 
-namespace Main {
+namespace Main.Graph {
 
 
 	public interface IProject {
@@ -45,17 +45,18 @@ namespace Main {
 		//! ----- static -----
 
 		//! 登録済みProject一覧の生成
-		public static void Initialized() {
+		public static void Initialize() {
 			if (s_projects == null) {
 				s_projects = new List<IProject>{
 					new Project("pabulum", new UColor(1f, 0.9f, 0.7f), true),
 					new Project("MisLead", new UColor(0.7f, 0.7f, 1f), true),
 					new Project("Dev::Unity", new UColor(0.7f, 1f, 0.8f), true),
 					new Project("Unproductive", new UColor(0.5f, 0.2f, 0.2f), false),
+					new Project("TestSample", new UColor(0.2f, 0.2f, 0.2f), false),
 				};
-				Debug.Log("Initialized ProjectsDB.");
+				du.Test.LLog.MBoot.Log("Initialized ProjectsDB.");
 			}
-			else { Debug.Log("ProjectsDB has already initialized."); }
+			else { du.Test.LLog.MBoot.Log("ProjectsDB has already initialized."); }
 		}
 
 		//! Projectを名前から引く

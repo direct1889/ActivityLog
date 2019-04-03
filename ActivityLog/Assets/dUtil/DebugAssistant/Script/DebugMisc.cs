@@ -39,9 +39,7 @@ namespace du.Test {
 				Add("BOOT"   , isActiveDefault);
 				Add("DEBUG"  , isActiveDefault);
 				Add("MISC"   , isActiveDefault);
-				Add("IA:BOOT", isActiveDefault);
-				Add("IA:IACT", isActiveDefault);
-				Add("EXPLOG" , isActiveDefault);
+				Add("MAIN:BOOT", isActiveDefault);
 				LLog.Boot.Log("LayeredLog booted.");
 			}
 		}
@@ -65,9 +63,7 @@ namespace du.Test {
 		public static ILogLayer Boot { get { return LayeredLog.At("BOOT"); } }
 		public static ILogLayer Debug { get { return LayeredLog.At("DEBUG"); } }
 		public static ILogLayer Misc { get { return LayeredLog.At("MISC"); } }
-		public static ILogLayer IABoot { get { return LayeredLog.At("IA:BOOT"); } }
-		public static ILogLayer IAct { get { return LayeredLog.At("IA:IACT"); } }
-		public static ILogLayer ExpLog { get { return LayeredLog.At("EXPLOG"); } }
+		public static ILogLayer MBoot { get { return LayeredLog.At("MAIN:BOOT"); } }
 	}
 
 	public static class Log {

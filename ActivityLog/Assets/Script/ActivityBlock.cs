@@ -2,52 +2,46 @@
 using UImage = UnityEngine.UI.Image;
 
 
-namespace Main {
+namespace Main.Graph {
 
 	public interface IActivityBlock {
-
-		void Initialize(IActivity act);
-
+		void Initialize(IActivity act, IActivitiesCylinder cylinder);
 	}
 
 	public class ActivityBlock : MonoBehaviour, IActivityBlock {
 
-		//! ----- field -----
-
+		#region field
 		UImage m_image = null;
 		RectTransform m_rect = null;
-		IActivities m_sylinder = null;
+		IActivitiesCylinder m_cylinder = null;
+		#endregion
 
-
-		//! ----- property -----
-
+		#region property
 		public IActivity Act { get; private set; }
+		#endregion
 
-
-		//! ----- mono -----
-
-		void Start() {
+		#region mono
+		private void Awake() {
 			gameObject.SetActive(false);
 			m_image = GetComponent<UImage>();
 			m_rect = GetComponent<RectTransform>();
 		}
+		#endregion
 
-		void Update() { }
-
-
-		//! ----- public -----
-
-		public void Initialize(IActivity act) {
-			if (gameObject.activeSelf) {
+		#region public
+		public void Initialize(IActivity act, IActivitiesCylinder cylinder) {
+			if (!gameObject.activeSelf) {
 				Act = act;
 				m_image.color = act.Project.Color;
-				var size = m_sylinder.RectSize;
+				m_cylinder = cylinder;
+				var size = m_cylinder.RectSize;
 				size.y *= Act.Duration / (24f * 60f);
 				m_rect.sizeDelta = size;
 				gameObject.SetActive(true);
 				Debug.Log("ActivityBlock initialized.");
 			}
 		}
+		#endregion
 
 	}
 
