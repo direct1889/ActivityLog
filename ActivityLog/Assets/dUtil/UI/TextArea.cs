@@ -26,6 +26,7 @@ namespace du.dui {
 
 		#region mono
 		private void Awake() {
+			Debug.LogError("TextArea awake.");
 			m_textUI = transform.GetComponentInChildren<UGUI.Text>();
 			m_rect = GetComponent<RectTransform>();
 		}

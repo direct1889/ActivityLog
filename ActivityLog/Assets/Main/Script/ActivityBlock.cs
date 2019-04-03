@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UImage = UnityEngine.UI.Image;
+using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
 
 
@@ -12,9 +12,10 @@ namespace Main.Graph {
 	public class ActivityBlock : MonoBehaviour, IActivityBlock {
 
 		#region field
-		UImage m_image = null;
+		UGUI.Image m_image = null;
 		RecTHorStretchBottom m_recT = null;
 		IActivitiesCylinder m_cylinder = null;
+		[SerializeField] UGUI.Text m_text = null;
 		#endregion
 
 		#region property
@@ -23,8 +24,9 @@ namespace Main.Graph {
 
 		#region mono
 		private void Awake() {
+			Debug.LogError("ActBlock awake.");
 			gameObject.SetActive(false);
-			m_image = GetComponent<UImage>();
+			m_image = GetComponent<UGUI.Image>();
 			m_recT = new RecTHorStretchBottom(GetComponent<RectTransform>());
 		}
 		#endregion
@@ -35,11 +37,9 @@ namespace Main.Graph {
 				Act = act;
 				m_image.color = act.Project.Color;
 				m_cylinder = cylinder;
-				// var size = m_cylinder.RectSize;
-				// size.y *= Act.Duration / (24f * 60f);
 				m_recT.Initialize(parent);
 				m_recT.Set(0f, 0f, Time2LocalYinCylinder(Act.BeginTime), Time2LocalYinCylinder(Act.EndTime ?? 1000f));
-				// m_rect.sizeDelta = size;
+				m_text.text = Act.Name;
 				gameObject.SetActive(true);
 				Debug.Log("ActivityBlock initialized.");
 			}
