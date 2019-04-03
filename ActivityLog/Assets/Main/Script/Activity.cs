@@ -2,6 +2,7 @@
 
 namespace Main.Graph {
 
+	//! 時間の単位はすべて[minute]
 	public interface IActivity {
 
 		IProject Project { get; }

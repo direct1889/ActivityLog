@@ -33,7 +33,7 @@ namespace Main.Graph {
 			GameObject goBlock = Instantiate(m_prefActBlock);
 			goBlock.transform.SetParent(transform);
 			IActivityBlock block = goBlock.GetComponent<ActivityBlock>();
-			block.Initialize(act, this);
+			block.Initialize(act, this, transform);
 		}
 		#endregion
 
