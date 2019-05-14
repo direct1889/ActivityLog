@@ -24,7 +24,6 @@ namespace Main.Graph {
 
 		#region mono
 		private void Awake() {
-			Debug.LogError("ActBlock awake.");
 			gameObject.SetActive(false);
 			m_image = GetComponent<UGUI.Image>();
 			m_recT = new RecTHorStretchBottom(GetComponent<RectTransform>());

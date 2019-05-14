@@ -4,7 +4,7 @@
 namespace Main.Graph {
 
     public class GraphMgr : MonoBehaviour {
-        private void Awake() {
+        private void Start() {
             ProjectsDB.Initialize();
         }
     }
