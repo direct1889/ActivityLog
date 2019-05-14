@@ -7,6 +7,7 @@ Shader "Unlit/GrabPass"
 		_UVy("UVy",float) = 0.5
 		_Color("Color",Color) = (1,1,1,1)
 		_Range("Range",Range(-10,10))=0.5
+		_MagnifyingPower("MagnifyingPower",float) = 1.2
 
 	}
 	SubShader
@@ -35,6 +36,7 @@ Shader "Unlit/GrabPass"
 			fixed _UVy;
 			fixed4 _Color;
 			fixed _Range;
+			fixed _MagnifyingPower;
 
 
 			struct appdata
@@ -67,13 +69,8 @@ Shader "Unlit/GrabPass"
                 // パネルのUV座標(左上が原点)
                 float2 worldUV = float2(_UVx, _UVy);
                 // 描画内容を持つ点
-                float2 drawUV = (grabUV - worldUV) * 0.8 + worldUV;
-                fixed4 tex = tex2D(_GrabTexture, drawUV) * _Color;
-                return tex;
-
-                // i.uv.y = 1.0 - i.uv.y;
-                // fixed4 tex = tex2D(_GrabTexture, i.uv);
-                // return tex;
+                float2 drawUV = (grabUV - worldUV) / _MagnifyingPower + worldUV;
+                return tex2D(_GrabTexture, drawUV) * _Color;
 			}
 			ENDCG
 		}
