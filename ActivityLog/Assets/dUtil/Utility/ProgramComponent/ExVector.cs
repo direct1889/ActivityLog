@@ -56,6 +56,19 @@ namespace du.Ex {
 			}
 		}
 
+		public static Vector3 DisN(this Vector3? nullable, Vector3 defaultValue) {
+			return nullable ?? defaultValue;
+		}
+		public static Vector2 DisN(this Vector2? nullable, Vector2 defaultValue) {
+			return nullable ?? defaultValue;
+		}
+		public static Vector3 DisN0(this Vector3? nullable) {
+			return nullable ?? Vector3.zero;
+		}
+		public static Vector2 DisN0(this Vector2? nullable) {
+			return nullable ?? Vector2.zero;
+		}
+
 
 	}
 

@@ -116,19 +116,19 @@ namespace du.di {
 		#region private
 
 		private static void FixedUpdate() {
-			switch (Touch.GetTouch(0)) {
-				case TouchInfo.None: break;
-				case TouchInfo.Began: {
-						s_onTouchEnter.OnNext(Touch.LastTouchedPosition);
+			switch (Mgr.Touch.GetTouch(0)) {
+				case TouchStep.None: break;
+				case TouchStep.Began: {
+						s_onTouchEnter.OnNext(Mgr.Touch.LastTouchedPosition);
 					}
 					break;
-				case TouchInfo.Moved: break;
-				case TouchInfo.Stationary: break;
-				case TouchInfo.Ended: {
-						s_onTouchExit.OnNext(Touch.LastTouchedPosition);
+				case TouchStep.Moved: break;
+				case TouchStep.Stationary: break;
+				case TouchStep.Ended: {
+						s_onTouchExit.OnNext(Mgr.Touch.LastTouchedPosition);
 					}
 					break;
-				case TouchInfo.Canceled: break;
+				case TouchStep.Canceled: break;
 			}
 		}
 

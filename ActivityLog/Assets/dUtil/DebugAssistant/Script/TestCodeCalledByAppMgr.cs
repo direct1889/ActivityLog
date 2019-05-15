@@ -22,9 +22,9 @@ namespace du.Test {
 		}
 
 		public void OnUpdate() {
-			Mgr.Debug.TestLog?.SetText("IsTouch", di.Touch.GetTouch(0));
-			Mgr.Debug.TestLog?.SetText("TouchPos", di.Touch.GetTouchPosition(0));
-			Mgr.Debug.TestLog?.SetText("TouchWPos2D", di.Touch.GetTouchWorldPosition2D(0));
+			Mgr.Debug.TestLog?.SetText("IsTouch", Mgr.Touch.GetTouch(0));
+			Mgr.Debug.TestLog?.SetText("TouchPos", Mgr.Touch.GetTouchPosition(0));
+			Mgr.Debug.TestLog?.SetText("TouchWPos2D", Mgr.Touch.GetTouchWorldPosition2D(0));
 		}
 
 	}

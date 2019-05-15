@@ -21,6 +21,7 @@ namespace du {
 
 		public static App.AppManager App { private set; get; }
 		public static Test.DebugAssistant Debug { private set; get; }
+		public static di.TouchMgr Touch { private set; get; }
 		// public static App.OSUI OSUI { private set; get; }
 
 		#endregion

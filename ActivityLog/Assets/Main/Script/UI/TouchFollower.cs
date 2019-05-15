@@ -1,16 +1,15 @@
-﻿using UnityEngine;
+﻿#if false
+using UnityEngine;
 using UGUI = UnityEngine.UI;
-
 
 namespace du.di {
 
-    public class Cursor : MonoBehaviour {
+    public class TouchFollower : MonoBehaviour {
 
         #region constant
+        enum State {
 
-        Color ColorValid { get; } = new Color(1f, 0.8f, 0.3f, 0.7f);
-        Color ColorInvalid { get; } = new Color(1f, 0.8f, 0.3f, 0.5f);
-
+        }
         #endregion
 
 
@@ -30,7 +29,7 @@ namespace du.di {
         }
 
         void Update() {
-            UpdateColor(Touch.IsTouch);
+            UpdateColor(TouchMgr.IsTouch);
             // m_rectTf.position = Touch.GetTouchPosition(0);
             m_rectTf.position = Input.mousePosition;
         }
@@ -49,3 +48,4 @@ namespace du.di {
     }
 
 }
+#endif
