@@ -68,7 +68,7 @@ namespace du.App {
             m_fixedUpdateActs = new List<Action>();
             GetComponent<Test.LayerdLogMgr>().InitializeLLog();
             Test.DebugAssistant.Instance.gameObject.SetActive(m_isDebugMode);
-            di.RxTouchInput.Initialize();
+            // di.RxTouchInput.Initialize();
 
             // Cursor.visible = m_mcmode == MouseCursorMode.Visible;
             Cursor.visible = m_mcmode != MouseCursorMode.Invisible;
