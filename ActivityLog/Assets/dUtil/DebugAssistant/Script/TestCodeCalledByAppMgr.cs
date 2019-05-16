@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
 using UniRx;
-using System.Collections.Generic;
-using System.Linq;
-
 
 namespace du.Test {
-
 
 	public interface ITestCode {
 		void OnStart();
 		void OnUpdate();
 	}
-
 
 	public class TestCodeCalledByAppMgr : ITestCode {
 
@@ -22,9 +17,9 @@ namespace du.Test {
 		}
 
 		public void OnUpdate() {
-			Mgr.Debug.TestLog?.SetText("IsTouch", Mgr.Touch.GetTouch(0));
-			Mgr.Debug.TestLog?.SetText("TouchPos", Mgr.Touch.GetTouchPosition(0));
-			Mgr.Debug.TestLog?.SetText("TouchWPos2D", Mgr.Touch.GetTouchWorldPosition2D(0));
+			Mgr.Debug.TestLog?.SetText("IsTouch", Mgr.Touch.Step0);
+			Mgr.Debug.TestLog?.SetText("TouchPos", Mgr.Touch.Pos3D0);
+			Mgr.Debug.TestLog?.SetText("TouchWPos2D", Mgr.Touch.WorldPos0);
 		}
 
 	}
