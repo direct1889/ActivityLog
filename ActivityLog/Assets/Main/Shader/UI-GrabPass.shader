@@ -6,7 +6,6 @@ Shader "Unlit/GrabPass"
 		_UVx("UVx",float) = 0.5
 		_UVy("UVy",float) = 0.5
 		_Color("Color",Color) = (1,1,1,1)
-		_Range("Range",Range(-10,10))=0.5
 		_MagnifyingPower("MagnifyingPower",float) = 1.2
 
 	}
@@ -35,7 +34,6 @@ Shader "Unlit/GrabPass"
 			fixed _UVx;
 			fixed _UVy;
 			fixed4 _Color;
-			fixed _Range;
 			fixed _MagnifyingPower;
 
 
