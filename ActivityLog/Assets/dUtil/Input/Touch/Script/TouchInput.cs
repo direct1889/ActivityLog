@@ -127,6 +127,7 @@ namespace du.di {
 		private void Awake() {
 			if (Application.isEditor) { m_impl = new TouchMgrImpl4Editor(); }
             else { m_impl = new TouchMgrImpl4ActualMachine(); }
+			Mgr.RegisterMgr(this);
 		}
 		#endregion
 

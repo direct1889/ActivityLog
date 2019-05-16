@@ -31,6 +31,7 @@ namespace du {
 
 		public static void RegisterMgr(App.AppManager appMgr) { App = appMgr; }
 		public static void RegisterMgr(Test.DebugAssistant debugAsst) { Debug = debugAsst; }
+		public static void RegisterMgr(di.TouchMgr touchMgr) { Touch = touchMgr; }
 		// public static void RegisterMgr(App.OSUI osui) { OSUI = osui; }
 
 		#endregion
