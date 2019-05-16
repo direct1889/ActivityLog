@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
+using UTMP = TMPro.TextMeshProUGUI;
 
 
 namespace Main.Graph {
@@ -15,7 +16,7 @@ namespace Main.Graph {
 		UGUI.Image m_image = null;
 		RecTHorStretchBottom m_recT = null;
 		IActivitiesCylinder m_cylinder = null;
-		[SerializeField] UGUI.Text m_text = null;
+		[SerializeField] UTMP m_text = null;
 		#endregion
 
 		#region property
