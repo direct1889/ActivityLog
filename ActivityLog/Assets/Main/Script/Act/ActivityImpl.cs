@@ -33,9 +33,9 @@ namespace Main.Act {
         public IROActivity NextAct { get; private set; } = null;
         public MinuteOfDay BeginTime { get; private set; }
         /// <summary> まだ終了していなければ null </summary>
-        public MinuteOfDay EndTime { get { return NextAct?.Context?.BeginTime; } }
-        /// <summary> TODO:未終了のとき、現在時刻までにするか null か </summary>
-        public int Duration { get { return /* TODO */EndTime - BeginTime; } }
+        public MinuteOfDay? EndTime { get { return NextAct?.Context?.BeginTime; } }
+        /// <summary> 未終了のときは現在時刻まで </summary>
+        public int Duration { get { return (EndTime ?? MinuteOfDay.Now) - BeginTime; } }
         public bool HasEnded { get { return NextAct != null; } }
 		#endregion
 

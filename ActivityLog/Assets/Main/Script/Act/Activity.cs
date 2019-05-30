@@ -17,8 +17,8 @@ namespace Main.Act {
 		IROActivity   NextAct   { get; }
 		MinuteOfDay BeginTime { get; }
         /// <returns> まだ終了していなければ null </returns>
-		MinuteOfDay EndTime   { get; }
-        /// <summary> TODO:未終了のとき、現在時刻までにするか null か </summary>
+		MinuteOfDay? EndTime   { get; }
+        /// <summary> 未終了のときは現在時刻まで </summary>
 		int         Duration  { get; }
 		bool        HasEnded  { get; }
 	}

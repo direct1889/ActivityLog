@@ -1,16 +1,16 @@
 ﻿
 namespace Main {
-    public class MinuteOfDay {
+    public struct MinuteOfDay {
         #region field
-        int m_enusuiteMinute = 0;
+        private int m_ensuiteMinute;
         #endregion
 
         #region property
         public int EnsuiteMinute {
-            get { return m_enusuiteMinute; }
+            get { return m_ensuiteMinute; }
             set {
                 if (0 <= value && value <= 24*60) {
-                    m_enusuiteMinute = value;
+                    m_ensuiteMinute = value;
                 }
                 else {
                     UnityEngine.Debug.LogError($"ArgumentException:Value must be between 0 to {24*60} (but value == {value}).");
@@ -25,8 +25,8 @@ namespace Main {
         #endregion
 
         #region ctor/dtor
-        public MinuteOfDay(int ensuiteMinute) { EnsuiteMinute = ensuiteMinute; }
-        public MinuteOfDay(int hour, int minute) { EnsuiteMinute = hour * 60 + minute; }
+        public MinuteOfDay(int ensuiteMinute) : this() { EnsuiteMinute = ensuiteMinute; }
+        public MinuteOfDay(int hour, int minute) : this() { EnsuiteMinute = hour * 60 + minute; }
         public MinuteOfDay(System.DateTime time) : this(time.Hour, time.Minute) {}
         #endregion
 
@@ -36,6 +36,7 @@ namespace Main {
             return EnsuiteMinute == ((MinuteOfDay)obj).EnsuiteMinute;
         }
         public override int GetHashCode() { return EnsuiteMinute; }
+        public override string ToString() { return $"{Hour:00}:{Minute:00}"; }
         #endregion
 
         #region operator

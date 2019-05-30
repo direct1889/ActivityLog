@@ -15,6 +15,9 @@ namespace Main.Act {
 		/// <summary> 指定時刻に行われていたアクティビティの index </summary>
 		int IndexOf(MinuteOfDay time);
 
+		/// <summary> アクティビティ数 </summary>
+        int Count { get; }
+
 		/// <summary> 末尾のアクティビティ </summary>
 		IROActivity Back { get; }
 
@@ -35,7 +38,7 @@ namespace Main.Act {
 
 		/// <summary> 登録済みのアクティビティを移動させる </summary>
 		/// <param name="index"> 変更対象の index </param>
-		void Move(int index, MinuteOfDay newBegin, MinuteOfDay newEnd);
+		void Move(int index, MinuteOfDay newBegin, MinuteOfDay? newEnd);
 
 		/// <summary> 登録済みのアクティビティの内容を書き換える </summary>
 		void OverwriteCnt(int index, IROContent newContent);
@@ -44,12 +47,13 @@ namespace Main.Act {
 		/// 飲み込まれたアクティビティは消滅
 		/// </summary>
 		void OverwriteBeginTime(int index, MinuteOfDay newBegin);
-		void OverwriteEndTime(int index, MinuteOfDay newEnd);
+		void OverwriteEndTime(int index, MinuteOfDay? newEnd);
 
 	}
 
 	/// <summary> アクティビティ系列/日を操作する </summary>
 	public interface IActivitiesMgr {
+		IROActivitiesContainer Activities { get; }
 		/// <summary>
 		/// 新たなアクティビティを開始
 		/// 現在のアクティビティを終了、開始時刻は現在時刻を使用

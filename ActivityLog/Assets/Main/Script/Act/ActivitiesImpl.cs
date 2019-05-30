@@ -32,17 +32,29 @@ namespace Main.Act {
             throw new System.Exception("");
 		}
 
-		public IROActivity Back { get { return m_acts[m_acts.Count]; } }
-		private IActivity MutableBack { get { return m_acts[m_acts.Count]; } }
+        public int Count { get { return m_acts.Count; } }
+		public IROActivity Back { get { return m_acts[m_acts.Count - 1]; } }
+		private IActivity MutableBack { get { return m_acts[m_acts.Count - 1]; } }
 		private bool IndexIsValid(int index) { return 0 <= index && index < m_acts.Count; }
 		#endregion
 		// ------------------------------
 
 		#region public
 		public void PushBack(IActivity act) {
-			if (Back.Context.BeginTime < act.Context.BeginTime) {
+			if (m_acts.Count == 0) {
+				m_acts.Add(act);
+			}
+			else if (Back.Context.BeginTime < act.Context.BeginTime) {
+				Debug.LogError($"PushBack[{Back.Context.BeginTime} >< {act.Context.BeginTime}]");
 				MutableBack.MutableContext.ResetFollowAct(act);
 				m_acts.Add(act);
+			}
+			else {
+				Debug.LogError($"PushBack[{Back.Context.BeginTime} >< {act.Context.BeginTime}]");
+				for (int i = Count - 1; i > IndexOf(act.Context.BeginTime); --i) {
+					RemoveAt(i);
+				}
+				PushBack(act);
 			}
 		}
 		public void Insert(MinuteOfDay begin, MinuteOfDay end, IROContent cnt) {
@@ -85,10 +97,11 @@ namespace Main.Act {
 			}
 			m_acts.RemoveAt(index);
 		}
-		public void Move(int index, MinuteOfDay newBegin, MinuteOfDay newEnd) {
+		public void Move(int index, MinuteOfDay newBegin, MinuteOfDay? newEnd) {
 			var act = m_acts[index];
 			RemoveAt(index);
-			Insert(newBegin, newEnd, act.Content);
+			if (newEnd != null) { Insert(newBegin, (MinuteOfDay)newEnd, act.Content); }
+			else { PushBack(act); }
 		}
 		public void OverwriteCnt(int index, IROContent newContent) {
 			m_acts[index].ResetContent(newContent);
@@ -96,7 +109,7 @@ namespace Main.Act {
 		public void OverwriteBeginTime(int index, MinuteOfDay newBegin) {
 			Move(index, newBegin, m_acts[index].Context.EndTime);
 		}
-		public void OverwriteEndTime(int index, MinuteOfDay newEnd) {
+		public void OverwriteEndTime(int index, MinuteOfDay? newEnd) {
 			Move(index, m_acts[index].Context.BeginTime, newEnd);
 		}
 		#endregion
@@ -105,7 +118,12 @@ namespace Main.Act {
 	/// <summary> アクティビティ系列/日を操作する </summary>
 	public class ActivitiesMgr : IActivitiesMgr {
 		#region property
-		IActivitiesContainer Acts { get; }
+		public IROActivitiesContainer Activities { get { return Acts; } }
+		protected IActivitiesContainer Acts { get; }
+		#endregion
+
+		#region ctor/dtor
+		public ActivitiesMgr() { Acts = new ActivitiesContainer(); }
 		#endregion
 
 		#region public
@@ -127,6 +145,19 @@ namespace Main.Act {
 			}
 		}
 		#endregion
+	}
+
+	public class ActivitiesMgr4Test : ActivitiesMgr {
+		public void BeginNewAct(IProject proj, string name, bool isEffective, MinuteOfDay beginTime) {
+			Acts.PushBack(new Activity(new Content(proj, name, isEffective), new Context(beginTime)));
+		}
+		public void BeginNewAct(IProject proj, string name, MinuteOfDay beginTime) {
+			if (Acts.Count > 0) {
+				Debug.LogError($"BeginNewActBefore[{Acts.Back.Context.BeginTime}><{beginTime}]");
+			}
+			Acts.PushBack(new Activity(new Content(proj, name), new Context(beginTime)));
+			Debug.LogError($"BeginNewActAfter[{Acts.Back.Context.BeginTime}><{beginTime}]");
+		}
 	}
 
 }
