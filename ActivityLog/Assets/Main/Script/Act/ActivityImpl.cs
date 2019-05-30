@@ -65,6 +65,10 @@ namespace Main.Act {
 			NextAct = null;
 		}
 		#endregion
+
+		#region static
+		public static IContext BeginFromNow { get { return new Context(MinuteOfDay.Now); } }
+		#endregion
 	}
 
 	/// <summary>

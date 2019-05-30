@@ -11,7 +11,7 @@ namespace Main.Act {
 
 		// IROActivitiesContainer -------
 		#region getter
-		// public IActivity this [int index] { get { return m_acts[index]; } }
+		public IActivity this [int index] { get { return m_acts[index]; } }
 		public IROActivity this [MinuteOfDay time] { get { return m_acts[IndexOf(time)]; } }
 		public int IndexOf(MinuteOfDay time) {
 			if (MinuteOfDay.Now < time) {
@@ -86,15 +86,43 @@ namespace Main.Act {
 			RemoveAt(index);
 			Insert(newBegin, newEnd, act.Content);
 		}
-		public void Overwrite(int index, IROContent newContent) {
+		public void OverwriteCnt(int index, IROContent newContent) {
 			m_acts[index].ResetContent(newContent);
+		}
+		public void OverwriteBeginTime(int index, MinuteOfDay newBegin) {
+			Move(index, newBegin, m_acts[index].Context.EndTime);
+		}
+		public void OverwriteEndTime(int index, MinuteOfDay newEnd) {
+			Move(index, m_acts[index].Context.BeginTime, newEnd);
 		}
 		#endregion
 	}
 
 	/// <summary> アクティビティ系列/日を操作する </summary>
-	public class ActivitiesMgr {
-		IActivities Acts { get; }
+	public class ActivitiesMgr : IActivitiesMgr {
+		#region property
+		IActivitiesContainer Acts { get; }
+		#endregion
+
+		#region public
+		public void BeginNewAct(IProject proj, string name, bool isEffective) {
+			Acts.PushBack(new Activity(new Content(proj, name, isEffective), Context.BeginFromNow));
+		}
+		public void BeginNewAct(IProject proj, string name) {
+			Acts.PushBack(new Activity(new Content(proj, name), Context.BeginFromNow));
+		}
+		public void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute) {
+			if (indexJustAfterBorder <= 0) { return; }
+			else if (Acts[indexJustAfterBorder].Context.BeginTime > newMinute) {
+				// Border を過去に移動 -> 直後のアクティビティを過去に伸ばす
+				Acts.OverwriteBeginTime(indexJustAfterBorder, newMinute);
+			}
+			else if (Acts[indexJustAfterBorder].Context.BeginTime < newMinute) {
+				// Border を未来に移動 -> 直前のアクティビティを未来に伸ばす
+				Acts.OverwriteEndTime(indexJustAfterBorder - 1, newMinute);
+			}
+		}
+		#endregion
 	}
 
 }

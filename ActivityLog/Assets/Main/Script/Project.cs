@@ -64,7 +64,7 @@ namespace Main.Act {
 	}
 
 	/// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-	public static class ProjectsDB {
+	public static class ProjectDB {
 
 		static IDictionary<string, IProject> s_projects;
 

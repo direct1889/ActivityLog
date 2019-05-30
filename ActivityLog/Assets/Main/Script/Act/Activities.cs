@@ -7,7 +7,7 @@ namespace Main.Act {
 
 		/// <summary> 時系列順で index 番目 </summary>
 		/// <param name="index"> index 番目が存在しない場合例外を投げる </param>
-		// IActivity this [int index] { get; }
+		IActivity this [int index] { get; }
 
 		/// <summary> 指定時刻に行われていたアクティビティ </summary>
 		IROActivity this [MinuteOfDay time] { get; }
@@ -38,8 +38,13 @@ namespace Main.Act {
 		void Move(int index, MinuteOfDay newBegin, MinuteOfDay newEnd);
 
 		/// <summary> 登録済みのアクティビティの内容を書き換える </summary>
-		/// <param name="index"> 変更対象の index </param>
-		void Overwrite(int index, IROContent newContent);
+		void OverwriteCnt(int index, IROContent newContent);
+		/// <summary>
+		/// 登録済みのアクティビティの時間を前に伸ばす
+		/// 飲み込まれたアクティビティは消滅
+		/// </summary>
+		void OverwriteBeginTime(int index, MinuteOfDay newBegin);
+		void OverwriteEndTime(int index, MinuteOfDay newEnd);
 
 	}
 
@@ -53,12 +58,12 @@ namespace Main.Act {
 		void BeginNewAct(IProject proj, string name);
 		/// <summary>
 		/// 連続したアクティビティ間の時刻境界を操作
+		/// 潰れたアクティビティは消滅
 		/// </summary>
-		/// <param name="newMinute">
-		/// ∈ (justBefore.Begin, justAfter.End)
-		/// 開区間外だと(=隣接アクティビティが潰れると)失敗
+		/// <param name="indexJustAfterBorder">
+		/// 操作したい境界の直後のアクティビティの index
 		/// </param>
-		void ChangeBorder(int lastIndexBeforeBorder, MinuteOfDay newMinute);
+		void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute);
 	}
 
 
