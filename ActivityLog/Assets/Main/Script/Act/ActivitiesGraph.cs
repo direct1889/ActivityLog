@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace Main.Act.View {
 
@@ -6,14 +7,15 @@ namespace Main.Act.View {
 		Vector2 RectSize { get; }
 	}
 
-	public interface IActivities {
+	public interface IActivitiesGraph {
 		void CreateBlock(IROActivity act);
 	}
 
-	public class Activities : MonoBehaviour, IActivitiesCylinder, IActivities {
+	public class ActivitiesGraph : MonoBehaviour, IActivitiesCylinder, IActivitiesGraph {
 
 		#region field
 		RectTransform m_rect = null;
+		IList<IActivityBlock> m_blocks = null;
 		[SerializeField]GameObject m_prefActBlock = null;
 		#endregion
 
@@ -24,6 +26,7 @@ namespace Main.Act.View {
 		#region mono
 		void Awake() {
 			m_rect = GetComponent<RectTransform>();
+			m_blocks = new List<IActivityBlock>();
 		}
 		#endregion
 
@@ -33,6 +36,8 @@ namespace Main.Act.View {
 			goBlock.transform.SetParent(transform);
 			IActivityBlock block = goBlock.GetComponent<ActivityBlock>();
 			block.Initialize(act, this, transform);
+			if (m_blocks.Count > 0) { m_blocks[m_blocks.Count - 1].RefreshSize(); }
+			m_blocks.Add(block);
 		}
 		#endregion
 
