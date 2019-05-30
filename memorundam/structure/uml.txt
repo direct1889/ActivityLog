@@ -2,38 +2,43 @@
 
 title <size:18> Class Structure </size>
 
-package Graph {
-
-	package Project {
-		interface IProject {
-			+string Name{get}
-			+UColor Color{get}
-			+bool IsEffectiveDefault{get}
-		}
-		interface ISubProject {
-			+IProject Parent{get}
-		}
-		IProject <|.. Project
-		ISubProject <|.. SubProject
-		Project <|-- SubProject
-	}
+package Main {
 
 	package Act {
 
-		interface IContent {
+		package Project {
+			interface IProject {
+				+string Name{get}
+				+UColor Color{get}
+				+bool IsEffectiveDefault{get}
+			}
+			interface ISubProject {
+				+IProject Parent{get}
+			}
+			IProject <|.. Project
+			ISubProject <|.. SubProject
+			Project <|-- SubProject
+
+			class ProjectDB <static>
+			IProject ..* ProjectDB
+		}
+
+		interface IROContent {
 			+IProject Project{get}
 			+string Name{get}
 			+bool IsEffective{get}
 		}
-		IContent <|.down. Content
-		IProject --left-o Content
+		IROContent <|.down. Content
+		IProject --up-o Content
 
-		interface IContext {
+		interface IROContext {
 			+IActivity NextAct{get}
 			+float BeginTime{get}
 			+float? EndTime{get}
 			+float Duration{get}
 		}
+		interface IContext
+		IROContext <|-down- IContext
 		IContext <|.down. Context
 
 		interface IActivity {
@@ -41,9 +46,17 @@ package Graph {
 			+IContext Context{get}
 		}
 		IActivity <|.. Activity
-		IContent --o Activity
+		IROContent --o Activity
 		IContext --o Activity
 
+		interface IIndependentContext
+		IIndependentContext <|.. IndependentContext
+		interface IIndependentActivity
+		IIndependentActivity <|.. IndependentActivity
+		IROContent --o IndependentActivity
+		IIndependentContext --o IndependentActivity
+
+		interface IROActivitiesContainer
 		interface IActivitiesContainer {
 			+IActivity At(int index);
 			+IActivity At(MinuteOfDay time);
@@ -55,7 +68,9 @@ package Graph {
 			+void Move(int index, MinuteOfDay newBegin, MinuteOfDay newEnd);
 			+void Overwrite(int index, IContent newContent);
 		}
+		IROActivitiesContainer <|-- IActivitiesContainer
 		IActivitiesContainer <|.. ActivitiesContainer
+		IActivity --* ActivitiesContainer
 
 		interface IActivitiesMgr {
 			+void BeginNewAct(IProject proj, string name, bool isEffective);
