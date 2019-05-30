@@ -1326,8 +1326,8 @@ GameObject:
   - component: {fileID: 1063767635}
   - component: {fileID: 1063767637}
   - component: {fileID: 1063767636}
-  - component: {fileID: 1063767638}
   - component: {fileID: 1063767639}
+  - component: {fileID: 1063767638}
   m_Layer: 5
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1401,7 +1401,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1063767634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9dab60da46cd4a198d5c25964cd5a68, type: 3}
+  m_Script: {fileID: 11500000, guid: 1469405cc20ac48928c96aa10fe8eb40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefActBlock: {fileID: 6337086200721332336, guid: 993635e03156e47408a2b49dc7f33a87,
