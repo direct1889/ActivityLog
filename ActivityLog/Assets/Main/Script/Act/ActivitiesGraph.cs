@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Main.Graph {
+namespace Main.Graph.Act {
 
 	public interface IActivitiesCylinder {
 		Vector2 RectSize { get; }

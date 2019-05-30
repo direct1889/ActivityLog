@@ -2,7 +2,8 @@
 using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
 using UTMP = TMPro.TextMeshProUGUI;
-
+using IActivity = Main.Graph.Act.IActivity;
+// using IActivities = Main.Graph.Act.IActivities;
 
 namespace Main.Graph {
 

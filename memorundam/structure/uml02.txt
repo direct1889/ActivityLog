@@ -1,6 +1,0 @@
-@startuml uml01.png
-
-title <size:18> Class Structure </size>
-
-@enduml
-
