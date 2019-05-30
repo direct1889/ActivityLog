@@ -9,6 +9,10 @@ namespace Main.Act {
 		IList<IActivity> m_acts;
 		#endregion
 
+		#region ctor/dtor
+		public ActivitiesContainer() { m_acts = new List<IActivity>(); }
+		#endregion
+
 		// IROActivitiesContainer -------
 		#region getter
 		public IActivity this [int index] { get { return m_acts[index]; } }
@@ -77,7 +81,7 @@ namespace Main.Act {
 			}
 			// 先頭 : 直後のアクティビティの開始時刻を00:00に伸ばす
 			else {
-				m_acts[index + 1].MutableContext.ResetPrecedeAct(MinuteOfDay.Zero);
+				m_acts[index + 1].MutableContext.ResetPrecedeAct(MinuteOfDay.Begin);
 			}
 			m_acts.RemoveAt(index);
 		}

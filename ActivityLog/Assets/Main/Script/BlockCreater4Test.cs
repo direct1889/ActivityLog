@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Main.Act {
+namespace Main.Act.View {
 
-	public class AddBlock : MonoBehaviour {
+	public class BlockCreater4Test : MonoBehaviour {
 
 		[SerializeField] InputField m_IFProject = null;
 		[SerializeField] InputField m_IFActivity = null;
@@ -11,8 +11,11 @@ namespace Main.Act {
 
 		[SerializeField] Activities m_acts = null;
 
-		float m_tempTimeSign = 0f;
+		MinuteOfDay m_tempTimeSign;
 
+		private void Awake() {
+			m_tempTimeSign = MinuteOfDay.Begin;
+		}
 
 		public void CreateActivity() {
 			if (m_IFProject.text == "") {
@@ -23,10 +26,13 @@ namespace Main.Act {
 			}
 		}
 		private void CreateActivityBlockImpl(string proj, string actName, string duration) {
-			float d = float.Parse(duration);
-			IROActivity act = new Activity(proj, actName, m_tempTimeSign, d);
+			int d = int.Parse(duration);
+			IROActivity act = new Activity(
+				new Content(ProjectDB.At(proj), actName),
+				new Context(m_tempTimeSign)
+			);
 			m_acts.CreateBlock(act);
-			m_tempTimeSign += d;
+			m_tempTimeSign.EnsuiteMinute += d;
 			du.Test.LLog.Debug.Log($"{proj}::{actName} at {duration}");
 		}
 

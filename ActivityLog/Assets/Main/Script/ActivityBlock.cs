@@ -2,11 +2,10 @@
 using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
 using UTMP = TMPro.TextMeshProUGUI;
-using IActivity = Main.Act.IActivity;
-// using IActivities = Main.Graph.Act.IActivities;
 
-namespace Main.Act {
+namespace Main.Act.View {
 
+	/// <summary> アクティビティを表す Block UI </summary>
 	public interface IActivityBlock {
 		void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent);
 	}
@@ -36,20 +35,24 @@ namespace Main.Act {
 		public void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent) {
 			if (!gameObject.activeSelf) {
 				Act = act;
-				m_image.color = act.Project.Color;
+				m_image.color = act.Content.Project.Color;
 				m_cylinder = cylinder;
 				m_recT.Initialize(parent);
-				m_recT.Set(0f, 0f, Time2LocalYinCylinder(Act.BeginTime), Time2LocalYinCylinder(Act.EndTime ?? 1000f));
-				m_text.text = Act.Name;
+				m_recT.Set(0f, 0f,
+					Time2LocalYinCylinder(Act.Context.BeginTime),
+					Time2LocalYinCylinder(Act.Context.EndTime ?? MinuteOfDay.Now)
+					);
+				m_text.text = Act.Content.Name;
 				gameObject.SetActive(true);
 				Debug.Log("ActivityBlock initialized.");
 			}
 		}
 		#endregion
 
-		#region static
-		private float Time2LocalYinCylinder(float time) {
-			return time * m_cylinder.RectSize.y / 1440f; // 1440 = 24h * 60m
+		#region private
+		/// <summary> 時刻をCylinder上でのy座標値に変換 </summary>
+		private float Time2LocalYinCylinder(MinuteOfDay time) {
+			return m_cylinder.RectSize.y * time.EnsuiteMinute / MinuteOfDay.End.EnsuiteMinute;
 		}
 		#endregion
 

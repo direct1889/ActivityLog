@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Main.Act {
+namespace Main.Act.View {
 
 	public interface IActivitiesCylinder {
 		Vector2 RectSize { get; }

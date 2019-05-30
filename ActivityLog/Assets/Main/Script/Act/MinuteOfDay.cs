@@ -30,6 +30,14 @@ namespace Main {
         public MinuteOfDay(System.DateTime time) : this(time.Hour, time.Minute) {}
         #endregion
 
+        #region override
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType()) { return false; }
+            return EnsuiteMinute == ((MinuteOfDay)obj).EnsuiteMinute;
+        }
+        public override int GetHashCode() { return EnsuiteMinute; }
+        #endregion
+
         #region operator
         public static int operator- (MinuteOfDay end, MinuteOfDay begin) {
             return end.EnsuiteMinute - begin.EnsuiteMinute;
@@ -40,12 +48,8 @@ namespace Main {
         public static bool operator> (MinuteOfDay m, MinuteOfDay n) {
             return m.EnsuiteMinute > n.EnsuiteMinute;
         }
-        public static bool operator== (MinuteOfDay m, MinuteOfDay n) {
-            return m.EnsuiteMinute == n.EnsuiteMinute;
-        }
-        public static bool operator!= (MinuteOfDay m, MinuteOfDay n) {
-            return m.EnsuiteMinute != n.EnsuiteMinute;
-        }
+        public static bool operator== (MinuteOfDay m, MinuteOfDay n) { return m.Equals(n); }
+        public static bool operator!= (MinuteOfDay m, MinuteOfDay n) { return !m.Equals(n); }
         public static bool operator<= (MinuteOfDay m, MinuteOfDay n) {
             return m.EnsuiteMinute <= n.EnsuiteMinute;
         }
@@ -55,12 +59,9 @@ namespace Main {
         #endregion
 
         #region static
-        public static MinuteOfDay Now {
-            get { return new MinuteOfDay(System.DateTime.Now); }
-        }
-        public static MinuteOfDay Zero {
-            get { return new MinuteOfDay(0); }
-        }
+        public static MinuteOfDay Now { get { return new MinuteOfDay(System.DateTime.Now); } }
+        public static MinuteOfDay Begin { get { return new MinuteOfDay(0); } }
+        public static MinuteOfDay End { get { return new MinuteOfDay(24, 0); } }
         #endregion
     }
 }
