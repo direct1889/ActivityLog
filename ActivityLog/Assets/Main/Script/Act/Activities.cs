@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Main.Graph.Act {
+namespace Main.Act {
 
 	/// <summary> アクティビティの系列(日毎) </summary>
 	public interface IROActivitiesContainer {
@@ -10,25 +10,25 @@ namespace Main.Graph.Act {
 		// IActivity this [int index] { get; }
 
 		/// <summary> 指定時刻に行われていたアクティビティ </summary>
-		IActivity this [MinuteOfDay time] { get; }
+		IROActivity this [MinuteOfDay time] { get; }
 
 		/// <summary> 指定時刻に行われていたアクティビティの index </summary>
 		int IndexOf(MinuteOfDay time);
 
 		/// <summary> 末尾のアクティビティ </summary>
-		IActivity Back { get; }
+		IROActivity Back { get; }
 
 	}
 	public interface IActivitiesContainer : IROActivitiesContainer {
 
 		/// <summary> 末尾に追加 </summary>
-		void PushBack(IMutableActivity act);
+		void PushBack(IActivity act);
 
 		/// <summary>
 		/// 指定した時間に挿入
 		/// 完全に包含されるアクティビティは消滅
 		/// </summary>
-		void Insert(MinuteOfDay begin, MinuteOfDay end, IContent cnt);
+		void Insert(MinuteOfDay begin, MinuteOfDay end, IROContent cnt);
 
 		/// <summary> 直前のアクティビティが伸びる </summary>
 		void RemoveAt(int index);
@@ -39,7 +39,7 @@ namespace Main.Graph.Act {
 
 		/// <summary> 登録済みのアクティビティの内容を書き換える </summary>
 		/// <param name="index"> 変更対象の index </param>
-		void Overwrite(int index, IContent newContent);
+		void Overwrite(int index, IROContent newContent);
 
 	}
 

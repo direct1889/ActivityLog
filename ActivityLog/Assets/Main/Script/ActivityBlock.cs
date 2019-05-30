@@ -2,13 +2,13 @@
 using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
 using UTMP = TMPro.TextMeshProUGUI;
-using IActivity = Main.Graph.Act.IActivity;
+using IActivity = Main.Act.IActivity;
 // using IActivities = Main.Graph.Act.IActivities;
 
-namespace Main.Graph {
+namespace Main.Act {
 
 	public interface IActivityBlock {
-		void Initialize(IActivity act, IActivitiesCylinder cylinder, Transform parent);
+		void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent);
 	}
 
 	public class ActivityBlock : MonoBehaviour, IActivityBlock {
@@ -21,7 +21,7 @@ namespace Main.Graph {
 		#endregion
 
 		#region property
-		public IActivity Act { get; private set; }
+		public IROActivity Act { get; private set; }
 		#endregion
 
 		#region mono
@@ -33,7 +33,7 @@ namespace Main.Graph {
 		#endregion
 
 		#region public
-		public void Initialize(IActivity act, IActivitiesCylinder cylinder, Transform parent) {
+		public void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent) {
 			if (!gameObject.activeSelf) {
 				Act = act;
 				m_image.color = act.Project.Color;

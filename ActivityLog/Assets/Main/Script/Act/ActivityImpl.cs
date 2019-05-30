@@ -1,9 +1,9 @@
 ﻿
 
-namespace Main.Graph.Act {
+namespace Main.Act {
 
 	/// <summary> アクティビティの内容 </summary>
-	public class Content : IContent {
+	public class Content : IROContent {
 		#region field-property
 		public IProject	Project		{ get; private set; }
 		public string	Name		{ get; private set; }
@@ -24,13 +24,13 @@ namespace Main.Graph.Act {
 	/// アクティビティの時刻/前後情報
 	/// 時間の単位はすべて minute (本アプリに秒の分解能はない)
 	/// </summary>
-	public class Context : IMutableContext {
+	public class Context : IContext {
         #region property
         /// <summary>
         /// 後続のアクティビティ
         /// まだ終了していなければ null
         /// </summary>
-        public IActivity NextAct { get; private set; } = null;
+        public IROActivity NextAct { get; private set; } = null;
         public MinuteOfDay BeginTime { get; private set; }
         /// <summary> まだ終了していなければ null </summary>
         public MinuteOfDay EndTime { get { return NextAct?.Context?.BeginTime; } }
@@ -41,7 +41,7 @@ namespace Main.Graph.Act {
 
 		#region ctor/dtor
 		public Context(MinuteOfDay beginTime) { BeginTime = beginTime; }
-		public Context(MinuteOfDay beginTime, IActivity followAct) {
+		public Context(MinuteOfDay beginTime, IROActivity followAct) {
 			BeginTime = beginTime;
 			NextAct = followAct;
 		}
@@ -58,7 +58,7 @@ namespace Main.Graph.Act {
 		public void ResetPrecedeAct(MinuteOfDay newBeginTime) {
 			BeginTime = newBeginTime;
 		}
-		public void ResetFollowAct(IActivity followAct) {
+		public void ResetFollowAct(IROActivity followAct) {
 			NextAct = followAct;
 		}
 		public void SaikaiSuru() {
@@ -86,23 +86,23 @@ namespace Main.Graph.Act {
 		#endregion
 
 		#region public
-		public IMutableContext MakeDepend(IActivity followAct) {
+		public IContext MakeDepend(IROActivity followAct) {
 			return new Context(BeginTime, followAct);
 		}
 		#endregion
 	}
 
 	/// <summary> アクティビティ </summary>
-	public class Activity : IMutableActivity {
+	public class Activity : IActivity {
 
 		#region property
-		public IContent Content { get; private set; }
-		public IContext Context { get { return MutableContext; } }
-		public IMutableContext MutableContext { get; private set; }
+		public IROContent Content { get; private set; }
+		public IROContext Context { get { return MutableContext; } }
+		public IContext MutableContext { get; private set; }
 		#endregion
 
 		#region ctor/dtor
-		public Activity(IContent content, IMutableContext context) {
+		public Activity(IROContent content, IContext context) {
 			Content = content; MutableContext = context;
 		}
 		public Activity(IProject proj, string name, bool isEffective, MinuteOfDay beginTime)
@@ -112,7 +112,7 @@ namespace Main.Graph.Act {
 		#endregion
 
 		#region public
-		public void ResetContent(IContent cnt) { Content = cnt; }
+		public void ResetContent(IROContent cnt) { Content = cnt; }
 		#endregion
 	}
 
@@ -120,12 +120,12 @@ namespace Main.Graph.Act {
 	public class IndependentActivity : IIndependentActivity {
 
 		#region property
-		public IContent Content { get; private set; }
+		public IROContent Content { get; private set; }
 		public IIndependentContext IndependentContext { get; private set; }
 		#endregion
 
 		#region ctor/dtor
-		public IndependentActivity(IContent content, IIndependentContext context) {
+		public IndependentActivity(IROContent content, IIndependentContext context) {
 			Content = content; IndependentContext = context;
 		}
 		public IndependentActivity(IProject proj, string name, bool isEffective, MinuteOfDay beginTime, MinuteOfDay endTime)
@@ -135,7 +135,7 @@ namespace Main.Graph.Act {
 		#endregion
 
 		#region public
-		public IMutableActivity MakeDepend(IMutableActivity followAct) {
+		public IActivity MakeDepend(IActivity followAct) {
 			return new Activity(Content, IndependentContext.MakeDepend(followAct));
 		}
 		#endregion

@@ -4,7 +4,7 @@ using UnityEngine;
 using UColor = UnityEngine.Color;
 using System.Linq;
 
-namespace Main.Graph {
+namespace Main.Act {
 
 	/// <summary> プロジェクト:タスクグループ </summary>
 	public interface IProject {

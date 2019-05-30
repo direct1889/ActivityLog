@@ -1,9 +1,9 @@
 ﻿
 
-namespace Main.Graph.Act {
+namespace Main.Act {
 
 	/// <summary> アクティビティの内容 </summary>
-	public interface IContent {
+	public interface IROContent {
 		IProject Project     { get; }
 		string   Name        { get; }
 		bool     IsEffective { get; }
@@ -13,8 +13,8 @@ namespace Main.Graph.Act {
 	/// アクティビティの時刻/前後情報
 	/// 時間の単位はすべて minute (本アプリに秒の分解能はない)
 	/// </summary>
-	public interface IContext {
-		IActivity   NextAct   { get; }
+	public interface IROContext {
+		IROActivity   NextAct   { get; }
 		MinuteOfDay BeginTime { get; }
         /// <returns> まだ終了していなければ null </returns>
 		MinuteOfDay EndTime   { get; }
@@ -22,10 +22,10 @@ namespace Main.Graph.Act {
 		int         Duration  { get; }
 		bool        HasEnded  { get; }
 	}
-	public interface IMutableContext : IContext {
+	public interface IContext : IROContext {
 		void ResetPrecedeAct(IIndependentActivity precedeAct);
 		void ResetPrecedeAct(MinuteOfDay newBeginTime);
-		void ResetFollowAct(IActivity followAct);
+		void ResetFollowAct(IROActivity followAct);
 		void SaikaiSuru();
 	}
 	/// <returns> 自己完結型時系列情報 </returns>
@@ -35,28 +35,28 @@ namespace Main.Graph.Act {
 		MinuteOfDay EndTime   { get; }
 		int         Duration  { get; }
 
-		IMutableContext MakeDepend(IActivity followAct);
+		IContext MakeDepend(IROActivity followAct);
 	}
 
 	/// <summary> アクティビティ </summary>
-	public interface IActivity {
+	public interface IROActivity {
 		/// <summary> 内容 </summary>
-		IContent Content { get; }
+		IROContent Content { get; }
 		/// <summary> 時系列情報 </summary>
-		IContext Context { get; }
+		IROContext Context { get; }
 	}
-	public interface IMutableActivity : IActivity {
-		IMutableContext MutableContext { get; }
-		void ResetContent(IContent cnt);
+	public interface IActivity : IROActivity {
+		IContext MutableContext { get; }
+		void ResetContent(IROContent cnt);
 	}
 	/// <summary> アクティビティ </summary>
 	public interface IIndependentActivity {
 		/// <summary> 内容 </summary>
-		IContent Content { get; }
+		IROContent Content { get; }
 		/// <summary> 時系列情報 </summary>
 		IIndependentContext IndependentContext { get; }
 
-		IMutableActivity MakeDepend(IMutableActivity followAct);
+		IActivity MakeDepend(IActivity followAct);
 	}
 
 }

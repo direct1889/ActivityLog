@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Main.Graph.Act {
+namespace Main.Act {
 
 	public interface IActivitiesCylinder {
 		Vector2 RectSize { get; }
 	}
 
 	public interface IActivities {
-		void CreateBlock(IActivity act);
+		void CreateBlock(IROActivity act);
 	}
 
 	public class Activities : MonoBehaviour, IActivitiesCylinder, IActivities {
@@ -28,7 +28,7 @@ namespace Main.Graph.Act {
 		#endregion
 
 		#region public
-		public void CreateBlock(IActivity act) {
+		public void CreateBlock(IROActivity act) {
 			GameObject goBlock = Instantiate(m_prefActBlock);
 			goBlock.transform.SetParent(transform);
 			IActivityBlock block = goBlock.GetComponent<ActivityBlock>();

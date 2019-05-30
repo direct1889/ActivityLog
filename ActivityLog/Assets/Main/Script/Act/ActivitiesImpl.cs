@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Main.Graph.Act {
+namespace Main.Act {
 
 	/// <summary> アクティビティの系列(日毎) </summary>
 	public class ActivitiesContainer : IActivitiesContainer {
 		#region field
-		IList<IMutableActivity> m_acts;
+		IList<IActivity> m_acts;
 		#endregion
 
 		// IROActivitiesContainer -------
 		#region getter
 		// public IActivity this [int index] { get { return m_acts[index]; } }
-		public IActivity this [MinuteOfDay time] { get { return m_acts[IndexOf(time)]; } }
+		public IROActivity this [MinuteOfDay time] { get { return m_acts[IndexOf(time)]; } }
 		public int IndexOf(MinuteOfDay time) {
 			if (MinuteOfDay.Now < time) {
 				throw new System.ArgumentException("Argument is future.");
@@ -28,20 +28,20 @@ namespace Main.Graph.Act {
             throw new System.Exception("");
 		}
 
-		public IActivity Back { get { return m_acts[m_acts.Count]; } }
-		private IMutableActivity MutableBack { get { return m_acts[m_acts.Count]; } }
+		public IROActivity Back { get { return m_acts[m_acts.Count]; } }
+		private IActivity MutableBack { get { return m_acts[m_acts.Count]; } }
 		private bool IndexIsValid(int index) { return 0 <= index && index < m_acts.Count; }
 		#endregion
 		// ------------------------------
 
 		#region public
-		public void PushBack(IMutableActivity act) {
+		public void PushBack(IActivity act) {
 			if (Back.Context.BeginTime < act.Context.BeginTime) {
 				MutableBack.MutableContext.ResetFollowAct(act);
 				m_acts.Add(act);
 			}
 		}
-		public void Insert(MinuteOfDay begin, MinuteOfDay end, IContent cnt) {
+		public void Insert(MinuteOfDay begin, MinuteOfDay end, IROContent cnt) {
 			IIndependentActivity act = new IndependentActivity(cnt, new IndependentContext(begin, end));
 			int justBefore = IndexOf(act.IndependentContext.BeginTime);
 			int justAfter = IndexOf(act.IndependentContext.EndTime);
@@ -86,7 +86,7 @@ namespace Main.Graph.Act {
 			RemoveAt(index);
 			Insert(newBegin, newEnd, act.Content);
 		}
-		public void Overwrite(int index, IContent newContent) {
+		public void Overwrite(int index, IROContent newContent) {
 			m_acts[index].ResetContent(newContent);
 		}
 		#endregion

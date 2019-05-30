@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Main.Graph {
+namespace Main.Act {
 
 	public class AddBlock : MonoBehaviour {
 
@@ -24,7 +24,7 @@ namespace Main.Graph {
 		}
 		private void CreateActivityBlockImpl(string proj, string actName, string duration) {
 			float d = float.Parse(duration);
-			IActivity act = new Activity(proj, actName, m_tempTimeSign, d);
+			IROActivity act = new Activity(proj, actName, m_tempTimeSign, d);
 			m_acts.CreateBlock(act);
 			m_tempTimeSign += d;
 			du.Test.LLog.Debug.Log($"{proj}::{actName} at {duration}");
