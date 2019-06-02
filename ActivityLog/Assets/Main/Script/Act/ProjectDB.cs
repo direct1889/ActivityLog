@@ -27,7 +27,7 @@ namespace Main.Act {
                 AddProj("Unproductive", ThemeColors.Brown, false);
                 AddProj("TestSample"  , ThemeColors.Gray , false);
 
-                // AddProj(new SubProject(At("Dev"), "Unity"));
+                AddSubProj("Dev", "Unity");
 
                 du.Test.LLog.MBoot.Log("Initialized ProjectsDB.");
             }
@@ -56,6 +56,15 @@ namespace Main.Act {
         }
         private static void AddProj(string name, UColor color, bool isEffectiveDefault) {
             AddProj(new Project(name, color, isEffectiveDefault));
+        }
+        private static void AddSubProj(string parentName, string name) {
+            AddProj(new SubProject(At(parentName), name));
+        }
+        private static void AddSubProj(string parentName, string name, UColor color) {
+            AddProj(new SubProject(At(parentName), name, color));
+        }
+        private static void AddSubProj(string parentName, string name, UColor color, bool isEffectiveDefault) {
+            AddProj(new SubProject(At(parentName), name, color, isEffectiveDefault));
         }
         #endregion
     }
