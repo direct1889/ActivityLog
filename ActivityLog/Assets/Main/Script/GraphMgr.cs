@@ -3,7 +3,10 @@
 
 namespace Main.Act {
 
-    public class GraphMgr : MonoBehaviour {
+    public interface IGraphMgr {
+    }
+
+    public class GraphMgr : MonoBehaviour, IGraphMgr {
         private void Start() {
             ProjectDB.Initialize();
         }

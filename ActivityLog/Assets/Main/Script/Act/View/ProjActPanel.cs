@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UImage = UnityEngine.UI.Image;
 using System.Collections.Generic;
+using static du.Ex.ExVector;
 
 namespace Main.Act.View {
 
@@ -8,6 +9,7 @@ namespace Main.Act.View {
     }
 
     public interface IProjActPanel : IROProjActPanel {
+        void Initialize(IProject proj);
     }
 
     public class ProjActPanel : MonoBehaviour, IProjActPanel {
@@ -29,12 +31,15 @@ namespace Main.Act.View {
         #endregion
 
         #region public
-        private void Initialize(IProject proj) {
+        public void Initialize(IProject proj) {
             if (m_proj == null) {
                 m_proj = proj;
-                m_name.text = proj.Name;
-                m_frame.material.color = m_proj.Color;
+                m_name.text = m_proj.Name;
+                m_frame.color = m_proj.Color;
                 m_effectiveCert.SetActive(m_proj.IsEffectiveDefault);
+                var recT = GetComponent<RectTransform>();
+                recT.localScale = Vector3.one;
+                recT.position = recT.position.ReZ(0);
             }
         }
         #endregion

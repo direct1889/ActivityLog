@@ -5,7 +5,6 @@ namespace Main {
 
     public class MainMgr : MonoBehaviour {
         #region field
-        [SerializeField] GameObject m_graphCanvas = null;
         [SerializeField] GameObject m_doActCanvas = null;
         #endregion
 
