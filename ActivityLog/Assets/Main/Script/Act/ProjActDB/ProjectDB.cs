@@ -24,10 +24,10 @@ namespace Main.Act {
                 AddProj("pabulum"     , ThemeColors.Red  , true );
                 AddProj("MisLead"     , ThemeColors.Blue , true );
                 AddProj("Dev"         , ThemeColors.Green, true );
+                AddSubProj("Dev", "Unity");
                 AddProj("Unproductive", ThemeColors.Brown, false);
                 AddProj("TestSample"  , ThemeColors.Gray , false);
 
-                AddSubProj("Dev", "Unity");
 
                 du.Test.LLog.MBoot.Log("Initialized ProjectsDB.");
             }
