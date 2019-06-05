@@ -4,7 +4,7 @@ namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
     public interface IROContent {
-        IProject Project     { get; }
+        IProject Parent      { get; }
         string   Name        { get; }
         bool     IsEffective { get; }
     }
@@ -14,13 +14,13 @@ namespace Main.Act {
     /// 時間の単位はすべて minute (本アプリに秒の分解能はない)
     /// </summary>
     public interface IROContext {
-        IROActivity   NextAct   { get; }
-        MinuteOfDay BeginTime { get; }
+        IROActivity  NextAct   { get; }
+        MinuteOfDay  BeginTime { get; }
         /// <returns> まだ終了していなければ null </returns>
         MinuteOfDay? EndTime   { get; }
         /// <summary> 未終了のときは現在時刻まで </summary>
-        int         Duration  { get; }
-        bool        HasEnded  { get; }
+        int          Duration  { get; }
+        bool         HasEnded  { get; }
     }
     public interface IContext : IROContext {
         void ResetPrecedeAct(IIndependentActivity precedeAct);

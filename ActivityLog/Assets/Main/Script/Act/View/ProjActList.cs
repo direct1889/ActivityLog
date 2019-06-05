@@ -32,7 +32,7 @@ namespace Main.Act.View {
 
         #region private
         private void Initialize() {
-            foreach (var proj in ProjectDB.Projects()) {
+            foreach (var proj in ProjActDB.Proj.Projects()) {
                 CreateProjectPanel(proj);
             }
         }

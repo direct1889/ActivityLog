@@ -36,7 +36,7 @@ namespace Main.Act.View {
         public void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent) {
             if (!gameObject.activeSelf) {
                 Act = act;
-                m_image.color = act.Content.Project.Color;
+                m_image.color = act.Content.Parent.Color;
                 m_cylinder = cylinder;
                 m_recT.Initialize(parent);
                 RefreshSize();

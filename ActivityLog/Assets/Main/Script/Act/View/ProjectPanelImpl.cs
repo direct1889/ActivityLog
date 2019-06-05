@@ -44,7 +44,7 @@ namespace Main.Act.View {
         public void SetProject(IProject proj) {
             m_name.text = proj.Name;
             m_frame.color = proj.Color;
-            m_effectiveCert.SetActive(proj.IsEffectiveDefault);
+            m_effectiveCert.SetActive(proj.IsEffective);
         }
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         public void SetIndent(int indent) {

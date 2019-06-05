@@ -7,19 +7,19 @@ using System.Linq;
 namespace Main.Act {
 
     /// <summary> プロジェクト:タスクグループ </summary>
-    public interface IProject {
+    public interface IProject : IROContent {
         #region property
         /// <summary> 名称 </summary>
-        string Name { get; }
+        // string Name { get; }
         /// <summary> テーマカラー </summary>
         UColor Color { get; }
         /// <summary> 所属タスクが原則エフェクティブか </summary>
-        bool IsEffectiveDefault { get; }
+        // bool IsEffective { get; }
         /// <value>
         /// 親プロジェクト
         /// 最上位プロジェクトの場合 null
         /// </value>
-        IProject Parent { get; }
+        // IProject Parent { get; }
         /// <value>
         /// 親の数
         /// 最上位プロジェクトの場合 0
@@ -33,7 +33,7 @@ namespace Main.Act {
         #region field-property
         public string Name { get; }
         public UColor Color { get; }
-        public bool IsEffectiveDefault { get; }
+        public bool IsEffective { get; }
         public virtual IProject Parent { get { return null; } }
         public virtual int ParentCount { get { return 0; } }
         #endregion
@@ -42,13 +42,13 @@ namespace Main.Act {
         public Project(string name, UColor color, bool isEffectiveDefault) {
             Name = name;
             Color = color;
-            IsEffectiveDefault = isEffectiveDefault;
+            IsEffective = isEffectiveDefault;
         }
         #endregion
 
         #region getter
         public override string ToString() {
-            return $"[{Name},{Color},{IsEffectiveDefault}]";
+            return $"[{Name},{Color},{IsEffective}]";
         }
         #endregion
     }
@@ -69,10 +69,10 @@ namespace Main.Act {
         public SubProject(IProject parent, string name, bool isEffectiveDefault) : base(name, parent.Color, isEffectiveDefault) {
             Parent = parent;
         }
-        public SubProject(IProject parent, string name, UColor color) : base(name, color, parent.IsEffectiveDefault) {
+        public SubProject(IProject parent, string name, UColor color) : base(name, color, parent.IsEffective) {
             Parent = parent;
         }
-        public SubProject(IProject parent, string name) : base(name, parent.Color, parent.IsEffectiveDefault) {
+        public SubProject(IProject parent, string name) : base(name, parent.Color, parent.IsEffective) {
             Parent = parent;
         }
         #endregion
