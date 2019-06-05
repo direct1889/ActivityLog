@@ -13,10 +13,11 @@ namespace Main.Act.View {
 
     public class ProjActList : MonoBehaviour {// , IProjActPanel {
         #region field
-        IList<IProjActPanel> m_projActPanels = null;
+        IList<IProjectPanel> m_projActPanels = null;
 
         [SerializeField] GameObject m_panelsParent = null;
-        [SerializeField] GameObject m_panelPref = null;
+        [SerializeField] GameObject m_projPanelPref = null;
+        [SerializeField] GameObject m_actPanelPref = null;
         #endregion
 
         #region getter
@@ -24,7 +25,7 @@ namespace Main.Act.View {
 
         #region mono
         private void Start() {
-            m_projActPanels = new List<IProjActPanel>();
+            m_projActPanels = new List<IProjectPanel>();
             Initialize();
         }
         #endregion
@@ -32,14 +33,18 @@ namespace Main.Act.View {
         #region private
         private void Initialize() {
             foreach (var proj in ProjectDB.Projects()) {
-                CreatePanel(proj);
+                CreateProjectPanel(proj);
             }
         }
-        private void CreatePanel(IProject proj) {
-            var panel = Instantiate<GameObject>(m_panelPref);
-            panel.transform.parent = m_panelsParent.transform;
-            m_projActPanels.Add(panel.GetComponent<ProjActPanel>());
-            m_projActPanels.Back().Initialize(proj);
+        private void CreateProjectPanel(IProject proj) {
+            var panel = Instantiate<GameObject>(m_projPanelPref, m_panelsParent.transform);
+            m_projActPanels.Add(panel.GetComponent<ProjectPanel>());
+            m_projActPanels.Back().Initialize(proj, m_panelsParent.transform);
+        }
+        private void CreateActivityPanel(IProject proj) {
+            var panel = Instantiate<GameObject>(m_projPanelPref, m_panelsParent.transform);
+            m_projActPanels.Add(panel.GetComponent<ProjectPanel>());
+            m_projActPanels.Back().Initialize(proj, m_panelsParent.transform);
         }
         #endregion
     }
