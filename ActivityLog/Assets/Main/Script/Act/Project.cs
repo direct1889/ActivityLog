@@ -15,6 +15,16 @@ namespace Main.Act {
         UColor Color { get; }
         /// <summary> 所属タスクが原則エフェクティブか </summary>
         bool IsEffectiveDefault { get; }
+        /// <value>
+        /// 親プロジェクト
+        /// 最上位プロジェクトの場合 null
+        /// </value>
+        IProject Parent { get; }
+        /// <value>
+        /// 親の数
+        /// 最上位プロジェクトの場合 0
+        /// </value>
+        int ParentCount { get; }
         #endregion
     }
 
@@ -24,6 +34,8 @@ namespace Main.Act {
         public string Name { get; }
         public UColor Color { get; }
         public bool IsEffectiveDefault { get; }
+        public virtual IProject Parent { get { return null; } }
+        public virtual int ParentCount { get { return 0; } }
         #endregion
 
         #region ctor/dtor
@@ -44,7 +56,8 @@ namespace Main.Act {
     /// <summary> サブプロジェクト:親プロジェクトを持つ </summary>
     public class SubProject : Project {
         #region field-property
-        public IProject Parent { get; }
+        public override IProject Parent { get; }
+        public override int ParentCount { get { return Parent.ParentCount + 1; } }
         #endregion
 
         #region ctor/dtor
