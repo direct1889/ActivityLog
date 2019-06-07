@@ -12,93 +12,90 @@ namespace du.App {
         Invisible, Visible, Detail
     }
 
-    public class AppManager : MonoBehaviour {
+    [Serializable]
+    public class AudioDesc {
+        public bool isMute = true;
+        public float masterVolume = 0.01f;
+    }
+    [Serializable]
+    public class ResolutionDesc {
+        public int width;
+        public int height;
+        public bool isFullscreen = false;
+        public int preferredRefreshRate = 60;
 
-        #region singleton
-        public static AppManager Instance { get; private set; } = null;
-        #endregion
+        public void SetResolution() {
+            Screen.SetResolution(width, height, isFullscreen, preferredRefreshRate);
+        }
+    }
 
+    public interface IAppManager {
+        MouseCursorMode MouseCursorMode { get; }
+    }
+
+    public class AppManager : SingletonMonoBehaviour<AppManager>, IAppManager {
         #region field
-        // [SerializeField] List<Initializable> m_initializables = null;
-
         [SerializeField] string m_pilotScene = null;
-        [SerializeField] bool m_isMute = true;
-        [SerializeField] float m_masterVolume = 0.01f;
+        [SerializeField] AudioDesc m_audioDesc = null;
+        [SerializeField] ResolutionDesc m_resolutionDesc = null;
         [SerializeField] bool m_isDebugMode = false;
         [SerializeField] MouseCursorMode m_mcmode = MouseCursorMode.Visible;
-
-        IList<Action> m_fixedUpdateActs = null;
-        // ISubject<MouseCursorMode> m_rxMCMode = new Subject<MouseCursorMode>();
         #endregion
 
-        #region property
+        #region getter property
         public MouseCursorMode MouseCursorMode { get { return m_mcmode; } }
-        // public IReadOnlyReactiveProperty<MouseCursorMode> RxMCMode {  }
         #endregion
 
         #region mono
         private void Awake() {
-            if (Instance != null) { return; }
-
-            Instance = this;
-            Mgr.RegisterMgr(Instance);
             DontDestroyOnLoad(gameObject);
-
             Boot();
         }
-        private void FixedUpdate() {
-            if (m_fixedUpdateActs != null) {
-                for (int i = 0; i < m_fixedUpdateActs.Count; ++i) {
-                    m_fixedUpdateActs[i]();
-                }
+        private void Update() {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                Application.Quit();
             }
-        }
-        #endregion
-
-        #region public
-        public void RegisterFixedUpdatedAction(Action act) {
-            m_fixedUpdateActs.Add(act);
         }
         #endregion
 
         #region private
         private void Boot() {
             Debug.Log("Boot Apprication");
-
-            m_fixedUpdateActs = new List<Action>();
+            m_resolutionDesc.SetResolution();
+            InitializeDebugger();
+            // di.RxTouchInput.Initialize();
+            InitializeCursor();
+            // DG.Tweening.DOTween.Init();
+            // Initialize_di();
+            InitializeAudio();
+            InitializeScene();
+        }
+        private void InitializeDebugger() {
             GetComponent<Test.LayerdLogMgr>().InitializeLLog();
             Test.DebugAssistant.Instance.gameObject.SetActive(m_isDebugMode);
-            // di.RxTouchInput.Initialize();
-
+        }
+        private void InitializeCursor() {
             // Cursor.visible = m_mcmode == MouseCursorMode.Visible;
             Cursor.visible = m_mcmode != MouseCursorMode.Invisible;
             // OSUI.Instance.SetEnable(m_mcmode == MouseCursorMode.Detail);
-
-            // DG.Tweening.DOTween.Init();
-
-            // for (int i = 0; i < m_initializables.Count; ++i) {
-            // 	m_initializables[i].Initialize();
-            // }
-            /*
-			du.Input.InputManager.Initialize();
-			du.Input.Id.IdConverter.SetPlayer2GamePad(
-				dutil.Input.Id.GamePad._1P,
-				dutil.Input.Id.GamePad._2P,
-				dutil.Input.Id.GamePad._3P,
-				dutil.Input.Id.GamePad._4P
-				);
-			*/
-
-            // UI.UIAsset.Initialize();
-
+        }
+        private void Initialize_di() {
+            //  du.Input.InputManager.Initialize();
+            //  du.Input.Id.IdConverter.SetPlayer2GamePad(
+                //  dutil.Input.Id.GamePad._1P,
+                //  dutil.Input.Id.GamePad._2P,
+                //  dutil.Input.Id.GamePad._3P,
+                //  dutil.Input.Id.GamePad._4P
+                //  );
+        }
+        private void InitializeAudio() {
             // utility.sound.SoundManager.Init();
             // utility.sound.SoundManager.BGM
             // .MasterVolumeSet(
-            float volume = m_isMute ? 0f : m_masterVolume;
+            float volume = m_audioDesc.isMute ? 0f : m_audioDesc.masterVolume;
             // );
-
-            // GlobalStore.IsMute = m_isMute;
-
+        }
+        private void InitializeScene() {
             if (Enumerable.Range(0, SceneManager.sceneCount)
                 .Select(SceneManager.GetSceneAt)
                 .All(scn => { return scn.name != m_pilotScene; }))
@@ -106,7 +103,10 @@ namespace du.App {
                 SceneManager.LoadSceneAsync(m_pilotScene, LoadSceneMode.Additive);
             }
         }
+        #endregion
 
+        #region static
+        public static string DataPath { get { return Application.dataPath + "/MyData/"; } }
         #endregion
 
     }

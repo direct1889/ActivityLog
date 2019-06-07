@@ -189,5 +189,15 @@ PrefabInstance:
       propertyPath: m_mcmode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114646196734408850, guid: b6ac8ed1f9b3f473e82ae49993e33ce8,
+        type: 3}
+      propertyPath: m_resolutionDesc.width
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 114646196734408850, guid: b6ac8ed1f9b3f473e82ae49993e33ce8,
+        type: 3}
+      propertyPath: m_resolutionDesc.height
+      value: 1920
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6ac8ed1f9b3f473e82ae49993e33ce8, type: 3}
