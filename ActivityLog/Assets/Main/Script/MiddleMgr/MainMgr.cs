@@ -10,6 +10,7 @@ namespace Main {
 
         #region mono
         private void Start() {
+            Act.DB.ContentDB.Initialize();
             du.dui.RxButtonMgr.OnClickAsObservable("DoActivity")
                 .Subscribe(_ => m_doActCanvas.SetActive(!m_doActCanvas.activeSelf))
                 .AddTo(this);

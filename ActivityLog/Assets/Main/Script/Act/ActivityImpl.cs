@@ -22,6 +22,12 @@ namespace Main.Act {
         }
         public Content(IProject proj, string name) : this(proj, name, proj.IsEffective) {}
         #endregion
+
+        #region override
+        public override string ToString() {
+            return Parent.ToString() + $"::{Name}({IsEffective})";
+        }
+        #endregion
     }
 
     /// <summary>

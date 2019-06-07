@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using UImage = UnityEngine.UI.Image;
-using UColor = UnityEngine.Color;
+using UGUI = UnityEngine.UI;
 using System.Collections.Generic;
 using static du.Ex.ExVector;
+using System;
+using UniRx;
 
 namespace Main.Act.View {
 
@@ -17,11 +18,11 @@ namespace Main.Act.View {
         #endregion
     }
 
-    public interface IROContentPanel {
-        // int Indent { get; }
+    public interface IRxContentPanel {
+        IObservable<IROContent> Pressed { get; }
     }
 
-    public interface IContentPanel : IROContentPanel {
+    public interface IContentPanel : IRxContentPanel {
         void Initialize(IROContent content);
     }
 
@@ -29,11 +30,18 @@ namespace Main.Act.View {
         #region field
         IROContent m_content = null;
         ContentPanelImpl m_ppi = null;
+        UGUI.Button m_button = null;
+        Subject<IROContent> m_subject = null;
+        #endregion
+
+        #region getter
+        public IObservable<IROContent> Pressed => m_button.OnClickAsObservable().Select(_ => m_content);
         #endregion
 
         #region mono
         private void Awake() {
             m_ppi = transform.GetComponentInChildren<ContentPanelImpl>();
+            m_button = transform.GetComponentInChildren<UGUI.Button>();
         }
         #endregion
 
