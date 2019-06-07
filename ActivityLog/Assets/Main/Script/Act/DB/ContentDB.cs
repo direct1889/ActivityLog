@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UColor = UnityEngine.Color;
 using System.Linq;
+using static Main.Act.DB.ExProject;
 
 namespace Main.Act.DB {
 
@@ -34,13 +35,14 @@ namespace Main.Act.DB {
         //! 登録済みActivity一覧の生成
         public void Initialize() {
             // 色はプリセットからの選択式
-            AddAct("pabulum"     , "安達としまむら");
-            AddAct("pabulum"     , "ユーフォ");
-            AddAct("MisLead"     , "面接練習");
-            // AddAct("Dev"         , "");
-            AddAct("Unity"       , "ActivityLog");
-            AddAct("Unproductive", "Twitter");
-            AddAct("TestSample"  , "Hoge");
+            Load("System/Activities");
+            // AddAct("pabulum"     , "安達としまむら");
+            // AddAct("pabulum"     , "ユーフォ");
+            // AddAct("MisLead"     , "面接練習");
+            // // AddAct("Dev"         , "");
+            // AddAct("Unity"       , "ActivityLog");
+            // AddAct("Unproductive", "Twitter");
+            // AddAct("TestSample"  , "Hoge");
         }
 
         /// <summary> 指定したProjectを直属の親に持つActivityのみを取得 </summary>
@@ -55,6 +57,14 @@ namespace Main.Act.DB {
         private void AddAct(IROContent content) { Add(content.Name, content); }
         private void AddAct(string parentName, string name                  ) { Add(name, new Content(ContentDB.Proj.At(parentName), name             )); }
         private void AddAct(string parentName, string name, bool isEffective) { Add(name, new Content(ContentDB.Proj.At(parentName), name, isEffective)); }
+
+        private void Load(string csvFilePath) {
+            using (var reader = new du.File.CSVReader<ActivityDesc>(du.App.AppManager.DataPath + csvFilePath, true)) {
+                foreach (var desc in reader) {
+                    AddAct(desc.Instantiate());
+                }
+            }
+        }
         #endregion
     }
 
@@ -71,12 +81,13 @@ namespace Main.Act.DB {
         //! 登録済みProject一覧の生成
         public void Initialize() {
             // 色はプリセットからの選択式
-            AddRootProj("pabulum"     , ThemeColors.Red  , true );
-            AddRootProj("MisLead"     , ThemeColors.Blue , true );
-            AddRootProj("Dev"         , ThemeColors.Green, true );
-            AddSubProj("Dev", "Unity");
-            AddRootProj("Unproductive", ThemeColors.Brown, false);
-            AddRootProj("TestSample"  , ThemeColors.Gray , false);
+            Load("System/Projects");
+            // AddRootProj("pabulum"     , ThemeColors.Red  , true );
+            // AddRootProj("MisLead"     , ThemeColors.Blue , true );
+            // AddRootProj("Dev"         , ThemeColors.Green, true );
+            // AddSubProj("Dev", "Unity");
+            // AddRootProj("Unproductive", ThemeColors.Brown, false);
+            // AddRootProj("TestSample"  , ThemeColors.Gray , false);
         }
         #endregion
 
@@ -91,11 +102,38 @@ namespace Main.Act.DB {
 
         #region private
         private void AddProj(IProject proj) { Add(proj.Name, proj); }
-        private void AddRootProj(                  string name, UColor color, bool isEffectiveDefault) { AddProj(Project.Create(name,                 color, isEffectiveDefault)); }
-        private void AddSubProj(string parentName, string name                                       ) { AddProj(Project.Create(name, At(parentName)                           )); }
-        private void AddSubProj(string parentName, string name, UColor color                         ) { AddProj(Project.Create(name, At(parentName), color)); }
-        private void AddSubProj(string parentName, string name,               bool isEffectiveDefault) { AddProj(Project.Create(name, At(parentName),        isEffectiveDefault)); }
-        private void AddSubProj(string parentName, string name, UColor color, bool isEffectiveDefault) { AddProj(new Project(name, At(parentName), color, isEffectiveDefault)); }
+        private void AddRootProj(string name, ThemeColor color, bool isEffectiveDefault) {
+            AddProj(Project.Create(name, color, isEffectiveDefault));
+        }
+        private void AddSubProj(string parentName, string name) {
+            AddProj(Project.Create(name, At(parentName)));
+        }
+        private void AddSubProj(string parentName, string name, ThemeColor color) {
+            AddProj(Project.Create(name, At(parentName), color));
+        }
+        private void AddSubProj(string parentName, string name, bool isEffectiveDefault) {
+            AddProj(Project.Create(name, At(parentName), isEffectiveDefault));
+        }
+        private void AddSubProj(string parentName, string name, ThemeColor color, bool isEffectiveDefault) {
+            AddProj(new Project(name, At(parentName), color, isEffectiveDefault));
+        }
+
+        private void Load(string csvFilePath) {
+            using (var reader = new du.File.CSVReader<ProjectDesc>(du.App.AppManager.DataPath + csvFilePath, true)) {
+                foreach (var desc in reader) {
+                    AddProj(desc.Instantiate());
+                }
+            }
+        }
+
+        // private void Save(string csvFilePath) {
+        //     using (var writer = du.File.FWriter.OpenFile4Rewrite(du.App.AppManager.DataPath + csvFilePath + ".csv")) {
+        //         writer.Write(Project.CSVLabels);
+        //         foreach (var proj in Sorted()) {
+        //             writer.Write(proj.ToCSV());
+        //         }
+        //     }
+        // }
         #endregion
     }
 

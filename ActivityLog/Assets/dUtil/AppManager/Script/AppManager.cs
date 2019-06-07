@@ -106,6 +106,8 @@ namespace du.App {
         #endregion
 
         #region static
+        /// <summary> データファイルはここに置く </summary>
+        /// <value> "Assets/MyData/" </value>
         public static string DataPath { get { return Application.dataPath + "/MyData/"; } }
         #endregion
 

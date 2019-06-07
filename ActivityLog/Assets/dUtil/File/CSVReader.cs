@@ -35,8 +35,8 @@ namespace du {
 
             #region field
 
-#if USE_EVENT	// 変換できない場合に、イベントを発生させ使用者に判断させる場合
-			public event EventHandler<ConvertFailedEventArgs> ConvertFailed;
+#if USE_EVENT    // 変換できない場合に、イベントを発生させ使用者に判断させる場合
+            public event EventHandler<ConvertFailedEventArgs> ConvertFailed;
 #endif
 
             /// <summary>
@@ -140,7 +140,7 @@ namespace du {
                     return @default;
                 }
 
-#if USE_EVENT	// 変換できない場合に、イベントを発生させ使用者に判断させる場合
+#if USE_EVENT    // 変換できない場合に、イベントを発生させ使用者に判断させる場合
                 try {
                     return converter.ConvertFrom(value);
                 }
@@ -157,23 +157,23 @@ namespace du {
             }
 
 
-			private TextReader m_reader;
+            private TextReader m_reader;
             //private StringReader reader;
             #endregion
 
             #region ctor/dtor
-            // filePath は.csvを除いたファイル名を指定
+            /// <param name="filePath"> .csvを除いたファイル名を指定 </param>
             public CSVReader(string filePath, bool skipFirstLine, bool loadFromResources = false, Encoding encoding = null)
             {
                 // 既定のエンコードの設定
                 encoding = encoding ?? Encoding.GetEncoding("utf-8");
                 LoadType(); // Tを解析する
-				//! Resources内のファイルをロード
+                //! Resources内のファイルをロード
                 m_reader = loadFromResources ? CreateTextReaderFromResources(filePath) : CreateTextReaderRaw(filePath);
-				if (m_reader == null) {
-					Debug.Assert(false, "failure to load file : " + filePath + ".csv");
-					return;
-				}
+                if (m_reader == null) {
+                    Debug.Assert(false, "failure to load file : " + filePath + ".csv");
+                    return;
+                }
                 // ヘッダーを飛ばす場合は1行読む
                 if (skipFirstLine) { this.m_reader.ReadLine(); }
             }
@@ -214,7 +214,7 @@ namespace du {
                 else { return new StringReader(csv.text); }
             }
             private static TextReader CreateTextReaderRaw(string filePath) {
-				return new StreamReader(filePath + ".csv");
+                return new StreamReader(filePath + ".csv");
             }
 
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {

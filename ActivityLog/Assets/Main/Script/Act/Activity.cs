@@ -5,12 +5,12 @@ namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
     public interface IROContent {
-        IProject Parent      { get; }
-        string   Name        { get; }
-        bool     IsEffectiveDefault { get; }
+        IProject   Parent      { get; }
+        string     Name        { get; }
+        bool       IsEffective { get; }
 
-        UColor   Color       { get; }
-        int      ParentCount { get; }
+        ThemeColor Color       { get; }
+        int        ParentCount { get; }
     }
 
     /// <summary>

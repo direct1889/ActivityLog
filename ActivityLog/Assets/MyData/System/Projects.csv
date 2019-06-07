@@ -1,0 +1,7 @@
+ParentName,Name,Color,IsEffective
+,pabulum,Red,True
+,MisLead,Blue,True
+,Dev,Green,True
+Dev,Unity,,
+,Unproductive,Brown,False
+,TestSample,Gray,False

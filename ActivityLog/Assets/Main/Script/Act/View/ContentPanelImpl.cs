@@ -37,7 +37,7 @@ namespace Main.Act.View {
         public void SetContent(IROContent content) {
             m_name.text = content.Name;
             m_frame.color = content.Color;
-            m_effectiveCert.SetActive(content.IsEffectiveDefault);
+            m_effectiveCert.SetActive(content.IsEffective);
         }
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         public void SetIndent(int indent) {
