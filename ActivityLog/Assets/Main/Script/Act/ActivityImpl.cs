@@ -1,22 +1,26 @@
-﻿
+﻿using UColor = UnityEngine.Color;
+
 
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
     public class Content : IROContent {
         #region field-property
-        public IProject Parent     { get; private set; }
+        public IProject Parent      { get; private set; }
         public string   Name        { get; private set; }
-        public bool     IsEffective { get; private set; }
+        public bool     IsEffectiveDefault { get; private set; }
+        #endregion
+
+        #region getter
+        public UColor   Color       { get { return Parent.Color; } }
+        public int      ParentCount { get { return Parent.ParentCount + 1; } }
         #endregion
 
         #region ctor/dtor
         public Content(IProject proj, string name, bool isEffective) {
-            Parent = proj; Name = name; IsEffective = isEffective;
+            Parent = proj; Name = name; IsEffectiveDefault = isEffective;
         }
-        public Content(IProject proj, string name) {
-            Parent = proj; Name = name; IsEffective = proj.IsEffective;
-        }
+        public Content(IProject proj, string name) : this(proj, name, proj.IsEffectiveDefault) {}
         #endregion
     }
 

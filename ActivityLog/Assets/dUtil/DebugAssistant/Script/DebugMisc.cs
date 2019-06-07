@@ -5,6 +5,13 @@ using static du.Ex.ExDictionary;
 
 namespace du.Test {
 
+    public static class Misc {
+        public static void IsNull(object obj, string name) {
+            if (obj is null) { Debug.LogError($"{name} is null."); }
+            else { Debug.LogError($"{name} is not null."); }
+        }
+    }
+
     public interface ILogLayer {
         void Log(object message);
         void LogError(object message);
@@ -122,3 +129,4 @@ namespace du.Test {
     }
 
 }
+

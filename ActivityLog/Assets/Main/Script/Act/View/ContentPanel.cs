@@ -17,38 +17,32 @@ namespace Main.Act.View {
         #endregion
     }
 
-    public interface IROProjectPanel {
+    public interface IROContentPanel {
         // int Indent { get; }
     }
 
-    public interface IProjectPanel : IROProjectPanel {
-        void Initialize(IProject proj, Transform parent, IROProjectPanel parentProj = null);
+    public interface IContentPanel : IROContentPanel {
+        void Initialize(IROContent content);
     }
 
-    public class ProjectPanel : MonoBehaviour, IProjectPanel {
+    public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
-        IProject m_proj = null;
-        // IROProjectPanel m_parentProj = null;
-        ProjectPanelImpl m_ppi = null;
+        IROContent m_content = null;
+        ContentPanelImpl m_ppi = null;
         #endregion
-
-        // #region getter
-        // public int Indent { get { return m_parentProj == null ? 0 : m_parentProj.Indent; } }
-        // #endregion
 
         #region mono
         private void Awake() {
-            m_ppi = transform.GetComponentInChildren<ProjectPanelImpl>();
+            m_ppi = transform.GetComponentInChildren<ContentPanelImpl>();
         }
         #endregion
 
         #region public
-        public void Initialize(IProject proj, Transform parent, IROProjectPanel parentProj = null) {
-            if (m_proj == null) {
-                m_proj = proj;
-                // m_parentProj = parentProj;
-                m_ppi.SetProject(m_proj); // 内容、色
-                m_ppi.SetIndent(proj.ParentCount); // 親子関係、RecT
+        public void Initialize(IROContent content) {
+            if (m_content == null) {
+                m_content = content;
+                m_ppi.SetContent(m_content); // 内容、色
+                m_ppi.SetIndent(content.ParentCount); // 親子関係、RecT
             }
         }
         #endregion

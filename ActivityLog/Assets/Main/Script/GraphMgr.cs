@@ -8,7 +8,7 @@ namespace Main.Act {
 
     public class GraphMgr : MonoBehaviour, IGraphMgr {
         private void Start() {
-            ProjActDB.Initialize();
+            ContentDB.Initialize();
         }
     }
 

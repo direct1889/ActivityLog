@@ -6,16 +6,16 @@ using static du.Ex.ExVector;
 
 namespace Main.Act.View {
 
-    public interface IProjectPanelImpl {
+    public interface IContentPanelImpl {
         #region public
         /// <summary> IProjectに合わせてラベル/フレーム色/チェック有無 </summary>
-        void SetProject(IProject proj);
+        void SetContent(IROContent content);
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         void SetIndent(int indent);
         #endregion
     }
 
-    public class ProjectPanelImpl : MonoBehaviour, IProjectPanelImpl {
+    public class ContentPanelImpl : MonoBehaviour, IContentPanelImpl {
         #region field
         UImage m_frame = null;
         du.Cmp.RecT.RecTRightTop m_recTRT = null;
@@ -40,11 +40,11 @@ namespace Main.Act.View {
         #endregion
 
         #region public
-        /// <summary> IProjectに合わせてラベル/フレーム色/チェック有無 </summary>
-        public void SetProject(IProject proj) {
-            m_name.text = proj.Name;
-            m_frame.color = proj.Color;
-            m_effectiveCert.SetActive(proj.IsEffective);
+        /// <summary> IContentに合わせてラベル/フレーム色/チェック有無 </summary>
+        public void SetContent(IROContent content) {
+            m_name.text = content.Name;
+            m_frame.color = content.Color;
+            m_effectiveCert.SetActive(content.IsEffectiveDefault);
         }
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         public void SetIndent(int indent) {

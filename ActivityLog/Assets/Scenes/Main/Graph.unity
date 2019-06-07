@@ -4238,7 +4238,52 @@ PrefabInstance:
     - target: {fileID: 3183288014611714803, guid: bc9688a54578c4804bdb744501964185,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265058897288153867, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_textInfo.materialCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649668022012259173, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649668022012259173, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649668022012259173, guid: bc9688a54578c4804bdb744501964185,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc9688a54578c4804bdb744501964185, type: 3}

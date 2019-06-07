@@ -1,4 +1,5 @@
-﻿
+﻿using UColor = UnityEngine.Color;
+
 
 namespace Main.Act {
 
@@ -6,7 +7,10 @@ namespace Main.Act {
     public interface IROContent {
         IProject Parent      { get; }
         string   Name        { get; }
-        bool     IsEffective { get; }
+        bool     IsEffectiveDefault { get; }
+
+        UColor   Color       { get; }
+        int      ParentCount { get; }
     }
 
     /// <summary>

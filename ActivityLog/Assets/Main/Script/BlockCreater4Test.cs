@@ -30,7 +30,7 @@ namespace Main.Act.View {
         private void CreateActivityBlockImpl(string proj, string actName, string duration) {
             int d = int.Parse(duration);
             Debug.LogError($"Acts[{m_actMgr.Activities.Count}]");
-            m_actMgr.BeginNewAct(ProjActDB.Proj.At(proj), actName, m_tempTimeSign);
+            m_actMgr.BeginNewAct(ContentDB.Proj.At(proj), actName, m_tempTimeSign);
             Debug.LogError($"Acts[{m_actMgr.Activities.Count}]");
             Debug.LogError($"FirstAct[{m_actMgr.Activities[0].Context.EndTime}]");
             m_acts.CreateBlock(m_actMgr.Activities.Back);
