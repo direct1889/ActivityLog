@@ -20,7 +20,7 @@ namespace Main.Act {
     public interface IROContext {
         IROActivity  NextAct   { get; }
         MinuteOfDay  BeginTime { get; }
-        /// <returns> まだ終了していなければ null </returns>
+        /// <value> まだ終了していなければ null </value>
         MinuteOfDay? EndTime   { get; }
         /// <summary> 未終了のときは現在時刻まで </summary>
         int          Duration  { get; }

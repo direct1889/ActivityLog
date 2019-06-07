@@ -1,29 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-
 namespace du.Misc {
 
-
     public class EnumSprite<EnumType> where EnumType : struct {
-
-        //! ----- field -----
         #region field
-
         IDictionary<EnumType, Sprite> m_sprites
             = new Dictionary<EnumType, Sprite>();
-
         #endregion
 
-
-        //! ----- constructor -----
-        #region constructor
-
-        public EnumSprite(
-            string filePath,
-            bool isEliminateLastElement = false)
-        {
-
+        #region ctor/dtor
+        public EnumSprite(string filePath, bool isEliminateLastElement = false) {
             Sprite[] rawSprites = Resources.LoadAll<Sprite>(filePath);
             int max = System.Enum.GetValues(typeof(EnumType)).Length;
             if (isEliminateLastElement) { --max; }
@@ -34,23 +21,12 @@ namespace du.Misc {
                     rawSprites[i]
                     );
             }
-
         }
-
         #endregion
 
-
-        //! ----- getter -----
         #region getter
-
-        public Sprite this[EnumType type] {
-            get { return m_sprites[type]; }
-        }
-
+        public Sprite this[EnumType type] => m_sprites[type];
         #endregion
-
-
     }
-
 
 }

@@ -1,8 +1,6 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
-using UColor = UnityEngine.Color;
+﻿using System.Collections.Generic;
 using System.Linq;
+using static du.Ex.ExDictionary;
 
 namespace du.Cmp {
 
@@ -26,8 +24,8 @@ namespace du.Cmp {
         #endregion
 
         #region protected property
-        protected IList<string> Order { get { return m_order; } }
-        protected IDictionary<string, T> Data { get { return m_data; } }
+        protected IList<string> Order => m_order;
+        protected IDictionary<string, T> Data => m_data;
         #endregion
 
         #region ctor/dtor
@@ -44,14 +42,9 @@ namespace du.Cmp {
             else { return null; }
         }
         /// <returns> 見つからなければ null </returns>
-        public T At(string key) {
-            if (m_data.ContainsKey(key)) { return m_data[key]; }
-            else { return null; }
-        }
+        public T At(string key) => m_data.At(key);
         /// <summary> ActivityをEnumerableで一括取得 </summary>
-        public IEnumerable<T> Sorted() {
-            return m_order.Select(name => m_data[name]);
-        }
+        public IEnumerable<T> Sorted() => m_order.Select(name => m_data[name]);
         #endregion
 
         #region protected

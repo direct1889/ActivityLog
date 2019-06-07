@@ -6,7 +6,7 @@ namespace Main.Act {
     /// <summary> アクティビティ系列/日を操作する </summary>
     public class ActivitiesMgr : IActivitiesMgr {
         #region property
-        public IROActSequence Activities { get { return Acts; } }
+        public IROActSequence Activities => Acts;
         protected IActSequence Acts { get; }
         #endregion
 

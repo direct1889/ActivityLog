@@ -11,13 +11,13 @@ namespace du.Cmp.RecT {
 
         protected RectTransform RecT { get; }
 
-        protected float OffmX { get { return RecT.offsetMin.x; } set { RecT.offsetMin = new Vector2(value, RecT.offsetMin.y); } }
-        protected float OffmY { get { return RecT.offsetMin.y; } set { RecT.offsetMin = new Vector2(RecT.offsetMin.x, value); } }
-        protected float OffMX { get { return RecT.offsetMax.x; } set { RecT.offsetMax = new Vector2(value, RecT.offsetMax.y); } }
-        protected float OffMY { get { return RecT.offsetMax.y; } set { RecT.offsetMax = new Vector2(RecT.offsetMax.x, value); } }
+        protected float OffmX { get => RecT.offsetMin.x; set => RecT.offsetMin = new Vector2(value, RecT.offsetMin.y); }
+        protected float OffmY { get => RecT.offsetMin.y; set => RecT.offsetMin = new Vector2(RecT.offsetMin.x, value); }
+        protected float OffMX { get => RecT.offsetMax.x; set => RecT.offsetMax = new Vector2(value, RecT.offsetMax.y); }
+        protected float OffMY { get => RecT.offsetMax.y; set => RecT.offsetMax = new Vector2(RecT.offsetMax.x, value); }
 
-        protected float LocalX { get { return RecT.localPosition.x; } set { RecT.localPosition = new Vector3(value, RecT.localPosition.y, RecT.localPosition.z); }}
-        protected float LocalY { get { return RecT.localPosition.y; } set { RecT.localPosition = new Vector3(RecT.localPosition.x, value, RecT.localPosition.z); }}
+        protected float LocalX { get => RecT.localPosition.x; set => RecT.localPosition = new Vector3(value, RecT.localPosition.y, RecT.localPosition.z); }
+        protected float LocalY { get => RecT.localPosition.y; set => RecT.localPosition = new Vector3(RecT.localPosition.x, value, RecT.localPosition.z); }
 
         protected RecTController(RectTransform rect) { RecT = rect; }
 
@@ -28,10 +28,10 @@ namespace du.Cmp.RecT {
     /// <summary> H:ストレッチ,V:Bottom,Pivot:底辺中央 </summary>
     public class RecTHorStretchBottom : RecTController {
 
-        public float Left   { get { return OffmX; } set { OffmX = value; } }
-        public float Right  { get { return OffMX; } set { OffMX = value; } }
-        public float PosY   { get { return OffmY; } set { Height += value - OffmY; OffmY = value; } }
-        public float Height { get { return OffMY - OffmY; } set { OffMY = value + OffmY; } }
+        public float Left   { get => OffmX;         set => OffmX = value; }
+        public float Right  { get => OffMX;         set => OffMX = value; }
+        public float PosY   { get => OffmY;         set { Height += value - OffmY; OffmY = value; } }
+        public float Height { get => OffMY - OffmY; set => OffMY = value + OffmY; }
 
         public RecTHorStretchBottom(RectTransform rect) : base(rect) {}
 
@@ -52,11 +52,12 @@ namespace du.Cmp.RecT {
     public class RecTRightTop : RecTController {
 
         /// <value> 右上頂点のX座標 </value>
-        public float PosX   { get { return OffMX; } set { OffMX = value; } }
+        public float PosX   { get => OffMX; set => OffMX = value; }
         /// <value> 右上頂点のY座標 </value>
-        public float PosY   { get { return OffMY; } set { OffMY = value; } }
-        public float Width  { get { return OffMX - OffmX; } set { OffmX = OffMX - value; } }
-        public float Height { get { return OffMY - OffmY; } set { OffmY = OffMY - value; } }
+        public float PosY   { get => OffMY; set => OffMY = value; }
+
+        public float Width  { get => OffMX - OffmX; set => OffmX = OffMX - value; }
+        public float Height { get => OffMY - OffmY; set => OffmY = OffMY - value; }
 
         /// <summary> Transform親子関係の設定も合わせて行う </summary>
         public RecTRightTop(RectTransform rect, Transform parent) : base(rect) {

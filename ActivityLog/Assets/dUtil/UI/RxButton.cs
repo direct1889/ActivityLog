@@ -16,7 +16,7 @@ namespace du.dui {
         #endregion
 
         #region getter
-        public System.IObservable<Unit> OnClickAsObservable { get { return m_button.OnClickAsObservable(); } }
+        public System.IObservable<Unit> OnClickAsObservable => m_button.OnClickAsObservable();
         #endregion
 
         #region mono

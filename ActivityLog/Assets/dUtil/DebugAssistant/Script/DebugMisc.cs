@@ -73,10 +73,10 @@ namespace du.Test {
     }
 
     public static class LLog {
-        public static ILogLayer Boot { get { return LayeredLog.At("BOOT"); } }
-        public static ILogLayer Debug { get { return LayeredLog.At("DEBUG"); } }
-        public static ILogLayer Misc { get { return LayeredLog.At("MISC"); } }
-        public static ILogLayer MBoot { get { return LayeredLog.At("MAIN:BOOT"); } }
+        public static ILogLayer Boot  => LayeredLog.At("BOOT");
+        public static ILogLayer Debug => LayeredLog.At("DEBUG");
+        public static ILogLayer Misc  => LayeredLog.At("MISC");
+        public static ILogLayer MBoot => LayeredLog.At("MAIN:BOOT");
     }
 
     public static class Log {

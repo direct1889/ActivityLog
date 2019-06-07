@@ -57,8 +57,8 @@ namespace du.dui {
 
         #region public
         public string Text {
-            set { m_textUI.text = value; }
-            get { return m_textUI.text; }
+            set => m_textUI.text = value;
+            get => m_textUI.text;
         }
         public void Add(string text){ m_textUI.text += text; }
         public void Add(char c)     { m_textUI.text += c;    }
@@ -84,7 +84,7 @@ namespace du.dui {
         #endregion
 
         #region private
-        bool IsDisplaying { get { return m_displayStream != null; }}
+        bool IsDisplaying => m_displayStream != null;
         void DispNextChar() {
             if (m_message == null) { return; }
 
@@ -98,7 +98,7 @@ namespace du.dui {
                 || m_hasDispLine >= m_maxLine)
             { m_hasDispAll.Value = true; }
         }
-        char NextChar { get { return m_message[m_dispIt]; } }
+        char NextChar => m_message[m_dispIt];
         #endregion
 
     }

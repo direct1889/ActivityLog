@@ -12,8 +12,8 @@ namespace Main.Act {
         #endregion
 
         #region getter
-        public ThemeColor Color       { get { return Parent.Color; } }
-        public int        ParentCount { get { return Parent.ParentCount + 1; } }
+        public ThemeColor Color       => Parent.Color;
+        public int        ParentCount => Parent.ParentCount + 1;
         #endregion
 
         #region ctor/dtor
@@ -43,10 +43,10 @@ namespace Main.Act {
         public IROActivity NextAct { get; private set; } = null;
         public MinuteOfDay BeginTime { get; private set; }
         /// <summary> まだ終了していなければ null </summary>
-        public MinuteOfDay? EndTime { get { return NextAct?.Context?.BeginTime; } }
+        public MinuteOfDay? EndTime => NextAct?.Context?.BeginTime;
         /// <summary> 未終了のときは現在時刻まで </summary>
-        public int Duration { get { return (EndTime ?? MinuteOfDay.Now) - BeginTime; } }
-        public bool HasEnded { get { return NextAct != null; } }
+        public int Duration => (EndTime ?? MinuteOfDay.Now) - BeginTime;
+        public bool HasEnded => NextAct != null;
         #endregion
 
         #region ctor/dtor
@@ -77,7 +77,7 @@ namespace Main.Act {
         #endregion
 
         #region static
-        public static IContext BeginFromNow { get { return new Context(MinuteOfDay.Now); } }
+        public static IContext BeginFromNow => new Context(MinuteOfDay.Now);
         #endregion
     }
 
@@ -89,7 +89,7 @@ namespace Main.Act {
         #region property
         public MinuteOfDay BeginTime { get; private set; }
         public MinuteOfDay EndTime { get; private set; }
-        public int Duration { get { return EndTime - BeginTime; } }
+        public int Duration => EndTime - BeginTime;
         #endregion
 
         #region ctor/dtor
@@ -111,7 +111,7 @@ namespace Main.Act {
 
         #region property
         public IROContent Content { get; private set; }
-        public IROContext Context { get { return MutableContext; } }
+        public IROContext Context => MutableContext;
         public IContext MutableContext { get; private set; }
         #endregion
 

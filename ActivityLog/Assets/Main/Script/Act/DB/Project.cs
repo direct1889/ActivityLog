@@ -1,9 +1,4 @@
 ﻿
-using System.Collections.Generic;
-using UnityEngine;
-using UColor = UnityEngine.Color;
-using System.Linq;
-
 namespace Main.Act {
 
     /// <summary> プロジェクト:タスクグループ </summary>
@@ -20,7 +15,7 @@ namespace Main.Act {
         #endregion
 
         #region getter property
-        public int ParentCount { get { return (Parent is null ? 0 : Parent.ParentCount + 1); } }
+        public int ParentCount => (Parent is null ? 0 : Parent.ParentCount + 1);
         #endregion
 
         #region ctor/dtor
@@ -32,19 +27,15 @@ namespace Main.Act {
         }
         /// <param name="color"> 省略すると親から引き継ぐ </param>
         /// <param name="isEffective"> 省略すると親から引き継ぐ </param>
-        public static IProject Create(string name, IProject parent, ThemeColor color) {
-            return parent is null ? null : new Project(name, parent, color, parent.IsEffective);
-        }
-        public static IProject Create(string name, IProject parent, bool isEffective) {
-            return parent is null ? null : new Project(name, parent, parent.Color, isEffective);
-        }
-        public static IProject Create(string name, IProject parent) {
-            return parent is null ? null : new Project(name, parent, parent.Color, parent.IsEffective);
-        }
+        public static IProject Create(string name, IProject parent, ThemeColor color)
+            => parent is null ? null : new Project(name, parent, color, parent.IsEffective);
+        public static IProject Create(string name, IProject parent, bool isEffective)
+            => parent is null ? null : new Project(name, parent, parent.Color, isEffective);
+        public static IProject Create(string name, IProject parent)
+            => parent is null ? null : new Project(name, parent, parent.Color, parent.IsEffective);
         /// <summary> 親を持たないRootProjectの場合、color/isEffectiveの省略不可 </summary>
-        public static IProject Create(string name, ThemeColor color, bool isEffective) {
-            return new Project(name, null, color, isEffective);
-        }
+        public static IProject Create(string name, ThemeColor color, bool isEffective)
+            => new Project(name, null, color, isEffective);
         #endregion
 
         #region override
@@ -52,8 +43,8 @@ namespace Main.Act {
             // if (obj == null || GetType() != obj.GetType()) { return false; }
             // return GetHashCode() == ((Project)obj).GetHashCode();
         // }
-        public override int GetHashCode() { return ToString().GetHashCode(); }
-        public override string ToString() { return Parent?.ToString() ?? "" + $"::{Name}"; }
+        public override int GetHashCode() => ToString().GetHashCode();
+        public override string ToString() => Parent?.ToString() ?? "" + $"::{Name}";
         #endregion
 
         // #region operator
@@ -62,7 +53,7 @@ namespace Main.Act {
         // #endregion
 
         #region static
-        public static string CSVLabels { get { return "ParentName,Name,Color,IsEffective"; } }
+        public static string CSVLabels => "ParentName,Name,Color,IsEffective";
         #endregion
     }
 

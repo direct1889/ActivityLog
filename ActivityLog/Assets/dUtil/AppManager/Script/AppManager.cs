@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
@@ -43,7 +42,7 @@ namespace du.App {
         #endregion
 
         #region getter property
-        public MouseCursorMode MouseCursorMode { get { return m_mcmode; } }
+        public MouseCursorMode MouseCursorMode => m_mcmode;
         #endregion
 
         #region mono
@@ -108,7 +107,7 @@ namespace du.App {
         #region static
         /// <summary> データファイルはここに置く </summary>
         /// <value> "Assets/MyData/" </value>
-        public static string DataPath { get { return Application.dataPath + "/MyData/"; } }
+        public static string DataPath => Application.dataPath + "/MyData/";
         #endregion
 
     }

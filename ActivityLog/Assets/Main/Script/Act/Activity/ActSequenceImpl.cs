@@ -6,51 +6,41 @@ namespace Main.Act {
     /// <summary> アクティビティの系列(日毎) </summary>
     public class ActSequence : IActSequence {
         #region field
-        IList<IActivity> m_acts;
+        IList<IActivity> m_acts = new List<IActivity>();
         #endregion
 
-        #region ctor/dtor
-        public ActSequence() { m_acts = new List<IActivity>(); }
-        #endregion
-
-        // IROActivitiesContainer -------
+        // IROActSequence -------
         #region getter
-        public IActivity this [int index] { get { return m_acts[index]; } }
-        public IROActivity this [MinuteOfDay time] { get { return m_acts[IndexOf(time)]; } }
+        public IROActivity this [int index] => m_acts[index];
+        public IROActivity this [MinuteOfDay time] => m_acts[IndexOf(time)];
+
         public int IndexOf(MinuteOfDay time) {
             if (MinuteOfDay.Now < time) {
                 throw new System.ArgumentException("Argument is future.");
             }
-            else {
-                for (int i = m_acts.Count - 1; i >= 0; --i) {
-                    if (m_acts[i].Context.BeginTime < time) {
-                        return i;
-                    }
-                }
+            for (int i = m_acts.Count - 1; i >= 0; --i) {
+                if (m_acts[i].Context.BeginTime < time) { return i; }
             }
             // ここには本来到達し得ない
             throw new System.Exception("");
         }
 
-        public int Count { get { return m_acts.Count; } }
-        public IROActivity Back { get { return m_acts[m_acts.Count - 1]; } }
-        private IActivity MutableBack { get { return m_acts[m_acts.Count - 1]; } }
-        private bool IndexIsValid(int index) { return 0 <= index && index < m_acts.Count; }
-        #endregion
+        public int Count => m_acts.Count;
+        public IROActivity Back => m_acts[m_acts.Count - 1];
         // ------------------------------
+
+        private IActivity MutableBack => m_acts[m_acts.Count - 1];
+        private bool IndexIsValid(int index) => (0 <= index && index < m_acts.Count);
+        #endregion
 
         #region public
         public void PushBack(IActivity act) {
-            if (m_acts.Count == 0) {
-                m_acts.Add(act);
-            }
+            if (m_acts.Count == 0) { m_acts.Add(act); }
             else if (Back.Context.BeginTime < act.Context.BeginTime) {
-                Debug.LogError($"PushBack[{Back.Context.BeginTime} >< {act.Context.BeginTime}]");
                 MutableBack.MutableContext.ResetFollowAct(act);
                 m_acts.Add(act);
             }
             else {
-                Debug.LogError($"PushBack[{Back.Context.BeginTime} >< {act.Context.BeginTime}]");
                 for (int i = Count - 1; i > IndexOf(act.Context.BeginTime); --i) {
                     RemoveAt(i);
                 }

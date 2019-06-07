@@ -3,15 +3,20 @@ using UC = UnityEngine.Color;
 
 namespace Main {
 
+    /// <summary>
+    /// テーマカラーはプリセットからの選択式
+    /// カラー名のみをもつ、UColorへ暗黙変換可能なプロキシクラス
+    /// </summary>
     public struct ThemeColor {
         readonly string name;
         public ThemeColor(string name) { this.name = name; }
-        public override string ToString() { return name; }
+        public override string ToString() => name;
         public static implicit operator UC(ThemeColor color) {
             return ThemeColors.At(color.name);
         }
     }
 
+    /// <summary> テーマカラーの実体を一括で保持  </summary>
     public static class ThemeColors {
         static IDictionary<string, UC> m_colors = new Dictionary<string, UC>{
             { "Red"    , new UC(1.0f, 0.8f, 0.5f) },
@@ -34,12 +39,12 @@ namespace Main {
             return new ThemeColor(m_colors.ContainsKey(name) ? name : defaultName);
         }
 
-        public static ThemeColor Red     { get { return new ThemeColor("Red"); } }
-        public static ThemeColor Blue    { get { return new ThemeColor("Blue"); } }
-        public static ThemeColor Green   { get { return new ThemeColor("Green"); } }
-        public static ThemeColor Brown   { get { return new ThemeColor("Brown"); } }
-        public static ThemeColor Gray    { get { return new ThemeColor("Gray"); } }
-        public static ThemeColor Default { get { return new ThemeColor(defaultName); } }
+        public static ThemeColor Red     => new ThemeColor("Red");
+        public static ThemeColor Blue    => new ThemeColor("Blue");
+        public static ThemeColor Green   => new ThemeColor("Green");
+        public static ThemeColor Brown   => new ThemeColor("Brown");
+        public static ThemeColor Gray    => new ThemeColor("Gray");
+        public static ThemeColor Default => new ThemeColor(defaultName);
     }
 
 }
