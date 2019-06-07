@@ -21,63 +21,7 @@ namespace Main.Act {
         #endregion
     }
 
-    /// <summary>
-    /// 順序付き連想配列
-    /// Dicと別にキーのListを持ってるだけ
-    /// </summary>
-    public interface IOrderedDB<T> where T : class {
-        /// <returns> 見つからなければ null </returns>
-        T At(int i);
-        /// <returns> 見つからなければ null </returns>
-        T At(string key);
-        /// <summary> ActivityをEnumerableで一括取得 </summary>
-        IEnumerable<T> Sorted();
-    }
-
-    public class OrderedDB<T> : IOrderedDB<T> where T : class {
-        #region field
-        IList<string> m_order = null;
-        IDictionary<string, T> m_data = null;
-        #endregion
-
-        #region protected property
-        protected IList<string> Order { get { return m_order; } }
-        protected IDictionary<string, T> Data { get { return m_data; } }
-        #endregion
-
-        #region ctor/dtor
-        public OrderedDB() {
-            m_order = new List<string>();
-            m_data = new Dictionary<string, T>();
-        }
-        #endregion
-
-        #region public
-        /// <returns> 見つからなければ null </returns>
-        public T At(int i) {
-            if (0 <= i && i < m_data.Count) { return m_data[m_order[i]]; }
-            else { return null; }
-        }
-        /// <returns> 見つからなければ null </returns>
-        public T At(string key) {
-            if (m_data.ContainsKey(key)) { return m_data[key]; }
-            else { return null; }
-        }
-        /// <summary> ActivityをEnumerableで一括取得 </summary>
-        public IEnumerable<T> Sorted() {
-            return m_order.Select(name => m_data[name]);
-        }
-        #endregion
-
-        #region protected
-        protected void Add(string key, T value) {
-            m_order.Add(key);
-            m_data.Add(key, value);
-        }
-        #endregion
-    }
-
-    public interface IActivityDB : IOrderedDB<IROContent> {
+    public interface IActivityDB : du.Cmp.IOrderedMap<IROContent> {
         //! 登録済みActivity一覧の生成
         void Initialize();
         /// <summary> ActivityをEnumerableで一括取得 </summary>
@@ -85,7 +29,7 @@ namespace Main.Act {
     }
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-    public class ActivityDB : OrderedDB<IROContent>, IActivityDB {
+    public class ActivityDB : du.Cmp.OrderedMap<IROContent>, IActivityDB {
         #region public
         //! 登録済みActivity一覧の生成
         public void Initialize() {
@@ -114,7 +58,7 @@ namespace Main.Act {
         #endregion
     }
 
-    public interface IProjectDB : IOrderedDB<IProject> {
+    public interface IProjectDB : du.Cmp.IOrderedMap<IProject> {
         //! 登録済みProject一覧の生成
         void Initialize();
         /// <summary> ProjectをEnumerableで一括取得 </summary>
@@ -122,7 +66,7 @@ namespace Main.Act {
     }
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-    public class ProjectDB : OrderedDB<IProject>, IProjectDB {
+    public class ProjectDB : du.Cmp.OrderedMap<IProject>, IProjectDB {
         #region public
         //! 登録済みProject一覧の生成
         public void Initialize() {
