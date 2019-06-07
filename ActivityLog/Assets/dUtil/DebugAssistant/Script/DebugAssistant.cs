@@ -3,9 +3,12 @@ namespace du.Test {
 
     public class DebugAssistant : App.SingletonMonoBehaviour<DebugAssistant> {
         #region field
-        public TestLogger TestLog { private set; get; } = null;
-        ITestCode m_test = null;
-        public Audio.SoundAsset Sound { private set; get; } = null;
+        ITestCode m_test;
+        #endregion
+
+        #region field property
+        public TestLogger TestLog { get; private set; }
+        public Audio.SoundAsset Sound { get; private set; }
         #endregion
 
         #region mono

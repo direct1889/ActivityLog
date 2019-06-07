@@ -28,10 +28,10 @@ namespace Main.Act.View {
 
     public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
-        IROContent m_content = null;
-        ContentPanelImpl m_ppi = null;
-        UGUI.Button m_button = null;
-        Subject<IROContent> m_subject = null;
+        IROContent m_content;
+        ContentPanelImpl m_ppi;
+        UGUI.Button m_button;
+        Subject<IROContent> m_subject;
         #endregion
 
         #region getter

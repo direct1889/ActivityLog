@@ -13,9 +13,10 @@ namespace Main.Act.View {
 
     public class ActivitiesGraph : MonoBehaviour, IActivitiesCylinder, IActivitiesGraph {
         #region field
-        RectTransform m_rect = null;
-        IList<IActivityBlock> m_blocks = null;
-        [SerializeField]GameObject m_prefActBlock = null;
+        RectTransform m_rect;
+        IList<IActivityBlock> m_blocks = new List<IActivityBlock>();
+
+        [SerializeField]GameObject m_prefActBlock;
         #endregion
 
         #region getter
@@ -23,10 +24,7 @@ namespace Main.Act.View {
         #endregion
 
         #region mono
-        void Awake() {
-            m_rect = GetComponent<RectTransform>();
-            m_blocks = new List<IActivityBlock>();
-        }
+        void Awake() { m_rect = GetComponent<RectTransform>(); }
         #endregion
 
         #region public

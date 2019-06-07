@@ -10,7 +10,7 @@ namespace du.dui {
 
     public class RxButton : MonoBehaviour, IRxButton {
         #region field
-        UButtion m_button = null;
+        UButtion m_button;
 
         [SerializeField] string m_label = "";
         #endregion

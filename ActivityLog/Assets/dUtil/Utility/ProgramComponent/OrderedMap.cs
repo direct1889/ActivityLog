@@ -19,20 +19,13 @@ namespace du.Cmp {
 
     public class OrderedMap<T> : IOrderedMap<T> where T : class {
         #region field
-        IList<string> m_order = null;
-        IDictionary<string, T> m_data = null;
+        IList<string> m_order = new List<string>();
+        IDictionary<string, T> m_data = new Dictionary<string, T>();
         #endregion
 
         #region protected property
         protected IList<string> Order => m_order;
         protected IDictionary<string, T> Data => m_data;
-        #endregion
-
-        #region ctor/dtor
-        public OrderedMap() {
-            m_order = new List<string>();
-            m_data = new Dictionary<string, T>();
-        }
         #endregion
 
         #region public

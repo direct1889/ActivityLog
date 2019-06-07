@@ -19,9 +19,9 @@ namespace Main.Act.View {
         IList<IContentPanel> m_contentPanels = new List<IContentPanel>();
         Subject<IRxContentPanel> m_createdPanelStream = new Subject<IRxContentPanel>();
 
-        [SerializeField] GameObject m_panelsParent = null;
-        [SerializeField] GameObject m_projPanelPref = null;
-        [SerializeField] GameObject m_actPanelPref = null;
+        [SerializeField] GameObject m_panelsParent;
+        [SerializeField] GameObject m_projPanelPref;
+        [SerializeField] GameObject m_actPanelPref;
         #endregion
 
         #region getter

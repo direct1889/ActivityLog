@@ -34,9 +34,9 @@ namespace du.App {
 
     public class AppManager : SingletonMonoBehaviour<AppManager>, IAppManager {
         #region field
-        [SerializeField] string m_pilotScene = null;
-        [SerializeField] AudioDesc m_audioDesc = null;
-        [SerializeField] ResolutionDesc m_resolutionDesc = null;
+        [SerializeField] string m_pilotScene;
+        [SerializeField] AudioDesc m_audioDesc;
+        [SerializeField] ResolutionDesc m_resolutionDesc;
         [SerializeField] bool m_isDebugMode = false;
         [SerializeField] MouseCursorMode m_mcmode = MouseCursorMode.Visible;
         #endregion

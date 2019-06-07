@@ -24,7 +24,7 @@ namespace du.dui {
         [SerializeField] int m_maxLine = 3;
         [SerializeField] float m_intervalMS = 0.05f;
 
-        [SerializeField] string Msg = null;
+        [SerializeField] string Msg;
 
         UGUI.Text m_textUI;
         string m_message;
@@ -34,7 +34,7 @@ namespace du.dui {
         int m_dispIt = 0;          // 今見ている文字番号
         IReactiveProperty<bool> m_hasDispAll = new ReactiveProperty<bool>(false);      // メッセージ全文表示完了
 
-        IDisposable m_displayStream = null;
+        IDisposable m_displayStream;
 
         // マウスクリックを促すアイコン
         // private Image clickIcon;

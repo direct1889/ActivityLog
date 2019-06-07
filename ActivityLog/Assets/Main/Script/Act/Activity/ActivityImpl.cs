@@ -40,7 +40,7 @@ namespace Main.Act {
         /// 後続のアクティビティ
         /// まだ終了していなければ null
         /// </summary>
-        public IROActivity NextAct { get; private set; } = null;
+        public IROActivity NextAct { get; private set; }
         public MinuteOfDay BeginTime { get; private set; }
         /// <summary> まだ終了していなければ null </summary>
         public MinuteOfDay? EndTime => NextAct?.Context?.BeginTime;
@@ -71,7 +71,7 @@ namespace Main.Act {
         public void ResetFollowAct(IROActivity followAct) {
             NextAct = followAct;
         }
-        public void SaikaiSuru() {
+        public void Resume() {
             NextAct = null;
         }
         #endregion

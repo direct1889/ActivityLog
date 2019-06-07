@@ -15,8 +15,8 @@ namespace du.File {
     public class FWriter : IFWriter {
 
         #region field
-        StreamWriter m_sw = null;
-        string m_filePath = null;
+        StreamWriter m_sw;
+        string m_filePath;
         #endregion
 
         #region ctor/dtor

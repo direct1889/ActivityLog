@@ -1,6 +1,5 @@
 ﻿using UColor = UnityEngine.Color;
 
-
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
@@ -30,7 +29,7 @@ namespace Main.Act {
         void ResetPrecedeAct(IIndependentActivity precedeAct);
         void ResetPrecedeAct(MinuteOfDay newBeginTime);
         void ResetFollowAct(IROActivity followAct);
-        void SaikaiSuru();
+        void Resume();
     }
     /// <returns> 自己完結型時系列情報 </returns>
     public interface IIndependentContext {
@@ -53,7 +52,7 @@ namespace Main.Act {
         IContext MutableContext { get; }
         void ResetContent(IROContent cnt);
     }
-    /// <summary> アクティビティ </summary>
+    /// <summary> 自己完結型アクティビティ </summary>
     public interface IIndependentActivity {
         /// <summary> 内容 </summary>
         IROContent Content { get; }

@@ -5,19 +5,14 @@ namespace Main.Act.View {
 
     public class BlockCreater4Test : MonoBehaviour {
 
-        [SerializeField] InputField m_IFProject = null;
-        [SerializeField] InputField m_IFActivity = null;
-        [SerializeField] InputField m_IFDuration = null;
+        [SerializeField] InputField m_IFProject;
+        [SerializeField] InputField m_IFActivity;
+        [SerializeField] InputField m_IFDuration;
 
-        [SerializeField] ActivitiesGraph m_acts = null;
+        [SerializeField] ActivitiesGraph m_acts;
 
-        MinuteOfDay m_tempTimeSign;
-        ActivitiesMgr4Test m_actMgr = null;
-
-        private void Awake() {
-            m_tempTimeSign = MinuteOfDay.Begin;
-            m_actMgr = new ActivitiesMgr4Test();
-        }
+        MinuteOfDay m_tempTimeSign = MinuteOfDay.Begin;
+        ActivitiesMgr4Test m_actMgr = new ActivitiesMgr4Test();
 
         public void CreateActivity() {
             if (m_IFProject.text == "") {

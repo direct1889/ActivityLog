@@ -33,17 +33,7 @@ namespace Main.Act.DB {
     public class ActivityDB : du.Cmp.OrderedMap<IROContent>, IActivityDB {
         #region public
         //! 登録済みActivity一覧の生成
-        public void Initialize() {
-            // 色はプリセットからの選択式
-            Load("System/Activities");
-            // AddAct("pabulum"     , "安達としまむら");
-            // AddAct("pabulum"     , "ユーフォ");
-            // AddAct("MisLead"     , "面接練習");
-            // // AddAct("Dev"         , "");
-            // AddAct("Unity"       , "ActivityLog");
-            // AddAct("Unproductive", "Twitter");
-            // AddAct("TestSample"  , "Hoge");
-        }
+        public void Initialize() { Load("System/Activities"); }
 
         /// <summary> 指定したProjectを直属の親に持つActivityのみを取得 </summary>
         public IEnumerable<IROContent> Sorted(IProject parent) {
@@ -79,16 +69,7 @@ namespace Main.Act.DB {
     public class ProjectDB : du.Cmp.OrderedMap<IProject>, IProjectDB {
         #region public
         //! 登録済みProject一覧の生成
-        public void Initialize() {
-            // 色はプリセットからの選択式
-            Load("System/Projects");
-            // AddRootProj("pabulum"     , ThemeColors.Red  , true );
-            // AddRootProj("MisLead"     , ThemeColors.Blue , true );
-            // AddRootProj("Dev"         , ThemeColors.Green, true );
-            // AddSubProj("Dev", "Unity");
-            // AddRootProj("Unproductive", ThemeColors.Brown, false);
-            // AddRootProj("TestSample"  , ThemeColors.Gray , false);
-        }
+        public void Initialize() { Load("System/Projects"); }
         #endregion
 
         #region public

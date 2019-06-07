@@ -14,10 +14,11 @@ namespace Main.Act.View {
     public class ActivityBlock : MonoBehaviour, IActivityBlock {
 
         #region field
-        UGUI.Image m_image = null;
-        RecTHorStretchBottom m_recT = null;
-        IActivitiesCylinder m_cylinder = null;
-        [SerializeField] UTMP m_text = null;
+        UGUI.Image m_image;
+        RecTHorStretchBottom m_recT;
+        IActivitiesCylinder m_cylinder;
+
+        [SerializeField] UTMP m_text;
         #endregion
 
         #region property

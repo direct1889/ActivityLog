@@ -17,11 +17,11 @@ namespace Main.Act.View {
 
     public class ContentPanelImpl : MonoBehaviour, IContentPanelImpl {
         #region field
-        UImage m_frame = null;
-        du.Cmp.RecT.RecTRightTop m_recTRT = null;
+        UImage m_frame;
+        du.Cmp.RecT.RecTRightTop m_recTRT;
 
-        [SerializeField] TMPro.TMP_Text m_name = null;
-        [SerializeField] GameObject m_effectiveCert = null;
+        [SerializeField] TMPro.TMP_Text m_name;
+        [SerializeField] GameObject m_effectiveCert;
         #endregion
 
         #region mono

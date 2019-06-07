@@ -38,7 +38,7 @@ namespace du.Test {
     }
 
     public static class LayeredLog {
-        static IDictionary<string, IOperableLogLayer> m_layers = null;
+        static IDictionary<string, IOperableLogLayer> m_layers;
 
         public static void Initialize(bool isActiveDefault = true) {
             if (m_layers == null) {

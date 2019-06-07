@@ -11,8 +11,8 @@ namespace du.dui {
 
     public class TextArea : MonoBehaviour, ITextArea {
         #region field
-        UGUI.Text m_textUI = null;
-        RectTransform m_rect = null;
+        UGUI.Text m_textUI;
+        RectTransform m_rect;
         #endregion
 
         #region property

@@ -32,13 +32,10 @@ namespace du {
         public class CSVReader<T> : IEnumerable<T>, IDisposable
         where T : class, new()
         {
-
             #region field
-
 #if USE_EVENT    // 変換できない場合に、イベントを発生させ使用者に判断させる場合
             public event EventHandler<ConvertFailedEventArgs> ConvertFailed;
 #endif
-
             /// <summary>
             /// Type毎のデータコンバーター
             /// </summary>
