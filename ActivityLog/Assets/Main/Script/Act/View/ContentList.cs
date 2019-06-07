@@ -32,9 +32,9 @@ namespace Main.Act.View {
 
         #region private
         private void Initialize() {
-            foreach (var proj in ContentDB.Proj.Sorted()) {
+            foreach (var proj in DB.ContentDB.Proj.Sorted()) {
                 CreateContentPanel(proj, m_projPanelPref);
-                foreach (var act in ContentDB.Act.Sorted(proj)) {
+                foreach (var act in DB.ContentDB.Act.Sorted(proj)) {
                     CreateContentPanel(act, m_actPanelPref);
                 }
             }

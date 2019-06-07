@@ -30,13 +30,6 @@ namespace Main.Act.View {
             // Prefabのため親は常に設定済
             m_recTRT = new du.Cmp.RecT.RecTRightTop(GetComponent<RectTransform>());
         }
-        private void Update() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Return)) {
-                Debug.LogError($"{m_name.text}:{m_recTRT}");
-            }
-            if (UnityEngine.Input.GetKeyDown(KeyCode.LeftArrow)) {
-            }
-        }
         #endregion
 
         #region public

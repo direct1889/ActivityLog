@@ -4,7 +4,7 @@ using UnityEngine;
 using UColor = UnityEngine.Color;
 using System.Linq;
 
-namespace Main.Act {
+namespace Main.Act.DB {
 
     public static class ContentDB {
         #region property
