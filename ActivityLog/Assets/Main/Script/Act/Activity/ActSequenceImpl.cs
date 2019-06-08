@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static du.Ex.ExList;
 
 namespace Main.Act {
 
@@ -9,10 +10,11 @@ namespace Main.Act {
         IList<IActivity> m_acts = new List<IActivity>();
         #endregion
 
-        // IROActSequence -------
         #region getter
         public IROActivity this [int index] => m_acts[index];
         public IROActivity this [MinuteOfDay time] => m_acts[IndexOf(time)];
+        public int Count => m_acts.Count;
+        public IROActivity Back => m_acts.Back();
 
         public int IndexOf(MinuteOfDay time) {
             if (MinuteOfDay.Now < time) {
@@ -24,20 +26,13 @@ namespace Main.Act {
             // ここには本来到達し得ない
             throw new System.Exception("");
         }
-
-        public int Count => m_acts.Count;
-        public IROActivity Back => m_acts[m_acts.Count - 1];
-        // ------------------------------
-
-        private IActivity MutableBack => m_acts[m_acts.Count - 1];
-        private bool IndexIsValid(int index) => (0 <= index && index < m_acts.Count);
         #endregion
 
         #region public
         public void PushBack(IActivity act) {
             if (m_acts.Count == 0) { m_acts.Add(act); }
             else if (Back.Context.BeginTime < act.Context.BeginTime) {
-                MutableBack.MutableContext.ResetFollowAct(act);
+                m_acts.Back().MutableContext.ResetFollowAct(act);
                 m_acts.Add(act);
             }
             else {
@@ -75,7 +70,7 @@ namespace Main.Act {
         }
         public void RemoveAt(int index) {
             // 無効な index : 削除自体しない
-            if (!IndexIsValid(index)) { return; }
+            if (!m_acts.IsValidIndex(index)) { return; }
             // 先頭以外 : 直前のアクティビティを直後の開始時刻まで延長
             // > 末尾 : 直前のアクティビティを再開
             else if (index > 0) {

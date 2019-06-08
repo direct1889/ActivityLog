@@ -119,6 +119,9 @@ namespace Main.Act {
         public Activity(IROContent content, IContext context) {
             Content = content; MutableContext = context;
         }
+        public Activity(IROContent content, MinuteOfDay beginTime) {
+            Content = content; MutableContext = new Context(beginTime);
+        }
         public Activity(IProject proj, string name, bool isEffective, MinuteOfDay beginTime)
             : this(new Content(proj, name, isEffective), new Context(beginTime)) {}
         public Activity(IProject proj, string name, MinuteOfDay beginTime)

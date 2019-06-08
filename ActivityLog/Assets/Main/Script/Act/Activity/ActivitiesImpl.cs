@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 namespace Main.Act {
 
     /// <summary> アクティビティ系列/日を操作する </summary>
@@ -15,11 +13,14 @@ namespace Main.Act {
         #endregion
 
         #region public
-        public void BeginNewAct(IProject proj, string name, bool isEffective) {
-            Acts.PushBack(new Activity(new Content(proj, name, isEffective), Context.BeginFromNow));
+        public virtual void BeginNewAct(IROContent content) {
+            Acts.PushBack(new Activity(content, Context.BeginFromNow));
         }
-        public void BeginNewAct(IProject proj, string name) {
-            Acts.PushBack(new Activity(new Content(proj, name), Context.BeginFromNow));
+        public virtual void BeginNewAct(IProject proj, string name, bool isEffective) {
+            BeginNewAct(new Content(proj, name, isEffective));
+        }
+        public virtual void BeginNewAct(IProject proj, string name) {
+            BeginNewAct(new Content(proj, name));
         }
         public void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute) {
             if (indexJustAfterBorder <= 0) { return; }
@@ -36,15 +37,20 @@ namespace Main.Act {
     }
 
     public class ActivitiesMgr4Test : ActivitiesMgr {
-        public void BeginNewAct(IProject proj, string name, bool isEffective, MinuteOfDay beginTime) {
-            Acts.PushBack(new Activity(new Content(proj, name, isEffective), new Context(beginTime)));
+        MinuteOfDay m_tempTimeSign = MinuteOfDay.Begin;
+        int duration = 100;
+
+        public override void BeginNewAct(IROContent content) {
+            Acts.PushBack(new Activity(content, m_tempTimeSign));
+            m_tempTimeSign.EnsuiteMinute += duration;
         }
-        public void BeginNewAct(IProject proj, string name, MinuteOfDay beginTime) {
-            if (Acts.Count > 0) {
-                Debug.LogError($"BeginNewActBefore[{Acts.Back.Context.BeginTime}><{beginTime}]");
-            }
-            Acts.PushBack(new Activity(new Content(proj, name), new Context(beginTime)));
-            Debug.LogError($"BeginNewActAfter[{Acts.Back.Context.BeginTime}><{beginTime}]");
+        public override void BeginNewAct(IProject proj, string name, bool isEffective) {
+            Acts.PushBack(new Activity(proj, name, isEffective, m_tempTimeSign));
+            m_tempTimeSign.EnsuiteMinute += duration;
+        }
+        public override void BeginNewAct(IProject proj, string name) {
+            Acts.PushBack(new Activity(proj, name, m_tempTimeSign));
+            m_tempTimeSign.EnsuiteMinute += duration;
         }
     }
 

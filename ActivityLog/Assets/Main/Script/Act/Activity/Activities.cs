@@ -1,16 +1,21 @@
-﻿using UnityEngine;
-
+﻿
 namespace Main.Act {
 
-    /// <summary> アクティビティ系列/日を操作する </summary>
+    /// <summary>
+    /// アクティビティ系列/日を操作する
+    /// <see> IActSequence </see> のラッパー
+    /// </summary>
     public interface IActivitiesMgr {
         IROActSequence Activities { get; }
+
         /// <summary>
         /// 新たなアクティビティを開始
         /// 現在のアクティビティを終了、開始時刻は現在時刻を使用
         /// </summary>
+        void BeginNewAct(IROContent content);
         void BeginNewAct(IProject proj, string name, bool isEffective);
         void BeginNewAct(IProject proj, string name);
+
         /// <summary>
         /// 連続したアクティビティ間の時刻境界を操作
         /// 潰れたアクティビティは消滅

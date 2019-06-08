@@ -5,10 +5,12 @@ namespace Main.STrack {
 
     public class ContentListMgr : MonoBehaviour {
         #region field
-        Act.ActivitiesMgr4Test m_actMgr = null;
-        [SerializeField] Act.View.ActivitiesGraph m_acts = null;
-        MinuteOfDay m_tempTimeSign;
+        /// <summary> アクティビティの実データ系列 </summary>
+        Act.IActivitiesMgr m_acts = new Act.ActivitiesMgr4Test();
 
+        /// <summary> アクティビティのグラフ </summary>
+        [SerializeField] Act.View.ActivitiesGraph m_graph = null;
+        /// <summary> アクティビティを選択するリスト </summary>
         [SerializeField] Act.View.ContentList m_list = null;
         #endregion
 
@@ -18,8 +20,8 @@ namespace Main.STrack {
 
         #region mono
         private void Awake() {
-            RxList.CreatedPanel
-                .Subscribe(panel => panel.Pressed.Subscribe(c => Chosen(c)).AddTo(this))
+            RxList.ActivityChosen
+                .Subscribe(c => Chosen(c))
                 .AddTo(this);
         }
         #endregion
@@ -27,19 +29,16 @@ namespace Main.STrack {
         #region private
         private void Chosen(Act.IROContent content) {
             gameObject.SetActive(false);
+            CreateActivityBlockImpl(content);
         }
-        // private void CreateActivityBlockImpl(Act.IROContent act, string duration) {
-            // int d = int.Parse(duration);
-            // m_actMgr.BeginNewAct(Act.DB.ContentDB.Proj.At(proj), actName, m_tempTimeSign);
-            // m_acts.CreateBlock(m_actMgr.Activities.Back);
-            // m_tempTimeSign.EnsuiteMinute += d;
-        // }
-        // private void sCreateActivityBlockImpl(string proj, string actName, string duration) {
-            // int d = int.Parse(duration);
-            // m_actMgr.BeginNewAct(Act.DB.ContentDB.Proj.At(proj), actName, m_tempTimeSign);
-            // m_acts.CreateBlock(m_actMgr.Activities.Back);
-            // m_tempTimeSign.EnsuiteMinute += d;
-        // }
+        private void CreateActivityBlockImpl(Act.IROContent content) {
+            m_acts.BeginNewAct(content);
+            m_graph.CreateBlock(m_acts.Activities.Back);
+        }
+        private void CreateActivityBlockImpl(string proj, string actName, string duration) {
+            m_acts.BeginNewAct(Act.DB.ContentDB.Proj.At(proj), actName);
+            m_graph.CreateBlock(m_acts.Activities.Back);
+        }
         #endregion
     }
 

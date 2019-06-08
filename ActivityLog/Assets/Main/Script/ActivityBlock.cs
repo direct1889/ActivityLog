@@ -39,7 +39,6 @@ namespace Main.Act.View {
                 Act = act;
                 m_image.color = act.Content.Parent.Color;
                 m_cylinder = cylinder;
-                m_recT.Initialize(parent);
                 RefreshSize();
                 m_text.text = Act.Content.Name;
                 gameObject.SetActive(true);

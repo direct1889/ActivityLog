@@ -23,7 +23,7 @@ namespace Main.Act.View {
     }
 
     public interface IContentPanel : IRxContentPanel {
-        void Initialize(IROContent content);
+        void Initialize(IROContent content, IContentListAsParent parent);
     }
 
     public class ContentPanel : MonoBehaviour, IContentPanel {
@@ -31,6 +31,7 @@ namespace Main.Act.View {
         IROContent m_content;
         ContentPanelImpl m_ppi;
         UGUI.Button m_button;
+        IContentListAsParent m_parent;
         Subject<IROContent> m_subject;
         #endregion
 
@@ -43,14 +44,18 @@ namespace Main.Act.View {
             m_ppi = transform.GetComponentInChildren<ContentPanelImpl>();
             m_button = transform.GetComponentInChildren<UGUI.Button>();
         }
+        public void OnClicked() {
+            m_parent.OnChosenActivity(m_content);
+        }
         #endregion
 
         #region public
-        public void Initialize(IROContent content) {
+        public void Initialize(IROContent content, IContentListAsParent parent) {
             if (m_content == null) {
                 m_content = content;
                 m_ppi.SetContent(m_content); // 内容、色
                 m_ppi.SetIndent(content.ParentCount); // 親子関係、RecT
+                m_parent = parent;
             }
         }
         #endregion

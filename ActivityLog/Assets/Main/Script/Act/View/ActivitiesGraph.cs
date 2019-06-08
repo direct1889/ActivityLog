@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using static du.Ex.ExList;
 
 namespace Main.Act.View {
 
@@ -29,11 +30,9 @@ namespace Main.Act.View {
 
         #region public
         public void CreateBlock(IROActivity act) {
-            GameObject goBlock = Instantiate(m_prefActBlock);
-            goBlock.transform.SetParent(transform);
-            IActivityBlock block = goBlock.GetComponent<ActivityBlock>();
+            IActivityBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActivityBlock>();
             block.Initialize(act, this, transform);
-            if (m_blocks.Count > 0) { m_blocks[m_blocks.Count - 1].RefreshSize(); }
+            if (m_blocks.Count > 0) { m_blocks.Back()?.RefreshSize(); }
             m_blocks.Add(block);
         }
         #endregion

@@ -5,9 +5,17 @@ namespace du.Ex {
 
     public static class ExList {
 
-        //! 空の場合はnull
+        public static bool IsValidIndex<T>(this IList<T> list, int index) {
+            return !(list is null) && 0 <= index && index < list.Count;
+        }
+
+        public static bool IsEmpty<T>(this IList<T> list) {
+            return list is null || list.Count == 0;
+        }
+
+        /// <returns> listが空の場合はnull </returns>
         public static T Back<T>(this IList<T> list) where T : class {
-            if (list == null || list.Count == 0) { return null; }
+            if (list.IsEmpty()) { return null; }
             else { return list[list.Count - 1]; }
         }
 
