@@ -76,7 +76,7 @@ namespace du.Cmp {
 
         #region protected
         protected override void Add(string key, T value) {
-            Add(key, value);
+            base.Add(key, value);
             m_addedStream.OnNext(value);
         }
         #endregion
