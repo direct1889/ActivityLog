@@ -29,7 +29,7 @@ namespace Main.Act.View {
 
     public class ContentList : MonoBehaviour, IRxContentList, IContentListAsParent, IContentList {
         #region field
-        IList<IContentPanel> m_contentPanels = new List<IContentPanel>();
+        IDictionary<string, IContentPanel> m_contentPanels = new Dictionary<string, IContentPanel>();
         Subject<IROContent> m_chosenActStream = new Subject<IROContent>();
 
         [SerializeField] GameObject m_panelsParent;
@@ -67,12 +67,11 @@ namespace Main.Act.View {
         }
         private void CreateActPanel(IROContent content) {
             CreateContentPanel(content, m_actPanelPref);
-            // m_createdPanelStream.OnNext(m_contentPanels.Back());
         }
         private void CreateContentPanel(IROContent content, GameObject panelPref) {
             var panel = Instantiate<GameObject>(panelPref, m_panelsParent.transform);
-            m_contentPanels.Add(panel.GetComponent<ContentPanel>());
-            m_contentPanels.Back().Initialize(content, this);
+            m_contentPanels.Add(content.Key, panel.GetComponent<ContentPanel>());
+            m_contentPanels[content.Key].Initialize(content, this);
         }
         #endregion
     }

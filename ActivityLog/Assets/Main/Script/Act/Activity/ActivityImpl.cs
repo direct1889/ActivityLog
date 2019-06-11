@@ -14,6 +14,7 @@ namespace Main.Act {
         #region getter
         public ThemeColor Color       => Parent.Color;
         public int        ParentCount => Parent.ParentCount + 1;
+        public string     Key         => Name;
         #endregion
 
         #region ctor/dtor

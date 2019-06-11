@@ -16,6 +16,7 @@ namespace Main.Act {
 
         #region getter property
         public int ParentCount => (Parent is null ? 0 : Parent.ParentCount + 1);
+        public string Key => Name;
         #endregion
 
         #region ctor/dtor

@@ -10,6 +10,11 @@ namespace Main.Act {
 
         ThemeColor Color       { get; }
         int        ParentCount { get; }
+        /// <value>
+        /// 辞書に入れるときkeyとして利用する
+        /// a.key == b.key <=必要十分=> IsOverlap(a, b)
+        /// </value>
+        string     Key         { get; }
     }
 
     /// <summary>
