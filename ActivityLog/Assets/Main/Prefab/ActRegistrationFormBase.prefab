@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1533232294695560701}
   - component: {fileID: 1533232294695560702}
   - component: {fileID: 8882974308975523083}
+  - component: {fileID: 6018317256717155068}
   m_Layer: 5
   m_Name: ActRegistrationFormBase
   m_TagString: Untagged
@@ -26,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533232294695560640}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -91,6 +92,21 @@ MonoBehaviour:
   m_IFProject: {fileID: 1533232294872673585}
   m_IFActivity: {fileID: 1533232296011937523}
   m_BnCreate: {fileID: 0}
+--- !u!114 &6018317256717155068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533232294695560640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 246138482016e446f99d2b0b86f5efed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_activateFactor: {fileID: 0}
+  m_inactivateFactor: {fileID: 1533232295432548100}
+  m_defaultIsActive: 0
 --- !u!1 &1533232294872673586
 GameObject:
   m_ObjectHideFlags: 0
