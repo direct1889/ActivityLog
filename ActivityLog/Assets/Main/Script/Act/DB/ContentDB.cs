@@ -38,14 +38,6 @@ namespace Main.Act.DB {
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
     public class ActivityDB : du.Cmp.RxOrderedMap<IROContent>, IActivityDB {
-        // #region field
-        // Subject<IROContent> m_addedStream = new Subject<IROContent>();
-        // #endregion
-
-        // #region getter
-        // public IObservable<IROContent> Added => m_addedStream;
-        // #endregion
-
         #region public
         /// <summary> 登録済みのActivityをCSVから生成 </summary>
         public void Initialize() { Load("System/Activities"); }
@@ -67,8 +59,11 @@ namespace Main.Act.DB {
         #endregion
 
         #region private
+        #if false
+
         private void AddAct(string parentName, string name                  ) { Add(name, new Content(ContentDB.Proj.At(parentName), name             )); }
         private void AddAct(string parentName, string name, bool isEffective) { Add(name, new Content(ContentDB.Proj.At(parentName), name, isEffective)); }
+        #endif
 
         private void Load(string csvFilePath) {
             using (var reader = new du.File.CSVReader<ActivityDesc>(du.App.AppManager.DataPath + csvFilePath, true)) {
@@ -80,23 +75,17 @@ namespace Main.Act.DB {
         #endregion
     }
 
-    public interface IProjectDB : du.Cmp.IOrderedMap<IProject> {
+    public interface IProjectDB : du.Cmp.IRxOrderedMap<IProject> {
         //! 登録済みProject一覧の生成
         void Initialize();
         /// <summary> ProjectをEnumerableで一括取得 </summary>
         IEnumerable<IProject> Sorted(IProject parent);
+        /// <summary> Projectを新たに登録 </summary>
+        void AddProj(IProject project);
     }
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-    public class ProjectDB : du.Cmp.OrderedMap<IProject>, IProjectDB {
-        // #region field
-        // Subject<IROContent> m_addedStream = new Subject<IROContent>();
-        // #endregion
-
-        // #region getter
-        // public IObservable<IROContent> Added => m_addedStream;
-        // #endregion
-
+    public class ProjectDB : du.Cmp.RxOrderedMap<IProject>, IProjectDB {
         #region public
         //! 登録済みProject一覧の生成
         public void Initialize() { Load("System/Projects"); }
@@ -107,10 +96,13 @@ namespace Main.Act.DB {
                 .Where(key => At(key).Parent == parent)
                 .Select(key => At(key));
         }
+        /// <summary> Projectを新たに登録 </summary>
+        public void AddProj(IProject proj) { Add(proj.Name, proj); }
         #endregion
 
         #region private
-        private void AddProj(IProject proj) { Add(proj.Name, proj); }
+        #if false
+
         private void AddRootProj(string name, ThemeColor color, bool isEffectiveDefault) {
             AddProj(Project.Create(name, color, isEffectiveDefault));
         }
@@ -126,6 +118,7 @@ namespace Main.Act.DB {
         private void AddSubProj(string parentName, string name, ThemeColor color, bool isEffectiveDefault) {
             AddProj(new Project(name, At(parentName), color, isEffectiveDefault));
         }
+        #endif
 
         private void Load(string csvFilePath) {
             using (var reader = new du.File.CSVReader<ProjectDesc>(du.App.AppManager.DataPath + csvFilePath, true)) {

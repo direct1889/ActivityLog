@@ -11,11 +11,18 @@ namespace Main.Act.View {
         [SerializeField] InputField m_IFProject;
         [SerializeField] InputField m_IFActivity;
         [SerializeField] Button m_bnCreate;
+        #endregion
 
-        // [SerializeField] ActivitiesGraph m_acts;
+        #region private getter
+        private string ProjText => m_IFProject.text;
+        private string ActText => m_IFActivity.text;
         #endregion
 
         #region mono
+        private void OnEnable() {
+            m_IFProject.text = "";
+            m_IFActivity.text = "";
+        }
         private void Start() {
             m_bnCreate
                 .OnClickAsObservable()
@@ -29,8 +36,7 @@ namespace Main.Act.View {
             //     .AddTo(this);
         }
         public void OnButtonPressed() {
-            Debug.LogError("OnButtonPressed()");
-            if (!m_IFProject.text.IsEmpty() && !m_IFActivity.text.IsEmpty()) {
+            if (!ProjText.IsEmpty()) {
                 Register();
             }
         }
@@ -46,9 +52,15 @@ namespace Main.Act.View {
             }
         }
         private void Register() {
-            var proj = DB.ContentDB.Proj.At(m_IFProject.text);
-            var act = m_IFActivity.text;
-            DB.ContentDB.Act.AddAct(new Content(proj, act));
+            // Project を追加
+            if (ActText.IsEmpty()) {
+                DB.ContentDB.Proj.AddProj(new Project(ProjText, null, ThemeColors.Default, true));
+            }
+            // Activity を追加
+            else {
+                var proj = DB.ContentDB.Proj.At(ProjText);
+                DB.ContentDB.Act.AddAct(new Content(proj, ActText));
+            }
         }
         /// <summary> Activityとして登録可能な情報が揃っているかどうか </summary>
         private bool IsFilledIF() {

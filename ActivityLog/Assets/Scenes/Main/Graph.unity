@@ -1137,18 +1137,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 860289621}
   m_CullTransparentMesh: 0
---- !u!114 &884004748 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533232295432548100, guid: 5f297ce0038864960ba519c64e31f054,
-    type: 3}
-  m_PrefabInstance: {fileID: 1141399489}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &962099853
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,36 +1528,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1533232294872673585, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_LineType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1533232296011937523, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_LineType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1533232295432548100, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1533232295432548100, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8882974308975523083, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_BnCreate
-      value: 
-      objectReference: {fileID: 884004748}
-    - target: {fileID: 8882974308975523083, guid: 5f297ce0038864960ba519c64e31f054,
-        type: 3}
-      propertyPath: m_bnCreate
-      value: 
-      objectReference: {fileID: 884004748}
     - target: {fileID: 6018317256717155068, guid: 5f297ce0038864960ba519c64e31f054,
         type: 3}
       propertyPath: m_activateFactor
