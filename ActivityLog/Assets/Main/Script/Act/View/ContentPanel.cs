@@ -7,7 +7,8 @@ using UniRx;
 
 namespace Main.Act.View {
 
-    public static class ConstPAList {
+    /// <summary> ContentListに関する定数 </summary>
+    public static class ConstContentList {
         #region const
         /// <summary> 第一階層PanelのLocalWidth </summary>
         public const float RootWidth = 840;
@@ -26,10 +27,11 @@ namespace Main.Act.View {
         void Initialize(IROContent content, IContentListAsParent parent);
     }
 
+    /// <summary> ContentListを構成するPanel </summary>
     public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
         IROContent m_content;
-        ContentPanelImpl m_ppi;
+        ContentPanelUI m_ui;
         UGUI.Button m_button;
         IContentListAsParent m_parent;
         Subject<IROContent> m_subject;
@@ -41,9 +43,10 @@ namespace Main.Act.View {
 
         #region mono
         private void Awake() {
-            m_ppi = transform.GetComponentInChildren<ContentPanelImpl>();
+            m_ui = transform.GetComponentInChildren<ContentPanelUI>();
             m_button = transform.GetComponentInChildren<UGUI.Button>();
         }
+        /// <summary> UGUI.Buttonから呼ばれる </summary>
         public void OnClicked() {
             m_parent.OnChosenActivity(m_content);
         }
@@ -53,8 +56,8 @@ namespace Main.Act.View {
         public void Initialize(IROContent content, IContentListAsParent parent) {
             if (m_content == null) {
                 m_content = content;
-                m_ppi.SetContent(m_content); // 内容、色
-                m_ppi.SetIndent(content.ParentCount); // 親子関係、RecT
+                m_ui.SetContent(m_content); // 内容、色
+                m_ui.SetIndent(m_content.ParentCount); // 親子関係、RecT
                 m_parent = parent;
             }
         }

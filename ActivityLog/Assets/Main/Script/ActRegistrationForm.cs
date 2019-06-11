@@ -10,13 +10,17 @@ namespace Main.Act.View {
         #region field
         [SerializeField] InputField m_IFProject;
         [SerializeField] InputField m_IFActivity;
-        [SerializeField] Button m_BnCreate;
+        [SerializeField] Button m_bnCreate;
 
         // [SerializeField] ActivitiesGraph m_acts;
         #endregion
 
         #region mono
         private void Start() {
+            m_bnCreate
+                .OnClickAsObservable()
+                .Subscribe(_ => OnButtonPressed())
+                .AddTo(this);
             // m_IFProject.OnEndEditAsObservable()
             //     .Subscribe(_ => UpdateButtonStatus())
             //     .AddTo(this);
@@ -25,23 +29,26 @@ namespace Main.Act.View {
             //     .AddTo(this);
         }
         public void OnButtonPressed() {
-            Register();
+            Debug.LogError("OnButtonPressed()");
+            if (!m_IFProject.text.IsEmpty() && !m_IFActivity.text.IsEmpty()) {
+                Register();
+            }
         }
         #endregion
 
         #region private
         private void UpdateButtonStatus() {
-            if (m_BnCreate.IsInteractable()) {
-                if (!IsFilledIF()) { m_BnCreate.interactable = true; }
+            if (m_bnCreate.IsInteractable()) {
+                if (!IsFilledIF()) { m_bnCreate.interactable = true; }
             }
             else {
-                if (IsFilledIF()) { m_BnCreate.interactable = false; }
+                if (IsFilledIF()) { m_bnCreate.interactable = false; }
             }
         }
         private void Register() {
             var proj = DB.ContentDB.Proj.At(m_IFProject.text);
             var act = m_IFActivity.text;
-            // DB.ContentDB.Act.AddAct(new Content(proj, act));
+            DB.ContentDB.Act.AddAct(new Content(proj, act));
         }
         /// <summary> Activityとして登録可能な情報が揃っているかどうか </summary>
         private bool IsFilledIF() {

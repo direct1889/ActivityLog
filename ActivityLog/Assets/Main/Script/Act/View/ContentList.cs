@@ -8,6 +8,11 @@ using UniRx;
 
 namespace Main.Act.View {
 
+    /// <summary>
+    /// Content一覧
+    /// Content = Project, Activity
+    /// 事前登録済Contentの管理、Content実行時の選択UIの提供
+    /// </summary>
     public interface IRxContentList {
         // IObservable<IRxContentPanel> CreatedPanel { get; }
         IObservable<IROContent> ActivityChosen { get; }
@@ -17,9 +22,12 @@ namespace Main.Act.View {
         void OnChosenActivity(IROContent content);
     }
 
+    public interface IContentList {
+    }
+
     // public interface IContentList : IROContentList { }
 
-    public class ContentList : MonoBehaviour, IRxContentList, IContentListAsParent {
+    public class ContentList : MonoBehaviour, IRxContentList, IContentListAsParent, IContentList {
         #region field
         IList<IContentPanel> m_contentPanels = new List<IContentPanel>();
         // Subject<IRxContentPanel> m_createdPanelStream = new Subject<IRxContentPanel>();
@@ -47,6 +55,9 @@ namespace Main.Act.View {
 
         #region private
         private void Initialize() {
+            DB.ContentDB.Act.RxAdded.Subscribe(act => {
+                CreateActPanel(act);
+            });
             foreach (var proj in DB.ContentDB.Proj.Sorted()) {
                 CreateProjPanel(proj);
                 foreach (var act in DB.ContentDB.Act.Sorted(proj)) {

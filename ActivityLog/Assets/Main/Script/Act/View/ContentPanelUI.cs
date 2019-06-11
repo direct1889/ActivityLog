@@ -6,7 +6,8 @@ using static du.Ex.ExVector;
 
 namespace Main.Act.View {
 
-    public interface IContentPanelImpl {
+    /// <summary> ContentPanelのUIの詳細な描画を管理 </summary>
+    public interface IContentPanelUI {
         #region public
         /// <summary> IProjectに合わせてラベル/フレーム色/チェック有無 </summary>
         void SetContent(IROContent content);
@@ -15,7 +16,8 @@ namespace Main.Act.View {
         #endregion
     }
 
-    public class ContentPanelImpl : MonoBehaviour, IContentPanelImpl {
+    /// <summary> ContentPanelのUIの詳細な描画を管理 </summary>
+    public class ContentPanelUI : MonoBehaviour, IContentPanelUI {
         #region field
         UImage m_frame;
         du.Cmp.RecT.RecTRightTop m_recTRT;
@@ -42,7 +44,7 @@ namespace Main.Act.View {
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         public void SetIndent(int indent) {
             if (indent > 0) {
-                m_recTRT.Width = ConstPAList.RootWidth - ConstPAList.IndentWidth * indent;
+                m_recTRT.Width = ConstContentList.RootWidth - ConstContentList.IndentWidth * indent;
             }
         }
         #endregion
