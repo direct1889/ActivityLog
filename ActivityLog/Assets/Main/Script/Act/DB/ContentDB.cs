@@ -31,7 +31,7 @@ namespace Main.Act.DB {
         IEnumerable<IROContent> Sorted(IProject parent);
         // TODO: OVERLAP
         /// <summary> 既存アクティビティと重複するか </summary>
-        // bool HasExistOverlapped(string name, IProject parent);
+        bool HasExistOverlapped(string name, IProject parent);
         /// <summary> Activityを新たに登録 </summary>
         void AddAct(IROContent content);
     }
@@ -49,10 +49,13 @@ namespace Main.Act.DB {
                 .Select(key => At(key));
         }
         // TODO: OVERLAP
-        // public bool HasExistOverlapped(string name, IProject parent) {
-        //     if (!Data.ContainsKey(name)) { return false; }
-        //     var sameNames = Data.Where(act => act.Key == name);
-        // }
+        /// <summary>
+        /// すでに重複する Activity が登録されているか
+        /// TODO:現在は名前の重複のみで判断 (そもそも key == name)
+        /// </summary>
+        public bool HasExistOverlapped(string name, IProject parent) {
+            return ContainsKey(name);
+        }
 
         /// <summary> Activityを新たに登録 </summary>
         public void AddAct(IROContent content) { Add(content.Name, content); }
@@ -80,6 +83,9 @@ namespace Main.Act.DB {
         void Initialize();
         /// <summary> ProjectをEnumerableで一括取得 </summary>
         IEnumerable<IProject> Sorted(IProject parent);
+        // TODO: OVERLAP
+        /// <summary> 既存アクティビティと重複するか </summary>
+        bool HasExistOverlapped(string name, IProject parent);
         /// <summary> Projectを新たに登録 </summary>
         void AddProj(IProject project);
     }
@@ -95,6 +101,14 @@ namespace Main.Act.DB {
             return Order
                 .Where(key => At(key).Parent == parent)
                 .Select(key => At(key));
+        }
+        // TODO: OVERLAP
+        /// <summary>
+        /// すでに重複する Project が登録されているか
+        /// TODO:現在は名前の重複のみで判断 (そもそも key == name)
+        /// </summary>
+        public bool HasExistOverlapped(string name, IProject parent) {
+            return ContainsKey(name);
         }
         /// <summary> Projectを新たに登録 </summary>
         public void AddProj(IProject proj) { Add(proj.Name, proj); }

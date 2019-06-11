@@ -28,12 +28,12 @@ namespace Main.Act.View {
                 .OnClickAsObservable()
                 .Subscribe(_ => OnButtonPressed())
                 .AddTo(this);
-            // m_IFProject.OnEndEditAsObservable()
-            //     .Subscribe(_ => UpdateButtonStatus())
-            //     .AddTo(this);
-            // m_IFActivity.OnEndEditAsObservable()
-            //     .Subscribe(_ => UpdateButtonStatus())
-            //     .AddTo(this);
+            m_IFProject.OnValueChangedAsObservable()
+                .Subscribe(_ => UpdateButtonStatus())
+                .AddTo(this);
+            m_IFActivity.OnValueChangedAsObservable()
+                .Subscribe(_ => UpdateButtonStatus())
+                .AddTo(this);
         }
         public void OnButtonPressed() {
             if (!ProjText.IsEmpty()) {
@@ -45,10 +45,10 @@ namespace Main.Act.View {
         #region private
         private void UpdateButtonStatus() {
             if (m_bnCreate.IsInteractable()) {
-                if (!IsFilledIF()) { m_bnCreate.interactable = true; }
+                if (!IsReady()) { m_bnCreate.interactable = false; }
             }
             else {
-                if (IsFilledIF()) { m_bnCreate.interactable = false; }
+                if (IsReady()) { m_bnCreate.interactable = true; }
             }
         }
         private void Register() {
@@ -62,12 +62,24 @@ namespace Main.Act.View {
                 DB.ContentDB.Act.AddAct(new Content(proj, ActText));
             }
         }
-        /// <summary> Activityとして登録可能な情報が揃っているかどうか </summary>
-        private bool IsFilledIF() {
-            var proj = DB.ContentDB.Proj.At(m_IFProject.text);
-            return !(proj is null)                      // Projectが有効
-                && !m_IFActivity.text.IsEmpty()         // Act名が入力済
-                && DB.ContentDB.Act.Sorted(proj).Any(act => act.Name == m_IFActivity.text); // 同名のActが無い
+        /// <summary>
+        /// 入力内容が登録可能か
+        /// (名前の重複がない / 親Projectが存在する)
+        /// </summary>
+        private bool IsReady() {
+            if (ProjText.IsEmpty()) { return false; }
+            else {
+                // Projectを追加
+                if (ActText.IsEmpty()) {
+                    return !DB.ContentDB.Proj.HasExistOverlapped(ProjText, null);
+                }
+                // Activityを追加
+                else {
+                    var proj = DB.ContentDB.Proj.At(ProjText);
+                    return !(proj is null) &&
+                        !DB.ContentDB.Act.HasExistOverlapped(ActText, proj);
+                }
+            }
         }
         #endregion
     }
