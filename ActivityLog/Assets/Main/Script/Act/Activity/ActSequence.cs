@@ -5,11 +5,11 @@ namespace Main.Act {
     public interface IROActSequence {
         /// <summary> 時系列順で index 番目 </summary>
         /// <param name="index"> index 番目が存在しない場合例外を投げる </param>
-        IROActivity this [int index] { get; }
+        IROActRecord this [int index] { get; }
 
         /// <summary> 指定時刻に行われていたアクティビティ </summary>
         /// <param name="time"> 未来の場合例外を投げる </param>
-        IROActivity this [MinuteOfDay time] { get; }
+        IROActRecord this [MinuteOfDay time] { get; }
 
         /// <summary> 指定時刻に行われていたアクティビティの index </summary>
         int IndexOf(MinuteOfDay time);
@@ -18,19 +18,19 @@ namespace Main.Act {
         int Count { get; }
 
         /// <summary> 末尾のアクティビティ </summary>
-        IROActivity Back { get; }
+        IROActRecord Back { get; }
     }
 
     /// <summary> アクティビティの系列(日毎) </summary>
     public interface IActSequence : IROActSequence {
         /// <summary> 末尾に追加 </summary>
-        void PushBack(IActivity act);
+        void PushBack(IActRecord act);
 
         /// <summary>
         /// 指定した時間に挿入
         /// 完全に包含されるアクティビティは消滅、前後は押しのける
         /// </summary>
-        void Insert(MinuteOfDay begin, MinuteOfDay end, IROContent cnt);
+        void Insert(MinuteOfDay begin, MinuteOfDay end, IActivity cnt);
 
         /// <summary> 直前のアクティビティが伸びる </summary>
         void RemoveAt(int index);
@@ -40,7 +40,7 @@ namespace Main.Act {
         void Move(int index, MinuteOfDay newBegin, MinuteOfDay? newEnd);
 
         /// <summary> 登録済みのアクティビティの内容を書き換える </summary>
-        void OverwriteCnt(int index, IROContent newContent);
+        void OverwriteCnt(int index, IActivity newContent);
         /// <summary>
         /// 登録済みのアクティビティの時刻を変更
         /// 飲み込まれたアクティビティは消滅

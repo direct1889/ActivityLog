@@ -20,44 +20,43 @@ namespace Main.Act.View {
     }
 
     public interface IRxContentPanel {
-        IObservable<IROContent> Pressed { get; }
+        // IObservable<IActivity> Pressed { get; }
     }
 
     public interface IContentPanel : IRxContentPanel {
-        void Initialize(IROContent content, IContentListAsParent parent);
+        void Initialize(IContent content, IContentListAsParent parent);
     }
 
     /// <summary> ContentListを構成するPanel </summary>
     public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
-        IROContent m_content;
+        IContent m_content;
         ContentPanelUI m_ui;
-        UGUI.Button m_button;
+        // UGUI.Button m_button;
         IContentListAsParent m_parent;
-        Subject<IROContent> m_subject;
         #endregion
 
         #region getter
-        public IObservable<IROContent> Pressed => m_button.OnClickAsObservable().Select(_ => m_content);
+        // public IObservable<IROContent> Pressed => m_button.OnClickAsObservable().Select(_ => m_content);
         #endregion
 
         #region mono
         private void Awake() {
             m_ui = transform.GetComponentInChildren<ContentPanelUI>();
-            m_button = transform.GetComponentInChildren<UGUI.Button>();
+            // m_button = transform.GetComponentInChildren<UGUI.Button>();
         }
         /// <summary> UGUI.Buttonから呼ばれる </summary>
         public void OnClicked() {
-            m_parent.OnChosenActivity(m_content);
+            m_parent.OnChosenActivity(m_content.Act);
         }
         #endregion
 
         #region public
-        public void Initialize(IROContent content, IContentListAsParent parent) {
+        public void Initialize(IContent content, IContentListAsParent parent) {
             if (m_content == null) {
                 m_content = content;
-                m_ui.SetContent(m_content); // 内容、色
-                m_ui.SetIndent(m_content.ParentCount); // 親子関係、RecT
+                m_ui.SetContent(m_content.Data); // 内容、色
+                m_ui.SetIndent(m_content.Data.ParentCount); // 親子関係、RecT
                 m_parent = parent;
             }
         }

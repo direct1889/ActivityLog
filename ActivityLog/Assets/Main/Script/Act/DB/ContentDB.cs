@@ -30,10 +30,10 @@ namespace Main.Act.DB {
     // : du.Cmp.IRxOrderedMap<IROContent, string>
     {
         /// <summary> ActivityをEnumerableで一括取得 </summary>
-        IEnumerable<IROContent> ActSorted(IProject parent);
+        IEnumerable<IActivity> ActSorted(IProject parent);
         // TODO: OVERLAP
         /// <summary> Activityを新たに登録 </summary>
-        void AddAct(IROContent content);
+        void AddAct(IActivity content);
     }
 
     public interface IProjectDB

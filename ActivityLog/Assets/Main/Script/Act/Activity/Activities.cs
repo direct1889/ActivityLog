@@ -12,7 +12,7 @@ namespace Main.Act {
         /// 新たなアクティビティを開始
         /// 現在のアクティビティを終了、開始時刻は現在時刻を使用
         /// </summary>
-        void BeginNewAct(IROContent content);
+        void BeginNewAct(IActivity content);
         void BeginNewAct(IProject proj, string name, bool isEffective);
         void BeginNewAct(IProject proj, string name);
 

@@ -21,18 +21,18 @@ namespace Main.STrack {
         #region mono
         private void Awake() {
             RxList.ActivityChosen
-                .Subscribe(c => Chosen(c))
+                .Subscribe(act => Chosen(act))
                 .AddTo(this);
         }
         #endregion
 
         #region private
-        private void Chosen(Act.IROContent content) {
+        private void Chosen(Act.IActivity act) {
             gameObject.SetActive(false);
-            CreateActivityBlockImpl(content);
+            CreateActivityBlockImpl(act);
         }
-        private void CreateActivityBlockImpl(Act.IROContent content) {
-            m_acts.BeginNewAct(content);
+        private void CreateActivityBlockImpl(Act.IActivity act) {
+            m_acts.BeginNewAct(act);
             m_graph.CreateBlock(m_acts.Activities.Back);
         }
         private void CreateActivityBlockImpl(Act.IProject proj, string actName, string duration) {

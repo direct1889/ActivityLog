@@ -36,7 +36,7 @@ namespace Main.Act.DB {
         public static string ToCSV(this IProject proj) {
             return proj.Parent is null ? "" : proj.Parent.Name + $",{proj.Name},{proj.Color},{proj.IsEffective}";
         }
-        public static string ToCSV(this IROContent content) {
+        public static string ToCSV(this IActivity content) {
             return $"{content.Parent.Name},{content.Name},{content.IsEffective}";
         }
     }

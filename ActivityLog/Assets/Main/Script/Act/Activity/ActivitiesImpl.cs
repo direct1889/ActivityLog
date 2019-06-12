@@ -13,8 +13,8 @@ namespace Main.Act {
         #endregion
 
         #region public
-        public virtual void BeginNewAct(IROContent content) {
-            Acts.PushBack(new Activity(content, Context.BeginFromNow));
+        public virtual void BeginNewAct(IActivity content) {
+            Acts.PushBack(new ActRecord(content, Context.BeginFromNow));
         }
         public virtual void BeginNewAct(IProject proj, string name, bool isEffective) {
             BeginNewAct(new Content(proj, name, isEffective));
@@ -40,16 +40,16 @@ namespace Main.Act {
         MinuteOfDay m_tempTimeSign = MinuteOfDay.Begin;
         int duration = 100;
 
-        public override void BeginNewAct(IROContent content) {
-            Acts.PushBack(new Activity(content, m_tempTimeSign));
+        public override void BeginNewAct(IActivity content) {
+            Acts.PushBack(new ActRecord(content, m_tempTimeSign));
             m_tempTimeSign.EnsuiteMinute += duration;
         }
         public override void BeginNewAct(IProject proj, string name, bool isEffective) {
-            Acts.PushBack(new Activity(proj, name, isEffective, m_tempTimeSign));
+            Acts.PushBack(new ActRecord(proj, name, isEffective, m_tempTimeSign));
             m_tempTimeSign.EnsuiteMinute += duration;
         }
         public override void BeginNewAct(IProject proj, string name) {
-            Acts.PushBack(new Activity(proj, name, m_tempTimeSign));
+            Acts.PushBack(new ActRecord(proj, name, m_tempTimeSign));
             m_tempTimeSign.EnsuiteMinute += duration;
         }
     }

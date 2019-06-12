@@ -9,7 +9,7 @@ namespace Main.Act.View {
     }
 
     public interface IActivitiesGraph {
-        void CreateBlock(IROActivity act);
+        void CreateBlock(IROActRecord act);
     }
 
     public class ActivitiesGraph : MonoBehaviour, IActivitiesCylinder, IActivitiesGraph {
@@ -29,7 +29,7 @@ namespace Main.Act.View {
         #endregion
 
         #region public
-        public void CreateBlock(IROActivity act) {
+        public void CreateBlock(IROActRecord act) {
             IActivityBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActivityBlock>();
             block.Initialize(act, this, transform);
             if (m_blocks.Count > 0) { m_blocks.Back()?.RefreshSize(); }

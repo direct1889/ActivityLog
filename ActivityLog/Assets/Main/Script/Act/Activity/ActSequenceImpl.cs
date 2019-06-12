@@ -7,14 +7,14 @@ namespace Main.Act {
     /// <summary> アクティビティの系列(日毎) </summary>
     public class ActSequence : IActSequence {
         #region field
-        IList<IActivity> m_acts = new List<IActivity>();
+        IList<IActRecord> m_acts = new List<IActRecord>();
         #endregion
 
         #region getter
-        public IROActivity this [int index] => m_acts[index];
-        public IROActivity this [MinuteOfDay time] => m_acts[IndexOf(time)];
+        public IROActRecord this [int index] => m_acts[index];
+        public IROActRecord this [MinuteOfDay time] => m_acts[IndexOf(time)];
         public int Count => m_acts.Count;
-        public IROActivity Back => m_acts.Back();
+        public IROActRecord Back => m_acts.Back();
 
         public int IndexOf(MinuteOfDay time) {
             if (MinuteOfDay.Now < time) {
@@ -29,7 +29,7 @@ namespace Main.Act {
         #endregion
 
         #region public
-        public void PushBack(IActivity act) {
+        public void PushBack(IActRecord act) {
             if (m_acts.Count == 0) { m_acts.Add(act); }
             else if (Back.Context.BeginTime < act.Context.BeginTime) {
                 m_acts.Back().MutableContext.ResetFollowAct(act);
@@ -42,8 +42,8 @@ namespace Main.Act {
                 PushBack(act);
             }
         }
-        public void Insert(MinuteOfDay begin, MinuteOfDay end, IROContent cnt) {
-            IIndependentActivity act = new IndependentActivity(cnt, new IndependentContext(begin, end));
+        public void Insert(MinuteOfDay begin, MinuteOfDay end, IActivity cnt) {
+            IIndependentActRecord act = new IndependentActRecord(cnt, new IndependentContext(begin, end));
             int justBefore = IndexOf(act.IndependentContext.BeginTime);
             int justAfter = IndexOf(act.IndependentContext.EndTime);
             // e.g.        |---- act ----|
@@ -88,7 +88,7 @@ namespace Main.Act {
             if (newEnd != null) { Insert(newBegin, (MinuteOfDay)newEnd, act.Content); }
             else { PushBack(act); }
         }
-        public void OverwriteCnt(int index, IROContent newContent) {
+        public void OverwriteCnt(int index, IActivity newContent) {
             m_acts[index].ResetContent(newContent);
         }
         public void OverwriteBeginTime(int index, MinuteOfDay newBegin) {

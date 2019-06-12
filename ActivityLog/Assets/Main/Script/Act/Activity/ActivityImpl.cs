@@ -4,7 +4,7 @@
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
-    public class Content : IROContent {
+    public class Content : IActivity {
         #region field-property
         public IProject Parent      { get; private set; }
         public string   Name        { get; private set; }
@@ -41,7 +41,7 @@ namespace Main.Act {
         /// 後続のアクティビティ
         /// まだ終了していなければ null
         /// </summary>
-        public IROActivity NextAct { get; private set; }
+        public IROActRecord NextAct { get; private set; }
         public MinuteOfDay BeginTime { get; private set; }
         /// <summary> まだ終了していなければ null </summary>
         public MinuteOfDay? EndTime => NextAct?.Context?.BeginTime;
@@ -52,7 +52,7 @@ namespace Main.Act {
 
         #region ctor/dtor
         public Context(MinuteOfDay beginTime) { BeginTime = beginTime; }
-        public Context(MinuteOfDay beginTime, IROActivity followAct) {
+        public Context(MinuteOfDay beginTime, IROActRecord followAct) {
             BeginTime = beginTime;
             NextAct = followAct;
         }
@@ -63,13 +63,13 @@ namespace Main.Act {
         // public void Finish(IActivity nextAct) {
             // if (!HasEnded) { NextAct = nextAct; }
         // }
-        public void ResetPrecedeAct(IIndependentActivity precedeAct) {
+        public void ResetPrecedeAct(IIndependentActRecord precedeAct) {
             BeginTime = precedeAct.IndependentContext.EndTime;
         }
         public void ResetPrecedeAct(MinuteOfDay newBeginTime) {
             BeginTime = newBeginTime;
         }
-        public void ResetFollowAct(IROActivity followAct) {
+        public void ResetFollowAct(IROActRecord followAct) {
             NextAct = followAct;
         }
         public void Resume() {
@@ -101,60 +101,60 @@ namespace Main.Act {
         #endregion
 
         #region public
-        public IContext MakeDepend(IROActivity followAct) {
+        public IContext MakeDepend(IROActRecord followAct) {
             return new Context(BeginTime, followAct);
         }
         #endregion
     }
 
     /// <summary> アクティビティ </summary>
-    public class Activity : IActivity {
+    public class ActRecord : IActRecord {
 
         #region property
-        public IROContent Content { get; private set; }
+        public IActivity Content { get; private set; }
         public IROContext Context => MutableContext;
         public IContext MutableContext { get; private set; }
         #endregion
 
         #region ctor/dtor
-        public Activity(IROContent content, IContext context) {
+        public ActRecord(IActivity content, IContext context) {
             Content = content; MutableContext = context;
         }
-        public Activity(IROContent content, MinuteOfDay beginTime) {
+        public ActRecord(IActivity content, MinuteOfDay beginTime) {
             Content = content; MutableContext = new Context(beginTime);
         }
-        public Activity(IProject proj, string name, bool isEffective, MinuteOfDay beginTime)
+        public ActRecord(IProject proj, string name, bool isEffective, MinuteOfDay beginTime)
             : this(new Content(proj, name, isEffective), new Context(beginTime)) {}
-        public Activity(IProject proj, string name, MinuteOfDay beginTime)
+        public ActRecord(IProject proj, string name, MinuteOfDay beginTime)
             : this(new Content(proj, name), new Context(beginTime)) {}
         #endregion
 
         #region public
-        public void ResetContent(IROContent cnt) { Content = cnt; }
+        public void ResetContent(IActivity cnt) { Content = cnt; }
         #endregion
     }
 
     /// <summary> アクティビティ </summary>
-    public class IndependentActivity : IIndependentActivity {
+    public class IndependentActRecord : IIndependentActRecord {
 
         #region property
-        public IROContent Content { get; private set; }
+        public IActivity Content { get; private set; }
         public IIndependentContext IndependentContext { get; private set; }
         #endregion
 
         #region ctor/dtor
-        public IndependentActivity(IROContent content, IIndependentContext context) {
+        public IndependentActRecord(IActivity content, IIndependentContext context) {
             Content = content; IndependentContext = context;
         }
-        public IndependentActivity(IProject proj, string name, bool isEffective, MinuteOfDay beginTime, MinuteOfDay endTime)
+        public IndependentActRecord(IProject proj, string name, bool isEffective, MinuteOfDay beginTime, MinuteOfDay endTime)
             : this(new Content(proj, name, isEffective), new IndependentContext(beginTime, endTime)) {}
-        public IndependentActivity(IProject proj, string name, MinuteOfDay beginTime, MinuteOfDay endTime)
+        public IndependentActRecord(IProject proj, string name, MinuteOfDay beginTime, MinuteOfDay endTime)
             : this(new Content(proj, name), new IndependentContext(beginTime, endTime)) {}
         #endregion
 
         #region public
-        public IActivity MakeDepend(IActivity followAct) {
-            return new Activity(Content, IndependentContext.MakeDepend(followAct));
+        public IActRecord MakeDepend(IActRecord followAct) {
+            return new ActRecord(Content, IndependentContext.MakeDepend(followAct));
         }
         #endregion
     }

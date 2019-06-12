@@ -10,24 +10,30 @@ namespace Main.Act {
     /// <summary> ProjectとActivityを同一のインタフェースに </summary>
     public interface IContent : du.Cmp.IHashTreeDataType<IProject, string> {
         IProject Proj { get; }
-        IROContent Act { get; }
+        IActivity Act { get; }
         bool IsProj { get; }
+        IROContent Data { get; }
     }
 
     public abstract class ContentProxy : IContent {
         public abstract IProject Proj { get; }
-        public abstract IROContent Act { get; }
+        public abstract IActivity Act { get; }
         public abstract bool IsProj { get; }
 
         public IProject Parent => Data.Parent;
         public string Key => Data.Key;
 
-        protected IROContent Data { get => IsProj ? Proj : Act; }
+        public IROContent Data { get
+            {
+                if (IsProj) { return Proj; }
+                else { return Act; }
+            }
+        }
     }
 
     public class ProjectProxy : ContentProxy {
         public override IProject Proj { get; }
-        public override IROContent Act => null;
+        public override IActivity Act => null;
         public override bool IsProj => true;
 
         public ProjectProxy(IProject proj) {
@@ -38,7 +44,7 @@ namespace Main.Act {
 
     public class RootProjectProxy : ContentProxy {
         public override IProject   Proj   => null;
-        public override IROContent Act    => null;
+        public override IActivity Act    => null;
         public override bool       IsProj => true;
 
         private RootProjectProxy() {}
@@ -48,10 +54,10 @@ namespace Main.Act {
 
     public class ActivityProxy : ContentProxy {
         public override IProject Proj => null;
-        public override IROContent Act { get; }
+        public override IActivity Act { get; }
         public override bool IsProj => false;
 
-        public ActivityProxy(IROContent act) {
+        public ActivityProxy(IActivity act) {
             if (act is null) { throw new ArgumentNullException(); }
             Act = act;
         }
@@ -66,7 +72,7 @@ namespace Main.Act {
         bool ProjHasExist(IProject proj);
         /// <summary> 既存アクティビティと重複するか </summary>
         bool ActHasExist(string key, IProject parent);
-        bool ActHasExist(IROContent act);
+        bool ActHasExist(IActivity act);
         #endregion
 
         #region getter
@@ -75,7 +81,7 @@ namespace Main.Act {
         IProject AtProj(IProject proj);
         IProject AtProj(string key, IProject parent);
         /// <returns> 見つからない場合、見つかったがActivityじゃない場合は null </returns>
-        IROContent AtAct(string key, IProject parent);
+        IActivity AtAct(string key, IProject parent);
 
         IEnumerable<IContent> Sorted(IProject parent);
         #endregion
@@ -85,7 +91,7 @@ namespace Main.Act {
         void Initialize();
         /// <summary> 追加 </summary>
         void Add(IProject proj);
-        void Add(IROContent act);
+        void Add(IActivity act);
         #endregion
     }
 
@@ -102,7 +108,7 @@ namespace Main.Act {
         public bool ActHasExist(string key, IProject parent) {
             return !(At(parent)?.Children.At(key)?.Value.IsProj) ?? false;
         }
-        public bool ActHasExist(IROContent act) {
+        public bool ActHasExist(IActivity act) {
             return !(At(act.Parent)?.Children.At(act.Key)?.Value.IsProj) ?? false;
         }
 
@@ -118,13 +124,13 @@ namespace Main.Act {
             return At(parent)?.Children.At(key).Value.Proj;
         }
         /// <returns> 見つからない場合、見つかったがActivityじゃない場合は null </returns>
-        public IROContent AtAct(string key, IProject parent) {
+        public IActivity AtAct(string key, IProject parent) {
             return At(parent)?.Children.At(key).Value.Act;
         }
         public void Add(IProject proj) {
             Add(new ProjectProxy(proj));
         }
-        public void Add(IROContent act) {
+        public void Add(IActivity act) {
             Add(new ActivityProxy(act));
         }
 
@@ -143,14 +149,14 @@ namespace Main.Act {
         public void Initialize() { Load(); }
 
 
-        public IEnumerable<IROContent> ActSorted(IProject parent) {
+        public IEnumerable<IActivity> ActSorted(IProject parent) {
             return At(parent).Children             // parentを親に持つ
                 .Sorted()                          // 子供を指定した順番で
                 .Where(node => !node.Value.IsProj) // Activityのみを
                 .Select(node => node.Value.Act);   // IROContentで取得
         }
 
-        public void AddAct(IROContent content) { Add(content); }
+        public void AddAct(IActivity content) { Add(content); }
 
         public IEnumerable<IProject> ProjSorted(IProject parent) {
             return At(parent).Children            // parentを親に持つ

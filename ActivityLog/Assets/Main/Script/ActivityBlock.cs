@@ -7,7 +7,7 @@ namespace Main.Act.View {
 
     /// <summary> アクティビティを表す Block UI </summary>
     public interface IActivityBlock {
-        void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent);
+        void Initialize(IROActRecord act, IActivitiesCylinder cylinder, Transform parent);
         void RefreshSize();
     }
 
@@ -22,7 +22,7 @@ namespace Main.Act.View {
         #endregion
 
         #region property
-        public IROActivity Act { get; private set; }
+        public IROActRecord Act { get; private set; }
         #endregion
 
         #region mono
@@ -34,7 +34,7 @@ namespace Main.Act.View {
         #endregion
 
         #region public
-        public void Initialize(IROActivity act, IActivitiesCylinder cylinder, Transform parent) {
+        public void Initialize(IROActRecord act, IActivitiesCylinder cylinder, Transform parent) {
             if (!gameObject.activeSelf) {
                 Act = act;
                 m_image.color = act.Content.Parent.Color;

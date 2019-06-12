@@ -17,12 +17,14 @@ namespace Main.Act {
         // string     Key         { get; }
     }
 
+    public interface IActivity : IROContent {}
+
     /// <summary>
     /// アクティビティの時刻/前後情報
     /// 時間の単位はすべて minute (本アプリに秒の分解能はない)
     /// </summary>
     public interface IROContext {
-        IROActivity  NextAct   { get; }
+        IROActRecord  NextAct   { get; }
         MinuteOfDay  BeginTime { get; }
         /// <value> まだ終了していなければ null </value>
         MinuteOfDay? EndTime   { get; }
@@ -31,9 +33,9 @@ namespace Main.Act {
         bool         HasEnded  { get; }
     }
     public interface IContext : IROContext {
-        void ResetPrecedeAct(IIndependentActivity precedeAct);
+        void ResetPrecedeAct(IIndependentActRecord precedeAct);
         void ResetPrecedeAct(MinuteOfDay newBeginTime);
-        void ResetFollowAct(IROActivity followAct);
+        void ResetFollowAct(IROActRecord followAct);
         void Resume();
     }
     /// <returns> 自己完結型時系列情報 </returns>
@@ -43,28 +45,28 @@ namespace Main.Act {
         MinuteOfDay EndTime   { get; }
         int         Duration  { get; }
 
-        IContext MakeDepend(IROActivity followAct);
+        IContext MakeDepend(IROActRecord followAct);
     }
 
     /// <summary> アクティビティ </summary>
-    public interface IROActivity {
+    public interface IROActRecord {
         /// <summary> 内容 </summary>
-        IROContent Content { get; }
+        IActivity Content { get; }
         /// <summary> 時系列情報 </summary>
         IROContext Context { get; }
     }
-    public interface IActivity : IROActivity {
+    public interface IActRecord : IROActRecord {
         IContext MutableContext { get; }
-        void ResetContent(IROContent cnt);
+        void ResetContent(IActivity cnt);
     }
     /// <summary> 自己完結型アクティビティ </summary>
-    public interface IIndependentActivity {
+    public interface IIndependentActRecord {
         /// <summary> 内容 </summary>
-        IROContent Content { get; }
+        IActivity Content { get; }
         /// <summary> 時系列情報 </summary>
         IIndependentContext IndependentContext { get; }
 
-        IActivity MakeDepend(IActivity followAct);
+        IActRecord MakeDepend(IActRecord followAct);
     }
 
 }
