@@ -5,7 +5,7 @@ using static du.Ex.ExList;
 namespace Main.Act {
 
     /// <summary> アクティビティの系列(日毎) </summary>
-    public class ActSequence : IActSequence {
+    public class ActRecordSequence : IActRecordSequence {
         #region field
         IList<IActRecord> m_acts = new List<IActRecord>();
         #endregion
@@ -85,11 +85,11 @@ namespace Main.Act {
         public void Move(int index, MinuteOfDay newBegin, MinuteOfDay? newEnd) {
             var act = m_acts[index];
             RemoveAt(index);
-            if (newEnd != null) { Insert(newBegin, (MinuteOfDay)newEnd, act.Content); }
+            if (newEnd != null) { Insert(newBegin, (MinuteOfDay)newEnd, act.Activity); }
             else { PushBack(act); }
         }
         public void OverwriteCnt(int index, IActivity newContent) {
-            m_acts[index].ResetContent(newContent);
+            m_acts[index].ResetAct(newContent);
         }
         public void OverwriteBeginTime(int index, MinuteOfDay newBegin) {
             Move(index, newBegin, m_acts[index].Context.EndTime);

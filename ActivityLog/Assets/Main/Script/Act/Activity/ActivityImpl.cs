@@ -4,7 +4,7 @@
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
-    public class Content : IActivity {
+    public class Activity : IActivity {
         #region field-property
         public IProject Parent      { get; private set; }
         public string   Name        { get; private set; }
@@ -18,10 +18,10 @@ namespace Main.Act {
         #endregion
 
         #region ctor/dtor
-        public Content(IProject proj, string name, bool isEffective) {
+        public Activity(IProject proj, string name, bool isEffective) {
             Parent = proj; Name = name; IsEffective = isEffective;
         }
-        public Content(IProject proj, string name) : this(proj, name, proj.IsEffective) {}
+        public Activity(IProject proj, string name) : this(proj, name, proj.IsEffective) {}
         #endregion
 
         #region override
@@ -111,26 +111,26 @@ namespace Main.Act {
     public class ActRecord : IActRecord {
 
         #region property
-        public IActivity Content { get; private set; }
+        public IActivity Activity { get; private set; }
         public IROContext Context => MutableContext;
         public IContext MutableContext { get; private set; }
         #endregion
 
         #region ctor/dtor
-        public ActRecord(IActivity content, IContext context) {
-            Content = content; MutableContext = context;
+        public ActRecord(IActivity act, IContext context) {
+            Activity = act; MutableContext = context;
         }
-        public ActRecord(IActivity content, MinuteOfDay beginTime) {
-            Content = content; MutableContext = new Context(beginTime);
+        public ActRecord(IActivity act, MinuteOfDay beginTime) {
+            Activity = act; MutableContext = new Context(beginTime);
         }
         public ActRecord(IProject proj, string name, bool isEffective, MinuteOfDay beginTime)
-            : this(new Content(proj, name, isEffective), new Context(beginTime)) {}
+            : this(new Activity(proj, name, isEffective), new Context(beginTime)) {}
         public ActRecord(IProject proj, string name, MinuteOfDay beginTime)
-            : this(new Content(proj, name), new Context(beginTime)) {}
+            : this(new Activity(proj, name), new Context(beginTime)) {}
         #endregion
 
         #region public
-        public void ResetContent(IActivity cnt) { Content = cnt; }
+        public void ResetAct(IActivity cnt) { Activity = cnt; }
         #endregion
     }
 
@@ -138,23 +138,23 @@ namespace Main.Act {
     public class IndependentActRecord : IIndependentActRecord {
 
         #region property
-        public IActivity Content { get; private set; }
+        public IActivity Activity { get; private set; }
         public IIndependentContext IndependentContext { get; private set; }
         #endregion
 
         #region ctor/dtor
-        public IndependentActRecord(IActivity content, IIndependentContext context) {
-            Content = content; IndependentContext = context;
+        public IndependentActRecord(IActivity act, IIndependentContext context) {
+            Activity = act; IndependentContext = context;
         }
         public IndependentActRecord(IProject proj, string name, bool isEffective, MinuteOfDay beginTime, MinuteOfDay endTime)
-            : this(new Content(proj, name, isEffective), new IndependentContext(beginTime, endTime)) {}
+            : this(new Activity(proj, name, isEffective), new IndependentContext(beginTime, endTime)) {}
         public IndependentActRecord(IProject proj, string name, MinuteOfDay beginTime, MinuteOfDay endTime)
-            : this(new Content(proj, name), new IndependentContext(beginTime, endTime)) {}
+            : this(new Activity(proj, name), new IndependentContext(beginTime, endTime)) {}
         #endregion
 
         #region public
         public IActRecord MakeDepend(IActRecord followAct) {
-            return new ActRecord(Content, IndependentContext.MakeDepend(followAct));
+            return new ActRecord(Activity, IndependentContext.MakeDepend(followAct));
         }
         #endregion
     }

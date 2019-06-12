@@ -37,10 +37,10 @@ namespace Main.Act.View {
         public void Initialize(IROActRecord act, IActivitiesCylinder cylinder, Transform parent) {
             if (!gameObject.activeSelf) {
                 Act = act;
-                m_image.color = act.Content.Parent.Color;
+                m_image.color = act.Activity.Parent.Color;
                 m_cylinder = cylinder;
                 RefreshSize();
-                m_text.text = Act.Content.Name;
+                m_text.text = Act.Activity.Name;
                 gameObject.SetActive(true);
                 Debug.Log("ActivityBlock initialized.");
             }

@@ -4,12 +4,12 @@ namespace Main.Act {
     /// <summary> アクティビティ系列/日を操作する </summary>
     public class ActivitiesMgr : IActivitiesMgr {
         #region property
-        public IROActSequence Activities => Acts;
-        protected IActSequence Acts { get; }
+        public IROActRecordSequence Activities => Acts;
+        protected IActRecordSequence Acts { get; }
         #endregion
 
         #region ctor/dtor
-        public ActivitiesMgr() { Acts = new ActSequence(); }
+        public ActivitiesMgr() { Acts = new ActRecordSequence(); }
         #endregion
 
         #region public
@@ -17,10 +17,10 @@ namespace Main.Act {
             Acts.PushBack(new ActRecord(content, Context.BeginFromNow));
         }
         public virtual void BeginNewAct(IProject proj, string name, bool isEffective) {
-            BeginNewAct(new Content(proj, name, isEffective));
+            BeginNewAct(new Activity(proj, name, isEffective));
         }
         public virtual void BeginNewAct(IProject proj, string name) {
-            BeginNewAct(new Content(proj, name));
+            BeginNewAct(new Activity(proj, name));
         }
         public void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute) {
             if (indexJustAfterBorder <= 0) { return; }

@@ -2,7 +2,7 @@
 namespace Main.Act {
 
     /// <summary> アクティビティの系列(日毎)(読み取り専用) </summary>
-    public interface IROActSequence {
+    public interface IROActRecordSequence {
         /// <summary> 時系列順で index 番目 </summary>
         /// <param name="index"> index 番目が存在しない場合例外を投げる </param>
         IROActRecord this [int index] { get; }
@@ -22,7 +22,7 @@ namespace Main.Act {
     }
 
     /// <summary> アクティビティの系列(日毎) </summary>
-    public interface IActSequence : IROActSequence {
+    public interface IActRecordSequence : IROActRecordSequence {
         /// <summary> 末尾に追加 </summary>
         void PushBack(IActRecord act);
 

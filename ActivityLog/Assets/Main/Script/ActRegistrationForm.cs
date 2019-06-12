@@ -64,7 +64,7 @@ namespace Main.Act.View {
             // Activity を追加
             else {
                 var proj = DB.ContentDB.Tree.AtByKey(ProjText);
-                DB.ContentDB.Tree.AddAct(new Content(proj, ActText));
+                DB.ContentDB.Tree.AddAct(new Activity(proj, ActText));
             }
         }
         /// <summary>

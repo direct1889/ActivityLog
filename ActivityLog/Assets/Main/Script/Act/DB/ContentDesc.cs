@@ -26,7 +26,7 @@ namespace Main.Act.DB {
                     isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
                 }
                 else { // Activity
-                    return new ActivityProxy(new Content(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
+                    return new ActivityProxy(new Activity(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
                 }
             }
         }

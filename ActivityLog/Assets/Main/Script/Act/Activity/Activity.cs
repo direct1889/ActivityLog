@@ -4,16 +4,13 @@ namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
     public interface IROContent : du.Cmp.IHashTreeDataType<IProject, string> {
-        // IProject   Parent      { get; }
         string     Name        { get; }
         bool       IsEffective { get; }
 
         ThemeColor Color       { get; }
         int        ParentCount { get; }
-        /// <value>
-        /// 辞書に入れるときkeyとして利用する
-        /// a.key == b.key <=必要十分=> IsOverlap(a, b)
-        /// </value>
+
+        // IProject   Parent      { get; }
         // string     Key         { get; }
     }
 
@@ -51,18 +48,18 @@ namespace Main.Act {
     /// <summary> アクティビティ </summary>
     public interface IROActRecord {
         /// <summary> 内容 </summary>
-        IActivity Content { get; }
+        IActivity Activity { get; }
         /// <summary> 時系列情報 </summary>
         IROContext Context { get; }
     }
     public interface IActRecord : IROActRecord {
         IContext MutableContext { get; }
-        void ResetContent(IActivity cnt);
+        void ResetAct(IActivity cnt);
     }
     /// <summary> 自己完結型アクティビティ </summary>
     public interface IIndependentActRecord {
         /// <summary> 内容 </summary>
-        IActivity Content { get; }
+        IActivity Activity { get; }
         /// <summary> 時系列情報 </summary>
         IIndependentContext IndependentContext { get; }
 
