@@ -24,7 +24,7 @@ namespace Main.Act.DB {
         #endregion
     }
 
-    public interface IActivityDB : du.Cmp.IRxOrderedMap<IROContent> {
+    public interface IActivityDB : du.Cmp.IRxOrderedMap<IROContent, string> {
         /// <summary> 登録済みActivity一覧の生成 </summary>
         void Initialize();
         /// <summary> ActivityをEnumerableで一括取得 </summary>
@@ -37,7 +37,7 @@ namespace Main.Act.DB {
     }
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-    public class ActivityDB : du.Cmp.RxOrderedMap<IROContent>, IActivityDB {
+    public class ActivityDB : du.Cmp.RxOrderedMap<IROContent, string>, IActivityDB {
         #region public
         /// <summary> 登録済みのActivityをCSVから生成 </summary>
         public void Initialize() { Load("System/Activities"); }
@@ -78,7 +78,7 @@ namespace Main.Act.DB {
         #endregion
     }
 
-    public interface IProjectDB : du.Cmp.IRxOrderedMap<IProject> {
+    public interface IProjectDB : du.Cmp.IRxOrderedMap<IProject, string> {
         //! 登録済みProject一覧の生成
         void Initialize();
         /// <summary> ProjectをEnumerableで一括取得 </summary>
@@ -91,7 +91,7 @@ namespace Main.Act.DB {
     }
 
     /// <summary> 全てのプロジェクトは事前にDBに登録が必要 </summary>
-    public class ProjectDB : du.Cmp.RxOrderedMap<IProject>, IProjectDB {
+    public class ProjectDB : du.Cmp.RxOrderedMap<IProject, string>, IProjectDB {
         #region public
         //! 登録済みProject一覧の生成
         public void Initialize() { Load("System/Projects"); }
