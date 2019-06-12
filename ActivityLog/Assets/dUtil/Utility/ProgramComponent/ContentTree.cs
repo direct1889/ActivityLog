@@ -105,7 +105,7 @@ namespace Main.Act {
             for (int i = 0; i < matched.Groups[2].Captures.Count && !(it is null); ++i) {
                 it = it.Children.At(matched.Groups[2].Captures[i].Value);
             }
-            return it.Value.Proj;
+            return it?.Value?.Proj;
         }
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         public IProject AtByKey(string key) {
