@@ -35,8 +35,8 @@ namespace Main.STrack {
             m_acts.BeginNewAct(content);
             m_graph.CreateBlock(m_acts.Activities.Back);
         }
-        private void CreateActivityBlockImpl(string proj, string actName, string duration) {
-            m_acts.BeginNewAct(Act.DB.ContentDB.Proj.At(proj), actName);
+        private void CreateActivityBlockImpl(Act.IProject proj, string actName, string duration) {
+            m_acts.BeginNewAct(Act.DB.ContentDB.Proj.AtProj(proj.Key, proj.Parent), actName);
             m_graph.CreateBlock(m_acts.Activities.Back);
         }
         #endregion

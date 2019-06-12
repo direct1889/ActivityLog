@@ -16,28 +16,24 @@ namespace du.Cmp {
     /// <param name="TParent"> IProject </param>
     /// <param name="TKey"> string </param>
     public interface IHashTreeNode<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
-        // IHashTreeNode<T, Key> Parent { get; }
-        IOrderedMap<IHashTreeNode<T, TParent, TKey>, TKey> Children { get; }
         T Value { get; }
+        IOrderedMap<IHashTreeNode<T, TParent, TKey>, TKey> Children { get; }
     }
 
     public class HashTreeNode<T, TParent, TKey> : IHashTreeNode<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         #region public field property
-        // public IHashTreeNode<T> Parent { get; set; }
+        public T Value { get; }
         public IOrderedMap<IHashTreeNode<T, TParent, TKey>, TKey> Children { get; } = new OrderedMap<IHashTreeNode<T, TParent, TKey>, TKey>();
-        public T Value { get; set; }
         #endregion
 
         #region ctor
-        public HashTreeNode(T value) {
-            Value = value;
-        }
+        public HashTreeNode(T value) { Value = value; }
         #endregion
 
         #region public
@@ -45,10 +41,6 @@ namespace du.Cmp {
         public IHashTreeNode<T, TParent, TKey> At(TKey key) {
             return Children.At(key);
         }
-        /// <returns> 見つからなければ null </returns>
-        // public IOrderedMap<IHashTreeNode<T, Key>, Key> GetChildren(Key key) {
-        //     return Children.At(key)?.Children;
-        // }
         #endregion
 
         #region public
@@ -64,7 +56,7 @@ namespace du.Cmp {
 
 
     public interface IHashTree<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         void Add(T value);
@@ -75,13 +67,24 @@ namespace du.Cmp {
     }
 
     public class HashTree<T, TParent, TKey> : IHashTree<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
-        IHashTreeNode<T, TParent, TKey> m_root;
+        #region field
+        // IHashTreeNode<T, TParent, TKey> m_root;
+        protected IHashTreeNode<T, TParent, TKey> Root { get; }
+        #endregion
 
-        protected IHashTreeNode<T, TParent, TKey> Root => m_root;
+        #region ctor
+        public HashTree() {
+            Root = new HashTreeNode<T, TParent, TKey>(null);
+        }
+        public HashTree(T root) {
+            Root = new HashTreeNode<T, TParent, TKey>(root);
+        }
+        #endregion
 
+        #region public
         public virtual void Add(T value) {
             At(value.Parent)?.Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value));
         }
@@ -94,12 +97,13 @@ namespace du.Cmp {
             if (proj is null) { return Root; }
             else { return At(proj.Parent)?.Children.At(proj.Key); }
         }
+        #endregion
     }
 
 
     /// <summary> 要素の追加/削除/変更時に通知を流す </summary>
     public interface IRxHashTree<T, TParent, TKey>// : IHashTree<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         IObservable<T> RxAdded { get; }
@@ -109,7 +113,7 @@ namespace du.Cmp {
 
     public class RxHashTree<T, TParent, TKey>
     : HashTree<T, TParent, TKey>, IRxHashTree<T, TParent, TKey>
-        where T : IHashTreeDataType<TParent, TKey>
+        where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         #region field

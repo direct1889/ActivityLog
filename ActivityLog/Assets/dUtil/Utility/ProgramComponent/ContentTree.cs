@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using UniRx;
 using du.Cmp;
+using System.Text.RegularExpressions;
 
 namespace Main.Act {
 
@@ -29,7 +30,20 @@ namespace Main.Act {
         public override IROContent Act => null;
         public override bool IsProj => true;
 
-        public ProjectProxy(IProject proj) => Proj = proj;
+        public ProjectProxy(IProject proj) {
+            if (proj is null) { throw new ArgumentNullException(); }
+            Proj = proj;
+        }
+    }
+
+    public class RootProjectProxy : ContentProxy {
+        public override IProject   Proj   => null;
+        public override IROContent Act    => null;
+        public override bool       IsProj => true;
+
+        private RootProjectProxy() {}
+        static RootProjectProxy m_instance = new RootProjectProxy();
+        public static IContent Instance => m_instance;
     }
 
     public class ActivityProxy : ContentProxy {
@@ -37,21 +51,29 @@ namespace Main.Act {
         public override IROContent Act { get; }
         public override bool IsProj => false;
 
-        public ActivityProxy(IROContent act) => Act = act;
+        public ActivityProxy(IROContent act) {
+            if (act is null) { throw new ArgumentNullException(); }
+            Act = act;
+        }
     }
 
-    public interface IContentTree : DB.IActivityDB, DB.IProjectDB {
+    public interface IContentTree
+    : du.Cmp.IRxHashTree<IContent, IProject, string>, DB.IActivityDB, DB.IProjectDB
+    {
         /// <summary> 存在するか </summary>
         bool IsExistProj(string key, IProject parent);
         bool IsExist(IProject proj);
         bool IsExistAct(string key, IProject parent);
         bool IsExist(IROContent act);
 
+        IProject AtByKey(string key);
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         IProject AtProj(IProject proj);
         IProject AtProj(string key, IProject parent);
         /// <returns> 見つからない場合、見つかったがActivityじゃない場合は null </returns>
         IROContent AtAct(string key, IProject parent);
+
+        IEnumerable<IContent> Sorted(IProject parent);
 
         /// <summary> 追加 </summary>
         void Add(IProject proj);
@@ -74,6 +96,21 @@ namespace Main.Act {
         public bool IsExist(IROContent act) {
             return !(At(act.Parent)?.Children.At(act.Key)?.Value.IsProj) ?? false;
         }
+
+        static Regex Genealogy { get; } = new Regex("(::([^:]+))+");
+        /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
+        private IProject FromGenealogy(string genealogy) {
+            var matched = Genealogy.Match(genealogy);
+            var it = Root;
+            for (int i = 0; i < matched.Groups[2].Captures.Count && !(it is null); ++i) {
+                it = it.Children.At(matched.Groups[2].Captures[i].Value);
+            }
+            return it.Value.Proj;
+        }
+        /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
+        public IProject AtByKey(string key) {
+            return FromGenealogy(key);
+        }
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         public IProject AtProj(IProject proj) {
             return AtProj(proj.Key, proj.Parent);
@@ -90,6 +127,13 @@ namespace Main.Act {
         }
         public void Add(IROContent act) {
             Add(new ActivityProxy(act));
+        }
+
+
+        public IEnumerable<IContent> Sorted(IProject parent) {
+            return At(parent).Children            // parentを親に持つ
+                .Sorted()                         // 子供を指定した順番で
+                .Select(node => node.Value); // IROContentで取得
         }
 
 
@@ -132,16 +176,22 @@ namespace Main.Act {
 
 
         private void Load() {
-            using (var reader = new du.File.CSVReader<DB.ProjectDesc>(du.App.AppManager.DataPath + "System/Projects", true)) {
+            using (var reader = new du.File.CSVReader<DB.ContentDesc>(du.App.AppManager.DataPath + "System/Contents", true)) {
                 foreach (var desc in reader) {
-                    AddProj(desc.Instantiate());
+                    Add(desc.Instantiate());
+                    // AddProj(desc.Instantiate());
                 }
             }
-            using (var reader = new du.File.CSVReader<DB.ActivityDesc>(du.App.AppManager.DataPath + "System/Activities", true)) {
-                foreach (var desc in reader) {
-                    AddAct(desc.Instantiate());
-                }
-            }
+            // using (var reader = new du.File.CSVReader<DB.ProjectDesc>(du.App.AppManager.DataPath + "System/Projects", true)) {
+            //     foreach (var desc in reader) {
+            //         AddProj(desc.Instantiate());
+            //     }
+            // }
+            // using (var reader = new du.File.CSVReader<DB.ActivityDesc>(du.App.AppManager.DataPath + "System/Activities", true)) {
+            //     foreach (var desc in reader) {
+            //         AddAct(desc.Instantiate());
+            //     }
+            // }
         }
     }
 

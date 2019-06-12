@@ -53,22 +53,25 @@ namespace Main.Act.View {
 
         #region private
         private void Initialize() {
-            DB.ContentDB.Act.RxAdded.Subscribe(act => CreateActPanel(act)).AddTo(this);
-            DB.ContentDB.Proj.RxAdded.Subscribe(proj => CreateProjPanel(proj)).AddTo(this);
-            foreach (var proj in DB.ContentDB.Proj.Sorted()) {
-                CreateProjPanel(proj);
-                foreach (var act in DB.ContentDB.Act.ActSorted(proj)) {
-                    CreateActPanel(act);
+            DB.ContentDB.Act.RxAdded.Subscribe(content => CreatePanel(content)).AddTo(this);
+            // nullを渡してRootNodeから始める
+            foreach (var child in DB.ContentDB.Proj.Sorted(null)) {
+                CreatePanels(child);
+            }
+        }
+        private void CreatePanels(IContent content) {
+            CreatePanel(content);
+            if (content.IsProj) {
+                foreach (var child in DB.ContentDB.Proj.Sorted(content.Proj)) {
+                    CreatePanels(child);
                 }
             }
         }
-        private void CreateProjPanel(IProject content) {
-            CreateContentPanel(content, m_projPanelPref);
+        private void CreatePanel(IContent content) {
+            if (content.IsProj) { CreatePanel(content.Proj, m_projPanelPref); }
+            else { CreatePanel(content.Act, m_actPanelPref); }
         }
-        private void CreateActPanel(IROContent content) {
-            CreateContentPanel(content, m_actPanelPref);
-        }
-        private void CreateContentPanel(IROContent content, GameObject panelPref) {
+        private void CreatePanel(IROContent content, GameObject panelPref) {
             var panel = Instantiate<GameObject>(panelPref, m_panelsParent.transform);
             m_contentPanels.Add(content.Key, panel.GetComponent<ContentPanel>());
             m_contentPanels[content.Key].Initialize(content, this);

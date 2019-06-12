@@ -43,6 +43,11 @@ namespace Main.Act.View {
         #endregion
 
         #region private
+        // TODO:
+        private static IProject Convert(string projText) {
+            return null;
+        }
+
         private void UpdateButtonStatus() {
             if (m_bnCreate.IsInteractable()) {
                 if (!IsReady()) { m_bnCreate.interactable = false; }
@@ -58,7 +63,7 @@ namespace Main.Act.View {
             }
             // Activity を追加
             else {
-                var proj = DB.ContentDB.Proj.At(ProjText);
+                var proj = DB.ContentDB.Proj.AtByKey(ProjText);
                 DB.ContentDB.Act.AddAct(new Content(proj, ActText));
             }
         }
@@ -75,7 +80,7 @@ namespace Main.Act.View {
                 }
                 // Activityを追加
                 else {
-                    var proj = DB.ContentDB.Proj.At(ProjText);
+                    var proj = DB.ContentDB.Proj.AtByKey(ProjText);
                     return !(proj is null) &&
                         !DB.ContentDB.Act.ActHasExistOverlapped(ActText, proj);
                 }

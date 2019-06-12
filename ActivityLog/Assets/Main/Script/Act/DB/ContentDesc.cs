@@ -3,6 +3,35 @@ using static du.Ex.ExString;
 
 namespace Main.Act.DB {
 
+    public class ContentDesc {
+        [du.File.CSVColAttr(0,0)] public int isProject; // 1:Proj / 0:Act
+        [du.File.CSVColAttr(1,null)] public string parentGenealogy;
+        [du.File.CSVColAttr(2,null)] public string name;
+        [du.File.CSVColAttr(3,null)] public string isEffective;
+        [du.File.CSVColAttr(4,null)] public string color;
+        public override string ToString() {
+            return $"{parentGenealogy}::{name}({color},{isEffective})";
+        }
+
+        public IContent Instantiate() {
+            // Root直下
+            if (parentGenealogy.IsEmpty()) {
+                return new ProjectProxy(new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective)));
+            }
+            else {
+                var parent = DB.ContentDB.Proj.AtByKey(parentGenealogy);
+                if (isProject != 0) { // Project
+                    return new ProjectProxy(new Project(name, parent,
+                    color.IsEmpty() ? parent.Color : ThemeColors.Get(color),
+                    isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
+                }
+                else { // Activity
+                    return new ActivityProxy(new Content(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
+                }
+            }
+        }
+    }
+
     // CSVからの読み込みに対応
     public class ProjectDesc {
         [du.File.CSVColAttr(0,null)] public string parentName;
@@ -18,7 +47,7 @@ namespace Main.Act.DB {
                 return new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective));
             }
             else {
-                IProject parent = ContentDB.Proj.At(parentName);
+                IProject parent = ContentDB.Proj.AtByKey(parentName);
                 return new Project(name, parent,
                     color.IsEmpty() ? parent.Color : ThemeColors.Get(color),
                     isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective));
@@ -36,7 +65,7 @@ namespace Main.Act.DB {
         }
 
         public IROContent Instantiate() {
-            IProject parent = ContentDB.Proj.At(parentName);
+            IProject parent = ContentDB.Proj.AtByKey(parentName);
             return new Content(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective));
         }
     }
