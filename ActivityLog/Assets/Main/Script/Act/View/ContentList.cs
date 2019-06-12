@@ -53,16 +53,16 @@ namespace Main.Act.View {
 
         #region private
         private void Initialize() {
-            DB.ContentDB.Act.RxAdded.Subscribe(content => CreatePanel(content)).AddTo(this);
+            DB.ContentDB.Tree.RxAdded.Subscribe(content => CreatePanel(content)).AddTo(this);
             // nullを渡してRootNodeから始める
-            foreach (var child in DB.ContentDB.Proj.Sorted(null)) {
+            foreach (var child in DB.ContentDB.Tree.Sorted(null)) {
                 CreatePanels(child);
             }
         }
         private void CreatePanels(IContent content) {
             CreatePanel(content);
             if (content.IsProj) {
-                foreach (var child in DB.ContentDB.Proj.Sorted(content.Proj)) {
+                foreach (var child in DB.ContentDB.Tree.Sorted(content.Proj)) {
                     CreatePanels(child);
                 }
             }

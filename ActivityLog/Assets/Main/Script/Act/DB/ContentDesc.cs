@@ -19,7 +19,7 @@ namespace Main.Act.DB {
                 return new ProjectProxy(new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective)));
             }
             else {
-                var parent = DB.ContentDB.Proj.AtByKey(parentGenealogy);
+                var parent = DB.ContentDB.Tree.AtByKey(parentGenealogy);
                 if (isProject != 0) { // Project
                     return new ProjectProxy(new Project(name, parent,
                     color.IsEmpty() ? parent.Color : ThemeColors.Get(color),
@@ -32,45 +32,7 @@ namespace Main.Act.DB {
         }
     }
 
-    // CSVからの読み込みに対応
-    public class ProjectDesc {
-        [du.File.CSVColAttr(0,null)] public string parentName;
-        [du.File.CSVColAttr(1,null)] public string name;
-        [du.File.CSVColAttr(2,null)] public string color;
-        [du.File.CSVColAttr(3,null)] public string isEffective;
-        public override string ToString() {
-            return $"{parentName}::{name}({color},{isEffective})";
-        }
-
-        public IProject Instantiate() {
-            if (parentName.IsEmpty()) {
-                return new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective));
-            }
-            else {
-                IProject parent = ContentDB.Proj.AtByKey(parentName);
-                return new Project(name, parent,
-                    color.IsEmpty() ? parent.Color : ThemeColors.Get(color),
-                    isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective));
-            }
-        }
-    }
-
-    // CSVからの読み込みに対応
-    public class ActivityDesc {
-        [du.File.CSVColAttr(0,null)] public string parentName;
-        [du.File.CSVColAttr(1,null)] public string name;
-        [du.File.CSVColAttr(2,null)] public string isEffective;
-        public override string ToString() {
-            return $"{parentName}::{name}({isEffective})";
-        }
-
-        public IROContent Instantiate() {
-            IProject parent = ContentDB.Proj.AtByKey(parentName);
-            return new Content(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective));
-        }
-    }
-
-    public static class ExProject {
+    public static class ExContentCSV {
         public static string ToCSV(this IProject proj) {
             return proj.Parent is null ? "" : proj.Parent.Name + $",{proj.Name},{proj.Color},{proj.IsEffective}";
         }

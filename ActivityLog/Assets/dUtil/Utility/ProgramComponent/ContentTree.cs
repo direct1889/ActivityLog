@@ -60,12 +60,16 @@ namespace Main.Act {
     public interface IContentTree
     : du.Cmp.IRxHashTree<IContent, IProject, string>, DB.IActivityDB, DB.IProjectDB
     {
-        /// <summary> 存在するか </summary>
-        bool IsExistProj(string key, IProject parent);
-        bool IsExist(IProject proj);
-        bool IsExistAct(string key, IProject parent);
-        bool IsExist(IROContent act);
+        #region getter
+        /// <summary> 既存プロジェクトと重複するか </summary>
+        bool ProjHasExist(string key, IProject parent);
+        bool ProjHasExist(IProject proj);
+        /// <summary> 既存アクティビティと重複するか </summary>
+        bool ActHasExist(string key, IProject parent);
+        bool ActHasExist(IROContent act);
+        #endregion
 
+        #region getter
         IProject AtByKey(string key);
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         IProject AtProj(IProject proj);
@@ -74,39 +78,34 @@ namespace Main.Act {
         IROContent AtAct(string key, IProject parent);
 
         IEnumerable<IContent> Sorted(IProject parent);
+        #endregion
 
+        #region public
+        /// <summary> 登録済みActivity一覧の生成 </summary>
+        void Initialize();
         /// <summary> 追加 </summary>
         void Add(IProject proj);
         void Add(IROContent act);
+        #endregion
     }
 
     public class ContentTree
     : du.Cmp.RxHashTree<IContent, IProject, string>, IContentTree
     {
-        public bool IsExistProj(string key, IProject parent) {
+        public bool ProjHasExist(string key, IProject parent) {
             return At(parent)?.Children.At(key)?.Value.IsProj ?? false;
         }
-        public bool IsExist(IProject proj) {
+        public bool ProjHasExist(IProject proj) {
             // 見つからなければどこかでnullが出る
             return At(proj)?.Value.IsProj ?? false;
         }
-        public bool IsExistAct(string key, IProject parent) {
+        public bool ActHasExist(string key, IProject parent) {
             return !(At(parent)?.Children.At(key)?.Value.IsProj) ?? false;
         }
-        public bool IsExist(IROContent act) {
+        public bool ActHasExist(IROContent act) {
             return !(At(act.Parent)?.Children.At(act.Key)?.Value.IsProj) ?? false;
         }
 
-        static Regex Genealogy { get; } = new Regex("(::([^:]+))+");
-        /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
-        private IProject FromGenealogy(string genealogy) {
-            var matched = Genealogy.Match(genealogy);
-            var it = Root;
-            for (int i = 0; i < matched.Groups[2].Captures.Count && !(it is null); ++i) {
-                it = it.Children.At(matched.Groups[2].Captures[i].Value);
-            }
-            return it?.Value?.Proj;
-        }
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         public IProject AtByKey(string key) {
             return FromGenealogy(key);
@@ -141,8 +140,8 @@ namespace Main.Act {
 
         // IObservable<IProject> IRxOrderedMap<IProject, string>.RxAdded => throw new NotImplementedException();
 
+        public void Initialize() { Load(); }
 
-        public void ActInitialize() { Load(); }
 
         public IEnumerable<IROContent> ActSorted(IProject parent) {
             return At(parent).Children             // parentを親に持つ
@@ -151,15 +150,7 @@ namespace Main.Act {
                 .Select(node => node.Value.Act);   // IROContentで取得
         }
 
-        public bool ActHasExistOverlapped(string name, IProject parent) {
-            return IsExistAct(name, parent);
-        }
-
         public void AddAct(IROContent content) { Add(content); }
-
-        public void ProjInitialize() {
-            // Load("System/Projects");
-        }
 
         public IEnumerable<IProject> ProjSorted(IProject parent) {
             return At(parent).Children            // parentを親に持つ
@@ -168,9 +159,6 @@ namespace Main.Act {
                 .Select(node => node.Value.Proj); // IROContentで取得
         }
 
-        public bool ProjHasExistOverlapped(string name, IProject parent) {
-            return IsExistProj(name, parent);
-        }
 
         public void AddProj(IProject project) { Add(project); }
 
@@ -193,6 +181,18 @@ namespace Main.Act {
             //     }
             // }
         }
+
+        static Regex Genealogy { get; } = new Regex("(::([^:]+))+");
+        /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
+        private IProject FromGenealogy(string genealogy) {
+            var matched = Genealogy.Match(genealogy);
+            var it = Root;
+            for (int i = 0; i < matched.Groups[2].Captures.Count && !(it is null); ++i) {
+                it = it.Children.At(matched.Groups[2].Captures[i].Value);
+            }
+            return it?.Value?.Proj;
+        }
+
     }
 
 }

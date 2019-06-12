@@ -59,12 +59,12 @@ namespace Main.Act.View {
         private void Register() {
             // Project を追加
             if (ActText.IsEmpty()) {
-                DB.ContentDB.Proj.AddProj(new Project(ProjText, null, ThemeColors.Default, true));
+                DB.ContentDB.Tree.AddProj(new Project(ProjText, null, ThemeColors.Default, true));
             }
             // Activity を追加
             else {
-                var proj = DB.ContentDB.Proj.AtByKey(ProjText);
-                DB.ContentDB.Act.AddAct(new Content(proj, ActText));
+                var proj = DB.ContentDB.Tree.AtByKey(ProjText);
+                DB.ContentDB.Tree.AddAct(new Content(proj, ActText));
             }
         }
         /// <summary>
@@ -76,13 +76,13 @@ namespace Main.Act.View {
             else {
                 // Projectを追加
                 if (ActText.IsEmpty()) {
-                    return !DB.ContentDB.Proj.ProjHasExistOverlapped(ProjText, null);
+                    return !DB.ContentDB.Tree.ProjHasExist(ProjText, null);
                 }
                 // Activityを追加
                 else {
-                    var proj = DB.ContentDB.Proj.AtByKey(ProjText);
+                    var proj = DB.ContentDB.Tree.AtByKey(ProjText);
                     return !(proj is null) &&
-                        !DB.ContentDB.Act.ActHasExistOverlapped(ActText, proj);
+                        !DB.ContentDB.Tree.ActHasExist(ActText, proj);
                 }
             }
         }
