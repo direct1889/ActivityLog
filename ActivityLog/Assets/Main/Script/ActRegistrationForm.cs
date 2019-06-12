@@ -71,13 +71,13 @@ namespace Main.Act.View {
             else {
                 // Projectを追加
                 if (ActText.IsEmpty()) {
-                    return !DB.ContentDB.Proj.HasExistOverlapped(ProjText, null);
+                    return !DB.ContentDB.Proj.ProjHasExistOverlapped(ProjText, null);
                 }
                 // Activityを追加
                 else {
                     var proj = DB.ContentDB.Proj.At(ProjText);
                     return !(proj is null) &&
-                        !DB.ContentDB.Act.HasExistOverlapped(ActText, proj);
+                        !DB.ContentDB.Act.ActHasExistOverlapped(ActText, proj);
                 }
             }
         }

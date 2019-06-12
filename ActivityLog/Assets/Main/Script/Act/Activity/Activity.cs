@@ -3,8 +3,8 @@
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
-    public interface IROContent {
-        IProject   Parent      { get; }
+    public interface IROContent : du.Cmp.IHashTreeDataType<IProject, string> {
+        // IProject   Parent      { get; }
         string     Name        { get; }
         bool       IsEffective { get; }
 
@@ -14,7 +14,7 @@ namespace Main.Act {
         /// 辞書に入れるときkeyとして利用する
         /// a.key == b.key <=必要十分=> IsOverlap(a, b)
         /// </value>
-        string     Key         { get; }
+        // string     Key         { get; }
     }
 
     /// <summary>

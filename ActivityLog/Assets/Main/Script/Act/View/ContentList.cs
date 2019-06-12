@@ -57,7 +57,7 @@ namespace Main.Act.View {
             DB.ContentDB.Proj.RxAdded.Subscribe(proj => CreateProjPanel(proj)).AddTo(this);
             foreach (var proj in DB.ContentDB.Proj.Sorted()) {
                 CreateProjPanel(proj);
-                foreach (var act in DB.ContentDB.Act.Sorted(proj)) {
+                foreach (var act in DB.ContentDB.Act.ActSorted(proj)) {
                     CreateActPanel(act);
                 }
             }

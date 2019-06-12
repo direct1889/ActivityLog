@@ -3,6 +3,7 @@ using System.Linq;
 using static du.Ex.ExDictionary;
 using System;
 using UniRx;
+using static du.Ex.ExList;
 
 namespace du.Cmp {
 
@@ -19,6 +20,9 @@ namespace du.Cmp {
         bool ContainsKey(Key key);
         /// <summary> ActivityをEnumerableで一括取得 </summary>
         IEnumerable<T> Sorted();
+
+        void Add(Key key, T value);
+        void Add(Key key, T value, int index);
     }
 
     public class OrderedMap<T, Key> : IOrderedMap<T, Key> where T : class {
@@ -44,11 +48,16 @@ namespace du.Cmp {
         public bool ContainsKey(Key key) => m_data.ContainsKey(key);
         /// <summary> ActivityをEnumerableで一括取得 </summary>
         public IEnumerable<T> Sorted() => m_order.Select(name => m_data[name]);
-        #endregion
 
-        #region protected
-        protected virtual void Add(Key key, T value) {
+        public virtual void Add(Key key, T value) {
             m_order.Add(key);
+            m_data.Add(key, value);
+        }
+        public virtual void Add(Key key, T value, int index) {
+            if (m_order.IsValidIndex(index)) {
+                m_order.Insert(index, key);
+            }
+            else { m_order.Add(key); }
             m_data.Add(key, value);
         }
         #endregion
@@ -57,26 +66,30 @@ namespace du.Cmp {
     /// <summary> 要素の追加/削除/変更時に通知を流す </summary>
     public interface IRxOrderedMap<T, Key> : IOrderedMap<T, Key> where T : class {
         IObservable<T> RxAdded { get; }
-        IObservable<T> RxRemoved { get; }
-        IObservable<T> RxChanged { get; }
+        // IObservable<T> RxRemoved { get; }
+        // IObservable<T> RxChanged { get; }
     }
 
     public class RxOrderedMap<T, Key> : OrderedMap<T, Key>, IRxOrderedMap<T, Key> where T : class {
         #region field
         Subject<T> m_addedStream = new Subject<T>();
-        Subject<T> m_removedStream = new Subject<T>();
-        Subject<T> m_changedStream = new Subject<T>();
+        // Subject<T> m_removedStream = new Subject<T>();
+        // Subject<T> m_changedStream = new Subject<T>();
         #endregion
 
         #region getter
         public IObservable<T> RxAdded => m_addedStream;
-        public IObservable<T> RxRemoved => m_removedStream;
-        public IObservable<T> RxChanged => m_changedStream;
+        // public IObservable<T> RxRemoved => m_removedStream;
+        // public IObservable<T> RxChanged => m_changedStream;
         #endregion
 
         #region protected
-        protected override void Add(Key key, T value) {
+        public override void Add(Key key, T value) {
             base.Add(key, value);
+            m_addedStream.OnNext(value);
+        }
+        public override void Add(Key key, T value, int index) {
+            base.Add(key, value, index);
             m_addedStream.OnNext(value);
         }
         #endregion

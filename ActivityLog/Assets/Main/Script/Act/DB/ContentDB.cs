@@ -11,27 +11,35 @@ namespace Main.Act.DB {
 
     public static class ContentDB {
         #region field
-        public static IProjectDB Proj { get; } = new ProjectDB();
-        public static IActivityDB Act { get; } = new ActivityDB();
+        static IContentTree m_tree = new ContentTree();
+        // public static IProjectDB Proj { get; } = new ProjectDB();
+        // public static IActivityDB Act { get; } = new ActivityDB();
+        #endregion
+
+        #region field
+        public static IContentTree Proj => m_tree;
+        public static IContentTree Act => m_tree;
         #endregion
 
         #region public
         public static void Initialize() {
             du.Test.LLog.MBoot.Log("Initialized ContentDB.");
-            Proj.Initialize(); // 必ずProjを先に初期化
-            Act .Initialize(); // Actの初期化時Projにアクセスする
+            Proj.ProjInitialize(); // 必ずProjを先に初期化
+            Act .ActInitialize(); // Actの初期化時Projにアクセスする
         }
         #endregion
     }
 
-    public interface IActivityDB : du.Cmp.IRxOrderedMap<IROContent, string> {
+    public interface IActivityDB
+    // : du.Cmp.IRxOrderedMap<IROContent, string>
+    {
         /// <summary> 登録済みActivity一覧の生成 </summary>
-        void Initialize();
+        void ActInitialize();
         /// <summary> ActivityをEnumerableで一括取得 </summary>
-        IEnumerable<IROContent> Sorted(IProject parent);
+        IEnumerable<IROContent> ActSorted(IProject parent);
         // TODO: OVERLAP
         /// <summary> 既存アクティビティと重複するか </summary>
-        bool HasExistOverlapped(string name, IProject parent);
+        bool ActHasExistOverlapped(string name, IProject parent);
         /// <summary> Activityを新たに登録 </summary>
         void AddAct(IROContent content);
     }
@@ -40,10 +48,10 @@ namespace Main.Act.DB {
     public class ActivityDB : du.Cmp.RxOrderedMap<IROContent, string>, IActivityDB {
         #region public
         /// <summary> 登録済みのActivityをCSVから生成 </summary>
-        public void Initialize() { Load("System/Activities"); }
+        public void ActInitialize() { Load("System/Activities"); }
 
         /// <summary> 指定したProjectを直属の親に持つActivityのみを取得 </summary>
-        public IEnumerable<IROContent> Sorted(IProject parent) {
+        public IEnumerable<IROContent> ActSorted(IProject parent) {
             return Order
                 .Where(key => At(key).Parent == parent)
                 .Select(key => At(key));
@@ -53,7 +61,7 @@ namespace Main.Act.DB {
         /// すでに重複する Activity が登録されているか
         /// TODO:現在は名前の重複のみで判断 (そもそも key == name)
         /// </summary>
-        public bool HasExistOverlapped(string name, IProject parent) {
+        public bool ActHasExistOverlapped(string name, IProject parent) {
             return ContainsKey(name);
         }
 
@@ -78,14 +86,16 @@ namespace Main.Act.DB {
         #endregion
     }
 
-    public interface IProjectDB : du.Cmp.IRxOrderedMap<IProject, string> {
+    public interface IProjectDB
+    // : du.Cmp.IRxOrderedMap<IProject, string>
+    {
         //! 登録済みProject一覧の生成
-        void Initialize();
+        void ProjInitialize();
         /// <summary> ProjectをEnumerableで一括取得 </summary>
-        IEnumerable<IProject> Sorted(IProject parent);
+        IEnumerable<IProject> ProjSorted(IProject parent);
         // TODO: OVERLAP
         /// <summary> 既存アクティビティと重複するか </summary>
-        bool HasExistOverlapped(string name, IProject parent);
+        bool ProjHasExistOverlapped(string name, IProject parent);
         /// <summary> Projectを新たに登録 </summary>
         void AddProj(IProject project);
     }
@@ -94,10 +104,10 @@ namespace Main.Act.DB {
     public class ProjectDB : du.Cmp.RxOrderedMap<IProject, string>, IProjectDB {
         #region public
         //! 登録済みProject一覧の生成
-        public void Initialize() { Load("System/Projects"); }
+        public void ProjInitialize() { Load("System/Projects"); }
 
         /// <summary> 指定したProjectを直属の親に持つActivityのみを取得 </summary>
-        public IEnumerable<IProject> Sorted(IProject parent) {
+        public IEnumerable<IProject> ProjSorted(IProject parent) {
             return Order
                 .Where(key => At(key).Parent == parent)
                 .Select(key => At(key));
@@ -107,7 +117,7 @@ namespace Main.Act.DB {
         /// すでに重複する Project が登録されているか
         /// TODO:現在は名前の重複のみで判断 (そもそも key == name)
         /// </summary>
-        public bool HasExistOverlapped(string name, IProject parent) {
+        public bool ProjHasExistOverlapped(string name, IProject parent) {
             return ContainsKey(name);
         }
         /// <summary> Projectを新たに登録 </summary>
