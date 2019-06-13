@@ -1,0 +1,75 @@
+@startuml uml-ContentDB.png
+
+title <size:18> ContentDB </size>
+
+package du.Cmp {
+
+	package OrderedMap {
+		interface IReadOnlyOrderedMap
+		interface IOrderedMap
+		IReadOnlyOrderedMap <|-down- IOrderedMap
+		IOrderedMap <|.down. OrderedMap
+
+		interface IRxOrderedMap
+		IOrderedMap <|-down- IRxOrderedMap
+		IRxOrderedMap <|.down. RxOrderedMap
+		OrderedMap <|-down- RxOrderedMap
+	}
+
+	package Tree {
+		interface IHashTreeDataType
+		interface IHashTreeNode
+		IHashTreeNode <|.down. HashTreeNode
+		IHashTreeDataType --o HashTreeNode
+		IHashTreeNode --o HashTreeNode
+
+		interface IHashTree
+		IHashTree <|.down. HashTree
+		IHashTreeNode --o HashTree
+
+		interface IRxHashTree
+		IRxHashTree <|.down. RxHashTree
+		HashTree <|-down- RxHashTree
+	}
+
+}
+
+package Main {
+
+	package Act {
+
+		package CDB {
+			interface IContentAdapter
+			class ContentAdapter
+			class ProjectAdapter
+			class ActivityAdapter
+			IHashTreeNode <|-- IContentAdapter
+			IContentAdapter <|.down. ContentAdapter
+			ContentAdapter <|-down- ProjectAdapter
+			ContentAdapter <|-down- ActivityAdapter
+
+			interface IProjectDB
+			interface IActivityDB
+			interface IContentDB
+			IProjectDB <|-left- IContentDB
+			IActivityDB <|-right- IContentDB
+			IContentDB <|.down. ContentTree
+			RxHashTree <|-- ContentTree
+			IContentAdapter --o ContentTree
+
+			class CDB
+			CDB o-down- IProjectDB
+			CDB o-down- IActivityDB
+			CDB o-down- IContentDB
+		}
+
+		IHashTreeDataType <|-- IContentAdapter
+		IOrderedMap --o HashTreeNode
+
+	}
+
+}
+
+
+@enduml
+

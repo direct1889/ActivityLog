@@ -2,65 +2,28 @@
 
 title <size:18> Class Structure </size>
 
+
+package du.Cmp {
+	package Tree {
+		interface IHashTreeDataType
+	}
+}
+
 package Main {
 
 	package Act {
 
-		package OrderedMap {
-			interface IReadOnlyOrderedMap
-			interface IOrderedMap
-			IReadOnlyOrderedMap <|-down- IOrderedMap
-			IOrderedMap <|.down. OrderedMap
-
-			interface IRxOrderedMap
-			IOrderedMap <|-down- IRxOrderedMap
-			IRxOrderedMap <|.down. RxOrderedMap
-			OrderedMap <|-down- RxOrderedMap
-		}
-
-		package Tree {
-			interface IHashTreeDataType
-			interface IHashTreeNode
-			IHashTreeNode <|.down. HashTreeNode
-			IHashTreeDataType --o HashTreeNode
-			IHashTreeNode --o HashTreeNode
-
-			interface IHashTree
-			IHashTree <|.down. HashTree
-			IHashTreeNode --o HashTree
-
-			interface IRxHashTree
-			IRxHashTree <|.down. RxHashTree
-			HashTree <|-down- RxHashTree
-		}
-
-		package ContentTree {
+		package CDB {
 			interface IContentAdapter
-			class ContentAdapter
-			class ProjectAdapter
-			class ActivityAdapter
-			IHashTreeNode <|-- IContentAdapter
-			IContentAdapter <|.down. ContentAdapter
-			ContentAdapter <|-down- ProjectAdapter
-			ContentAdapter <|-down- ActivityAdapter
-
 			interface IProjectDB
 			interface IActivityDB
 			interface IContentDB
-			IProjectDB <|-left- IContentDB
-			IActivityDB <|-right- IContentDB
-			IContentDB <|.down. ContentTree
-			RxHashTree <|-- ContentTree
-			IContentAdapter --o ContentTree
-
-			class CDB
-			CDB o-down- IProjectDB
-			CDB o-down- IActivityDB
-			CDB o-down- IContentDB
+			IProjectDB  o-up- CDB
+			IActivityDB o-up- CDB
+			IContentDB  o-up- CDB
 		}
 
 		IHashTreeDataType <|-- IContentAdapter
-		IOrderedMap --o HashTreeNode
 
 		interface IContent {
 			+IProject Project{get}
@@ -68,11 +31,11 @@ package Main {
 			+bool IsEffective{get}
 		}
 		interface IActivity
-		IActivity <|.. Activity
+		IActivity <|.up. Activity
 		interface IProject
-		IProject <|.. Project
-		IContent <|-down- IActivity
-		IContent <|-down- IProject
+		IProject <|.up. Project
+		IContent <|-up- IActivity
+		IContent <|-up- IProject
 
 		IHashTreeDataType <|-- IContent
 
@@ -96,11 +59,11 @@ package Main {
 		IContext --o ActRecord
 
 		interface IIndependentContext
-		IIndependentContext <|.. IndependentContext
+		IIndependentContext <|.up. IndependentContext
 		interface IIndependentActRecord
-		IIndependentActRecord <|.. IndependentActRecord
-		IContent --o IndependentActRecord
-		IIndependentContext --o IndependentActRecord
+		IIndependentActRecord <|.down. IndependentActRecord
+		IContent -right-o IndependentActRecord
+		IIndependentContext -up-o IndependentActRecord
 
 		interface IROActSequence
 		interface IActSequence {
@@ -131,15 +94,15 @@ package Main {
 
 			package DoActivity {
 
-				interface IRxContentPanelList {
+				interface IRxDoActList {
 					+IObservable<IActivity> ActivityChosen{get}
 				}
-				interface IContentPanelListAsParent {
+				interface IDoActListAsParent {
 					+void OnChosenActivity(IActivity content);
 				}
-				IRxContentPanelList <|.. ContentPanelList
-				IContentPanelListAsParent <|.. ContentPanelList
-				IContentPanel --o ContentPanelList
+				IRxDoActList <|.. DoActList
+				IDoActListAsParent <|.. DoActList
+				IContentPanel --o DoActList
 
 				interface IContentPanelUI {
 					+void SetContent(IContent content);
@@ -148,14 +111,15 @@ package Main {
 				IContentPanelUI <|.. ContentPanelUI
 
 				interface IContentPanel {
-					+void Initialize(IContentAdapter content, IContentPanelListAsParent parent);
+					+void Initialize(IContentAdapter content, IDoActListAsParent parent);
 				}
 				IContentPanel <|.. ContentPanel
-				IContentPanelListAsParent <-- ContentPanel
+				IDoActListAsParent <-- ContentPanel
 				IContentPanelUI <-- ContentPanel
 				IContentAdapter --o ContentPanel
 
 			}
+
 
 			package RecordsCylinder {
 
@@ -181,6 +145,7 @@ package Main {
 
 		}
 
+
 		package STrack {
 
 			class ActRecordCylinderMgr {
@@ -191,7 +156,8 @@ package Main {
 			}
 
 			IActSequenceMgr --o ActRecordCylinderMgr
-			IActRecordsCylinder --o ActRecordCylinderMgr
+			IActRecordsCylinder <-- ActRecordCylinderMgr
+			IActRecordsCylinder <-- ActRecordCylinderMgr
 
 		}
 

@@ -512,7 +512,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 619986320}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.516129
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -710,6 +710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 593583358}
+  - component: {fileID: 593583359}
   m_Layer: 0
   m_Name: MainManager
   m_TagString: Untagged
@@ -731,6 +732,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &593583359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593583357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 091903c5e56da43bfa173efa7fe88f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_recCylinder: {fileID: 1063767638}
+  m_doActList: {fileID: 2117424040}
 --- !u!1 &619986319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2731,7 +2746,6 @@ GameObject:
   - component: {fileID: 2021063153}
   - component: {fileID: 2021063155}
   - component: {fileID: 2021063154}
-  - component: {fileID: 2021063156}
   m_Layer: 5
   m_Name: ProjActList
   m_TagString: Untagged
@@ -2796,23 +2810,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021063152}
   m_CullTransparentMesh: 0
---- !u!114 &2021063156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2021063152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3294c15c548e4292a69797e3de5c0ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_panelsParent: {fileID: 1645322271}
-  m_projPanelPref: {fileID: 2409317711008828573, guid: b131fe7951c0e4a5ebd33eac4dbebe74,
-    type: 3}
-  m_actPanelPref: {fileID: 3183288014415081968, guid: bc9688a54578c4804bdb744501964185,
-    type: 3}
 --- !u!1 &2093355825
 GameObject:
   m_ObjectHideFlags: 0
@@ -2997,11 +2994,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2117424035}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 091903c5e56da43bfa173efa7fe88f42, type: 3}
+  m_Script: {fileID: 11500000, guid: b3294c15c548e4292a69797e3de5c0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_recCylinder: {fileID: 1063767638}
-  m_doActList: {fileID: 2021063156}
+  m_panelsParent: {fileID: 1645322271}
+  m_projPanelPref: {fileID: 2409317711008828573, guid: b131fe7951c0e4a5ebd33eac4dbebe74,
+    type: 3}
+  m_actPanelPref: {fileID: 3183288014415081968, guid: bc9688a54578c4804bdb744501964185,
+    type: 3}
 --- !u!1 &2133210490
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ namespace Main.Act.DB {
             return At(parent)?.Children.At(key).Value.Proj;
         }
         public IProject AtProjByGenealogy(string genealogy) {
-            return FromGenealogy(genealogy).Proj;
+            return FromGenealogy(genealogy)?.Proj;
         }
 
         public bool ProjHasExist(string key, IProject parent) {

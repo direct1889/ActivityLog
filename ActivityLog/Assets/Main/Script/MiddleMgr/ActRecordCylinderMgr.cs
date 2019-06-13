@@ -22,19 +22,22 @@ namespace Main.STrack {
         /// <summary> アクティビティを選択するリスト </summary>
         Act.View.IRxDoActList DoActList => m_doActList;
 
-        GameObject DoActCanvas => gameObject;
+        GameObject DoActCanvas => m_doActList.gameObject;
         #endregion
 
         #region mono
         private void Awake() {
             du.Test.LLog.MBoot.Log("ActRecordCylinderMgr awoke");
             Act.CDB.Initialize();
-            du.dui.RxButtonMgr.OnClickAsObservable("DoActivity")
-                .Subscribe(_ => DoActCanvas.SetActive(!DoActCanvas.activeSelf))
-                .AddTo(this);
             // DoActListから入力があったら
             DoActList.ActivityChosen
                 .Subscribe(act => BeginNewAct(act))
+                .AddTo(this);
+            DoActCanvas.SetActive(false);
+        }
+        private void Start() {
+            du.dui.RxButtonMgr.OnClickAsObservable("DoActivity")
+                .Subscribe(_ => DoActCanvas.SetActive(!DoActCanvas.activeSelf))
                 .AddTo(this);
         }
         #endregion
