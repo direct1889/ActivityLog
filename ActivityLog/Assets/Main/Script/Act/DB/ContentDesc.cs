@@ -27,20 +27,20 @@ namespace Main.Act.DB {
         }
 
         /// <summary> CSVを読み込みContent(Proj/Act)に変換 </summary>
-        public IContentProxy Instantiate() {
+        public IContentAdapter Instantiate() {
             // Root直下
             if (parentGenealogy.IsEmpty()) {
-                return new ProjectProxy(new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective)));
+                return new ProjectAdapter(new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective)));
             }
             else {
-                var parent = DB.ContentDB.Tree.AtByKey(parentGenealogy);
+                var parent = CDB.Proj.AtProjByGenealogy(parentGenealogy);
                 if (isProject != 0) { // Project
-                    return new ProjectProxy(new Project(name, parent,
+                    return new ProjectAdapter(new Project(name, parent,
                     color.IsEmpty() ? parent.Color : ThemeColors.Get(color),
                     isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
                 }
                 else { // Activity
-                    return new ActivityProxy(new Activity(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
+                    return new ActivityAdapter(new Activity(parent, name, isEffective.IsEmpty() ? parent.IsEffective : bool.Parse(isEffective)));
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace Main.Act.DB {
 
     public static class ExContentCSV {
         /// <summary> CSV出力形式に変換 </summary>
-        public static string ToCSV(this IContentProxy content) {
+        public static string ToCSV(this IContentAdapter content) {
             return content.IsProj ? content.Proj.ToCSV() : content.Act.ToCSV();
         }
         private static string ToCSV(this IProject proj) {

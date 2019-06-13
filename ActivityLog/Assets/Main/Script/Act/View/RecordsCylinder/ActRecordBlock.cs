@@ -5,18 +5,22 @@ using UTMP = TMPro.TextMeshProUGUI;
 
 namespace Main.Act.View {
 
-    /// <summary> アクティビティを表す Block UI </summary>
-    public interface IActivityBlock {
-        void Initialize(IROActRecord act, IActivitiesCylinder cylinder, Transform parent);
+    /// <summary> ActRecordを表す Block UI </summary>
+    public interface IActRecordBlock {
+        /// <summary> 初期化 </summary>
+        void Initialize(IROActRecord act, IActRecordsCylinderUI cylinder);
+        /// <summary>
+        /// UIサイズを更新
+        /// - 毎フレーム呼ぶと無駄なため、
+        /// </summary>
         void RefreshSize();
     }
 
-    public class ActivityBlock : MonoBehaviour, IActivityBlock {
+    public class ActRecordBlock : MonoBehaviour, IActRecordBlock {
 
         #region field
-        UGUI.Image m_image;
         RecTHorStretchBottom m_recT;
-        IActivitiesCylinder m_cylinder;
+        IActRecordsCylinderUI m_cylinder;
 
         [SerializeField] UTMP m_text;
         #endregion
@@ -28,21 +32,21 @@ namespace Main.Act.View {
         #region mono
         private void Awake() {
             gameObject.SetActive(false);
-            m_image = GetComponent<UGUI.Image>();
             m_recT = new RecTHorStretchBottom(GetComponent<RectTransform>());
         }
         #endregion
 
         #region public
-        public void Initialize(IROActRecord act, IActivitiesCylinder cylinder, Transform parent) {
+        public void Initialize(IROActRecord act, IActRecordsCylinderUI cylinder) {
             if (!gameObject.activeSelf) {
                 Act = act;
-                m_image.color = act.Activity.Parent.Color;
                 m_cylinder = cylinder;
-                RefreshSize();
+
+                GetComponent<UGUI.Image>().color = Act.Activity.Parent.Color;
                 m_text.text = Act.Activity.Name;
+                RefreshSize();
+
                 gameObject.SetActive(true);
-                Debug.Log("ActivityBlock initialized.");
             }
         }
         public void RefreshSize() {

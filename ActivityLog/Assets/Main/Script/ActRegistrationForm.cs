@@ -59,12 +59,12 @@ namespace Main.Act.View {
         private void Register() {
             // Project を追加
             if (ActText.IsEmpty()) {
-                DB.ContentDB.Tree.AddProj(new Project(ProjText, null, ThemeColors.Default, true));
+                CDB.Proj.Add(new Project(ProjText, null, ThemeColors.Default, true));
             }
             // Activity を追加
             else {
-                var proj = DB.ContentDB.Tree.AtByKey(ProjText);
-                DB.ContentDB.Tree.AddAct(new Activity(proj, ActText));
+                var proj = CDB.Proj.AtProjByGenealogy(ProjText);
+                CDB.Act.Add(new Activity(proj, ActText));
             }
         }
         /// <summary>
@@ -76,13 +76,13 @@ namespace Main.Act.View {
             else {
                 // Projectを追加
                 if (ActText.IsEmpty()) {
-                    return !DB.ContentDB.Tree.ProjHasExist(ProjText, null);
+                    return !CDB.Proj.ProjHasExist(ProjText, null);
                 }
                 // Activityを追加
                 else {
-                    var proj = DB.ContentDB.Tree.AtByKey(ProjText);
+                    var proj = CDB.Proj.AtProjByGenealogy(ProjText);
                     return !(proj is null) &&
-                        !DB.ContentDB.Tree.ActHasExist(ActText, proj);
+                        !CDB.Act.ActHasExist(ActText, proj);
                 }
             }
         }

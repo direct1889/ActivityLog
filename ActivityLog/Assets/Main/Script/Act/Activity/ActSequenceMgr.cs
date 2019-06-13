@@ -5,12 +5,12 @@ namespace Main.Act {
     /// アクティビティ系列/日を操作する
     /// - <see> IActSequence </see> のラッパー
     /// </summary>
-    public interface IActivitiesMgr {
+    public interface IActSequenceMgr {
         IROActRecordSequence Activities { get; }
 
         /// <summary>
         /// 新たなアクティビティを開始
-        /// 現在のアクティビティを終了、開始時刻は現在時刻を使用
+        /// - 現在のアクティビティを終了、開始時刻は現在時刻を使用
         /// </summary>
         void BeginNewAct(IActivity act);
         void BeginNewAct(IProject proj, string name, bool isEffective);

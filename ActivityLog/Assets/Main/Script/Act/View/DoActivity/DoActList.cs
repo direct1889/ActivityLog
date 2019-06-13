@@ -9,25 +9,28 @@ using UniRx;
 namespace Main.Act.View {
 
     /// <summary>
-    /// Content一覧
-    /// Content = Project, Activity
-    /// 事前登録済Contentの管理、Content実行時の選択UIの提供
+    /// ContentPanel一覧
+    /// - Activityが選択されたら通知する
     /// </summary>
-    public interface IRxContentList {
-        // IObservable<IRxContentPanel> CreatedPanel { get; }
+    public interface IRxDoActList {
+        /// <summary> Panelが押されたことを通知 </summary>
         IObservable<IActivity> ActivityChosen { get; }
     }
 
-    public interface IContentListAsParent {
+    /// <summary>
+    /// ContentPanel一覧
+    /// - Panelから見た親としてのList
+    /// </summary>
+    public interface IDoActListAsParent {
+        /// <summary> 押されたPanelからの報告を受け取る </summary>
         void OnChosenActivity(IActivity content);
     }
 
-    public interface IContentList {
-    }
-
-    // public interface IContentList : IROContentList { }
-
-    public class ContentList : MonoBehaviour, IRxContentList, IContentListAsParent, IContentList {
+    /// <summary>
+    /// ContentPanel一覧
+    /// Content実行時の選択UI(ContentPanelリスト)の提供
+    /// </summary>
+    public class DoActList : MonoBehaviour, IRxDoActList, IDoActListAsParent {
         #region field
         IDictionary<string, IContentPanel> m_contentPanels = new Dictionary<string, IContentPanel>();
         Subject<IActivity> m_chosenActStream = new Subject<IActivity>();
@@ -37,37 +40,43 @@ namespace Main.Act.View {
         [SerializeField] GameObject m_actPanelPref;
         #endregion
 
-        #region getter
+        #region IRxContentPanelList
         public IObservable<IActivity> ActivityChosen => m_chosenActStream;
+        #endregion
+
+        #region IContentPanelListAsParent
+        public void OnChosenActivity(IActivity content) {
+            m_chosenActStream.OnNext(content);
+        }
         #endregion
 
         #region mono
         private void Start() { Initialize(); }
         #endregion
 
-        #region public
-        public void OnChosenActivity(IActivity content) {
-            m_chosenActStream.OnNext(content);
-        }
-        #endregion
-
         #region private
+        /// <summary>
+        /// - データベースにContentが追加されたときに自動でPanelを生成
+        /// - CSVファイルからPanelを一括生成
+        /// </summary>
         private void Initialize() {
-            DB.ContentDB.Tree.RxAdded.Subscribe(content => CreatePanel(content)).AddTo(this);
+            CDB.Content.RxAdded.Subscribe(content => CreatePanel(content)).AddTo(this);
             // nullを渡してRootNodeから始める
-            foreach (var child in DB.ContentDB.Tree.Sorted(null)) {
+            foreach (var child in CDB.Content.OrderedValues(null)) {
                 CreatePanels(child);
             }
         }
-        private void CreatePanels(IContentProxy content) {
+        /// <summary> 再帰的にPanelを生成 </summary>
+        private void CreatePanels(IContentAdapter content) {
             CreatePanel(content);
             if (content.IsProj) {
-                foreach (var child in DB.ContentDB.Tree.Sorted(content.Proj)) {
+                foreach (var child in CDB.Content.OrderedValues(content.Proj)) {
                     CreatePanels(child);
                 }
             }
         }
-        private void CreatePanel(IContentProxy content) {
+        /// <summary> Panelを生成 </summary>
+        private void CreatePanel(IContentAdapter content) {
             var panel = Instantiate<GameObject>(
                 content.IsProj ? m_projPanelPref : m_actPanelPref,
                 m_panelsParent.transform);

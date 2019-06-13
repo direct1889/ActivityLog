@@ -8,12 +8,10 @@ namespace Main.Act.View {
 
     /// <summary> ContentPanelのUIの詳細な描画を管理 </summary>
     public interface IContentPanelUI {
-        #region public
         /// <summary> IProjectに合わせてラベル/フレーム色/チェック有無 </summary>
         void SetContent(IContent content);
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         void SetIndent(int indent);
-        #endregion
     }
 
     /// <summary> ContentPanelのUIの詳細な描画を管理 </summary>

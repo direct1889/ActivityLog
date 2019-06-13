@@ -72,7 +72,6 @@ namespace du.Cmp {
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         #region field
-        // IHashTreeNode<T, TParent, TKey> m_root;
         protected IHashTreeNode<T, TParent, TKey> Root { get; }
         #endregion
 

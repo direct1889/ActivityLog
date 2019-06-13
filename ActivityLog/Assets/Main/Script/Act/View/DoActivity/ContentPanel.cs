@@ -7,7 +7,7 @@ using UniRx;
 
 namespace Main.Act.View {
 
-    /// <summary> ContentListに関する定数 </summary>
+    /// <summary> ContentPanelListに関する定数 </summary>
     public static class ConstContentList {
         #region const
         /// <summary> 第一階層PanelのLocalWidth </summary>
@@ -19,45 +19,29 @@ namespace Main.Act.View {
         #endregion
     }
 
-    public interface IRxContentPanel {
-        // IObservable<IActivity> Pressed { get; }
+    /// <summary> ContentPanelListを構成するPanel </summary>
+    public interface IContentPanel {
+        void Initialize(IContentAdapter content, IDoActListAsParent parent);
     }
 
-    public interface IContentPanel : IRxContentPanel {
-        void Initialize(IContentProxy content, IContentListAsParent parent);
-    }
-
-    /// <summary> ContentListを構成するPanel </summary>
+    /// <summary> ContentPanelListを構成するPanel </summary>
     public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
-        IContentProxy m_content;
+        IContentAdapter m_content;
         ContentPanelUI m_ui;
-        // UGUI.Button m_button;
-        IContentListAsParent m_parent;
-        #endregion
-
-        #region getter
-        // public IObservable<IROContent> Pressed => m_button.OnClickAsObservable().Select(_ => m_content);
+        IDoActListAsParent m_parent;
         #endregion
 
         #region mono
         private void Awake() {
             m_ui = transform.GetComponentInChildren<ContentPanelUI>();
-            // m_button = transform.GetComponentInChildren<UGUI.Button>();
         }
         /// <summary> UGUI.Buttonから呼ばれる </summary>
-        public void OnClicked() {
-            m_parent.OnChosenActivity(m_content.Act);
-        }
+        public void OnClicked() => m_parent.OnChosenActivity(m_content.Act);
         #endregion
 
         #region public
-        public void Initialize(IContentProxy content, IContentListAsParent parent) {
-            IReadOnlyList<string> a = new List<string>();
-            Dictionary<string, string> b = new Dictionary<string, string>();
-            IDictionary<string, string> c = b;
-            IReadOnlyDictionary<string, string> d = b;
-            c["hoge"] = "";
+        public void Initialize(IContentAdapter content, IDoActListAsParent parent) {
             if (m_content == null) {
                 m_content = content;
                 m_ui.SetContent(m_content.Data); // 内容、色

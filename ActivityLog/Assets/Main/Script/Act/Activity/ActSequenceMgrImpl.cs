@@ -2,7 +2,7 @@
 namespace Main.Act {
 
     /// <summary> アクティビティ系列/日を操作する </summary>
-    public class ActivitiesMgr : IActivitiesMgr {
+    public class ActSequenceMgr : IActSequenceMgr {
         #region field-property
         protected IActRecordSequence Acts { get; }
         #endregion
@@ -12,7 +12,7 @@ namespace Main.Act {
         #endregion
 
         #region ctor
-        public ActivitiesMgr() { Acts = new ActRecordSequence(); }
+        public ActSequenceMgr() { Acts = new ActRecordSequence(); }
         #endregion
 
         #region public
@@ -39,7 +39,7 @@ namespace Main.Act {
         #endregion
     }
 
-    public class ActivitiesMgr4Test : ActivitiesMgr {
+    public class ActSequenceMgr4Test : ActSequenceMgr {
         MinuteOfDay m_tempTimeSign = MinuteOfDay.Begin;
         int duration = 100;
 

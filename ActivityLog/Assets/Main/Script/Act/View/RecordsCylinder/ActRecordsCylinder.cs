@@ -4,18 +4,19 @@ using static du.Ex.ExList;
 
 namespace Main.Act.View {
 
-    public interface IActivitiesCylinder {
+    /// <summary> ActRecordの累積Cylinder </summary>
+    public interface IActRecordsCylinderUI {
         Vector2 RectSize { get; }
     }
 
-    public interface IActivitiesGraph {
+    public interface IActRecordsCylinder {
         void CreateBlock(IROActRecord act);
     }
 
-    public class ActivitiesGraph : MonoBehaviour, IActivitiesCylinder, IActivitiesGraph {
+    public class ActRecordsCylinder : MonoBehaviour, IActRecordsCylinderUI, IActRecordsCylinder {
         #region field
         RectTransform m_rect;
-        IList<IActivityBlock> m_blocks = new List<IActivityBlock>();
+        IList<IActRecordBlock> m_blocks = new List<IActRecordBlock>();
 
         [SerializeField]GameObject m_prefActBlock;
         #endregion
@@ -26,13 +27,14 @@ namespace Main.Act.View {
 
         #region mono
         void Awake() { m_rect = GetComponent<RectTransform>(); }
+        void Update() { m_blocks.Back()?.RefreshSize(); }
         #endregion
 
         #region public
         public void CreateBlock(IROActRecord act) {
-            IActivityBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActivityBlock>();
-            block.Initialize(act, this, transform);
-            if (m_blocks.Count > 0) { m_blocks.Back()?.RefreshSize(); }
+            IActRecordBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActRecordBlock>();
+            block.Initialize(act, this);
+            m_blocks.Back()?.RefreshSize();
             m_blocks.Add(block);
         }
         #endregion
