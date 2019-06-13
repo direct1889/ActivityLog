@@ -61,13 +61,6 @@ namespace Main.Act.View {
             }
         }
         #endregion
-
-        #region private
-        private void RollUp() {
-        }
-        private void DropDown() {
-        }
-        #endregion
     }
 
 }
