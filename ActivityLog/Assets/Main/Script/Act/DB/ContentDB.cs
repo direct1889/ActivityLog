@@ -86,6 +86,7 @@ namespace Main.Act.DB {
     {
         #region getter
         IEnumerable<IContentAdapter> OrderedValues(IProject parent);
+        int? SerialNumber(IContentAdapter content);
         #endregion
 
         #region public

@@ -12,6 +12,8 @@ namespace du.Cmp {
         TValue At(int i);
         /// <returns> 見つからなければ null </returns>
         TValue At(TKey key);
+        /// <returns> 見つからなければ null </returns>
+        int? IndexOf(TKey key);
         /// <summary> 該当するキーが登録されているか </summary>
         bool ContainsKey(TKey key);
         /// <summary> 値のみをEnumerableで一括取得 </summary>

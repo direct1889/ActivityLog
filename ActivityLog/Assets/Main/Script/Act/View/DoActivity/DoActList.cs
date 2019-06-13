@@ -5,8 +5,20 @@ using static du.Ex.ExCollection;
 using System.Linq;
 using System;
 using UniRx;
+using du.Cmp;
 
 namespace Main.Act.View {
+
+    #if false
+    public interface IContentPanelAdapter : IHashTreeDataType<IContentPanelAdapter, string> {
+        IContentPanel Impl { get; }
+    }
+    public class ContentPanelAdapter : IContentPanelAdapter {
+        public IContentPanelAdapter Parent { get; }
+        public string Key { get; }
+        public IContentPanel Impl { get; }
+    }
+    #endif
 
     /// <summary>
     /// ContentPanel一覧
@@ -32,6 +44,8 @@ namespace Main.Act.View {
     /// </summary>
     public class DoActList : MonoBehaviour, IRxDoActList, IDoActListAsParent {
         #region field
+        // IHashTree<IContentPanelAdapter, IContentPanelAdapter, string> m_panels = new HashTree<IContentPanelAdapter, IContentPanelAdapter, string>();
+
         IDictionary<string, IContentPanel> m_contentPanels = new Dictionary<string, IContentPanel>();
         Subject<IActivity> m_chosenActStream = new Subject<IActivity>();
 
@@ -75,11 +89,15 @@ namespace Main.Act.View {
                 }
             }
         }
-        /// <summary> Panelを生成 </summary>
+        /// <summary>
+        /// Panelを生成
+        /// - contentがDBに含まれていないと例外を投げる
+        /// </summary>
         private void CreatePanel(IContentAdapter content) {
             var panel = Instantiate<GameObject>(
                 content.IsProj ? m_projPanelPref : m_actPanelPref,
                 m_panelsParent.transform);
+            panel.transform.SetSiblingIndex((int)CDB.Content.SerialNumber(content));
             m_contentPanels.Add(content.Key, panel.GetComponent<ContentPanel>());
             m_contentPanels[content.Key].Initialize(content, this);
         }

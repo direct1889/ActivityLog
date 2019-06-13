@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 using UniRx;
 
 namespace du.Cmp {
@@ -22,37 +23,52 @@ namespace du.Cmp {
     {
         T Value { get; }
         IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children { get; }
+        void Add(T value);
+        void Add(T value, int index);
+        int DescendantCount();
     }
 
     public class HashTreeNode<T, TParent, TKey> : IHashTreeNode<T, TParent, TKey>
         where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
+        #region field
+        IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> m_children;
+        #endregion
+
         #region public field property
         public T Value { get; }
-        public IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children { get; } = new OrderedMap<TKey, IHashTreeNode<T, TParent, TKey>>();
+        public IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children => m_children;
         #endregion
 
         #region ctor
         public HashTreeNode(T value) { Value = value; }
         #endregion
 
-        #region public
+        #region getter
         /// <returns> 見つからなければ null </returns>
-        public IHashTreeNode<T, TParent, TKey> At(TKey key) {
-            return Children.At(key);
+        public int DescendantCount() {
+            if (Children is null) { return 0; }
+            else {
+                return Children.Select(node => node.DescendantCount()).Sum() + Children.Count;
+            }
         }
         #endregion
 
         #region public
         public void Add(T value) {
+            if (Children is null) {
+                m_children = new OrderedMap<TKey, IHashTreeNode<T, TParent, TKey>>();
+            }
             Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value));
         }
         public void Add(T value, int index) {
-            Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value));
+            if (Children is null) {
+                m_children = new OrderedMap<TKey, IHashTreeNode<T, TParent, TKey>>();
+            }
+            Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value), index);
         }
         #endregion
-
     }
 
 
@@ -64,7 +80,10 @@ namespace du.Cmp {
         void Add(T value, int index);
         /// <param name="proj"> nullのときはRootNodeを返す </param>
         /// <returns> projがnullでなく、見つからないときはnull </returns>
-        du.Cmp.IHashTreeNode<T, TParent, TKey> At(TParent proj);
+        du.Cmp.IHashTreeNode<T, TParent, TKey> At(IHashTreeDataType<TParent, TKey> value);
+        /// <summary> valueがRoot(0)から数えて何番目か </summary>
+        /// <returns> valueがnullでなく、見つからないときはnull </returns>
+        int? SerialNumber(IHashTreeDataType<TParent, TKey> value);
     }
 
     public class HashTree<T, TParent, TKey> : IHashTree<T, TParent, TKey>
@@ -85,17 +104,27 @@ namespace du.Cmp {
         #endregion
 
         #region public
-        public virtual void Add(T value) {
-            At(value.Parent)?.Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value));
+        public virtual void Add(T value) => At(value.Parent)?.Add(value);
+        public virtual void Add(T value, int index) => At(value.Parent)?.Add(value, index);
+        /// <param name="value"> nullのときはRootNodeを返す </param>
+        /// <returns> valueがnullでなく、見つからないときはnull </returns>
+        public du.Cmp.IHashTreeNode<T, TParent, TKey> At(IHashTreeDataType<TParent, TKey> value) {
+            if (value is null) { return Root; }
+            else { return At(value.Parent)?.Children?.At(value.Key); }
         }
-        public virtual void Add(T value, int index) {
-            At(value.Parent)?.Children.Add(value.Key, new HashTreeNode<T, TParent, TKey>(value), index);
-        }
-        /// <param name="proj"> nullのときはRootNodeを返す </param>
-        /// <returns> projがnullでなく、見つからないときはnull </returns>
-        public du.Cmp.IHashTreeNode<T, TParent, TKey> At(TParent proj) {
-            if (proj is null) { return Root; }
-            else { return At(proj.Parent)?.Children.At(proj.Key); }
+        /// <summary> valueがRoot(0)から数えて何番目か </summary>
+        /// <returns> valueがnullでなく、見つからないときはnull </returns>
+        public int? SerialNumber(IHashTreeDataType<TParent, TKey> value) {
+            // value is null ならRootとみなす
+            if (value is null) { return 0; }
+            var parentNode = At(value.Parent);
+            int? siblingNum = parentNode?.Children?.IndexOf(value.Key);
+            int? sum = SerialNumber(value.Parent) + siblingNum + 1;
+            for (int i = 0; i < siblingNum; ++i) {
+                sum += parentNode?.Children?.At(i).DescendantCount();
+            }
+            // SN(node) == SN(node.Parent) + 第n兄弟 + 第n-1兄弟目までの子
+            return sum;
         }
         #endregion
     }

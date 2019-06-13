@@ -53,6 +53,11 @@ namespace du.Cmp {
         }
         /// <returns> 見つからなければ null </returns>
         public TValue At(TKey key) => Data.At(key);
+        /// <returns> 見つからなければ null </returns>
+        public int? IndexOf(TKey key) {
+            if (ContainsKey(key)) { return Order.IndexOf(key); }
+            else { return null; }
+        }
         /// <summary> 該当するキーが登録されているか </summary>
         public bool ContainsKey(TKey key) => Data.ContainsKey(key);
         /// <summary> ActivityをEnumerableで一括取得 </summary>
