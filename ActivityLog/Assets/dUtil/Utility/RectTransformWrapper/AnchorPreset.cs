@@ -1,3 +1,6 @@
+/*  参考:RectTransformのAnchorのプリセットをスクリプトから「インスペクタ上のenumと同じように」指定する為の拡張クラス
+*   https://gist.github.com/neon-izm/512a439fe6d07348f6f421c6061338e3
+*/
 using UnityEngine;
 using Anchor = du.Cmp.RecT.Anchor;
 using Pivot = du.Cmp.RecT.Pivot;

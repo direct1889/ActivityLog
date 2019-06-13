@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UGUI = UnityEngine.UI;
 
 namespace Main.UI {
 
-    // 使用時はCanvasのRenderModeをOverlayにすること
+    /// <summary> 使用時はCanvasのRenderModeをOverlayにすること </summary>
     public class Loupe4UI : MonoBehaviour {
+        #region field
+        Material m_mat;
+        RectTransform m_recT;
+        RectTransform m_parentRecT;
+        #endregion
 
-        Material m_mat = null;
-        RectTransform m_recT = null;
-        RectTransform m_parentRecT = null;
-
+        #region mono
         void Awake() {
             m_mat = GetComponent<UGUI.Image>().material;
             m_recT = GetComponentInParent<RectTransform>();
@@ -22,6 +23,7 @@ namespace Main.UI {
             m_mat.SetFloat("_UVx", uv.x);
             m_mat.SetFloat("_UVy", 1f - uv.y);  // UI座標はyが上から
         }
+        #endregion
     }
 
 }

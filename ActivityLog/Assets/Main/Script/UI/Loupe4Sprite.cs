@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UGUI = UnityEngine.UI;
 
 namespace Main.UI {
 
-    // 使用時はCanvasのRenderModeをCameraにすること
+    /// <summary> 使用時はCanvasのRenderModeをCameraにすること </summary>
     public class Loupe4Sprite : MonoBehaviour {
+        #region field
+        Material m_mat;
+        RectTransform m_recT;
+        RectTransform m_parentRecT;
+        #endregion
 
-        Material m_mat = null;
-        RectTransform m_recT = null;
-        RectTransform m_parentRecT = null;
-
+        #region mono
         void Awake() {
             m_mat = GetComponent<SpriteRenderer>().material;
             //m_mat = GetComponent<UGUI.Image>().material;
@@ -24,6 +25,7 @@ namespace Main.UI {
             m_mat.SetFloat("_UVx", posOnScreen.x / Screen.width);
             m_mat.SetFloat("_UVy", 1f - posOnScreen.y / Screen.height);  // UI座標はyが上から
         }
+        #endregion
     }
 
 }

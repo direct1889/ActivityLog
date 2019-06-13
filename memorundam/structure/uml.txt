@@ -2,37 +2,46 @@
 
 title <size:18> Class Structure </size>
 
+
+package du.Cmp {
+	package Tree {
+		interface IHashTreeDataType
+	}
+}
+
 package Main {
 
 	package Act {
 
-		package Project {
-			interface IProject {
-				+string Name{get}
-				+UColor Color{get}
-				+bool IsEffectiveDefault{get}
-			}
-			interface ISubProject {
-				+IProject Parent{get}
-			}
-			IProject <|.. Project
-			ISubProject <|.. SubProject
-			Project <|-- SubProject
-
-			class ProjectDB <static>
-			IProject ..* ProjectDB
+		package CDB {
+			interface IContentAdapter
+			interface IProjectDB
+			interface IActivityDB
+			interface IContentDB
+			IProjectDB  o-up- CDB
+			IActivityDB o-up- CDB
+			IContentDB  o-up- CDB
 		}
 
-		interface IROContent {
+		IHashTreeDataType <|-- IContentAdapter
+
+		interface IContent {
 			+IProject Project{get}
 			+string Name{get}
 			+bool IsEffective{get}
 		}
-		IROContent <|.down. Content
-		IProject --up-o Content
+		interface IActivity
+		IActivity <|.up. Activity
+		interface IProject
+		IProject <|.up. Project
+		IContent <|-up- IActivity
+		IContent <|-up- IProject
+
+		IHashTreeDataType <|-- IContent
+
 
 		interface IROContext {
-			+IActivity NextAct{get}
+			+IActRecord NextAct{get}
 			+float BeginTime{get}
 			+float? EndTime{get}
 			+float Duration{get}
@@ -41,68 +50,119 @@ package Main {
 		IROContext <|-down- IContext
 		IContext <|.down. Context
 
-		interface IActivity {
-			+IContent Content{get}
+		interface IActRecord {
+			+IActivity Activity{get}
 			+IContext Context{get}
 		}
-		IActivity <|.. Activity
-		IROContent --o Activity
-		IContext --o Activity
+		IActRecord <|.. ActRecord
+		IActivity --o ActRecord
+		IContext --o ActRecord
 
 		interface IIndependentContext
-		IIndependentContext <|.. IndependentContext
-		interface IIndependentActivity
-		IIndependentActivity <|.. IndependentActivity
-		IROContent --o IndependentActivity
-		IIndependentContext --o IndependentActivity
+		IIndependentContext <|.up. IndependentContext
+		interface IIndependentActRecord
+		IIndependentActRecord <|.down. IndependentActRecord
+		IContent -right-o IndependentActRecord
+		IIndependentContext -up-o IndependentActRecord
 
-		interface IROActivitiesContainer
-		interface IActivitiesContainer {
-			+IActivity At(int index);
-			+IActivity At(MinuteOfDay time);
+		interface IROActSequence
+		interface IActSequence {
+			+IActRecord At(int index);
+			+IActRecord At(MinuteOfDay time);
 			+int AtIndex(MinuteOfDay time);
 
-			+void PushBack(IActivity act);
-			+void Insert(IActivity act, int destIndex);
+			+void PushBack(IActRecord act);
+			+void Insert(IActRecord act, int destIndex);
 			+void Remove(int index);
 			+void Move(int index, MinuteOfDay newBegin, MinuteOfDay newEnd);
 			+void Overwrite(int index, IContent newContent);
 		}
-		IROActivitiesContainer <|-- IActivitiesContainer
-		IActivitiesContainer <|.. ActivitiesContainer
-		IActivity --* ActivitiesContainer
+		IROActSequence <|-- IActSequence
+		IActSequence <|.. ActSequence
+		IActRecord --* ActSequence
 
-		interface IActivitiesMgr {
+		interface IActSequenceMgr {
 			+void BeginNewAct(IProject proj, string name, bool isEffective);
 			+void BeginNewAct(IProject proj, string name);
 			+void ChangeBorder(int lastIndexBeforeBorder, MinuteOfDay newMinute);
 		}
-		IActivitiesMgr <|.. ActivitiesMgr
-		IActivitiesContainer --o ActivitiesMgr
+		IActSequenceMgr <|.. ActSequenceMgr
+		IActSequence --o ActSequenceMgr
 
 
 		package View {
 
-			interface ICylinderOfTheDay
-			class CylinderOfTheDay
-			ICylinderOfTheDay <|.. CylinderOfTheDay
+			package DoActivity {
+
+				interface IRxDoActList {
+					+IObservable<IActivity> ActivityChosen{get}
+				}
+				interface IDoActListAsParent {
+					+void OnChosenActivity(IActivity content);
+				}
+				IRxDoActList <|.. DoActList
+				IDoActListAsParent <|.. DoActList
+				IContentPanel --o DoActList
+
+				interface IContentPanelUI {
+					+void SetContent(IContent content);
+					+void SetIndent(int indent);
+				}
+				IContentPanelUI <|.. ContentPanelUI
+
+				interface IContentPanel {
+					+void Initialize(IContentAdapter content, IDoActListAsParent parent);
+				}
+				IContentPanel <|.. ContentPanel
+				IDoActListAsParent <-- ContentPanel
+				IContentPanelUI <-- ContentPanel
+				IContentAdapter --o ContentPanel
+
+			}
 
 
-			interface IActStatus
-			IActStatus <|.. ActStatus
-			interface IActOperator
-			IActOperator <|.. ActOperator
-			interface IActView
-			IActView <|.. ActView
+			package RecordsCylinder {
 
-			IActStatus <-up- ActOperator
-			IActView <-up- ActOperator
+				interface IActRecordBlock {
+					+void Initialize(IROActRecord act, IActRecordsCylinder cylinder);
+					+void RefreshSize();
+				}
+				IActRecordBlock <|.. ActRecordBlock
+
+				interface IActRecordsCylinderUI {
+					+Vector2 RectSize { get; }
+				}
+				interface IActRecordsCylinder {
+					+void CreateBlock(IROActRecord act);
+				}
+				IActRecordsCylinderUI <|.. ActRecordsCylinder
+				IActRecordsCylinder   <|.. ActRecordsCylinder
+				IActRecordBlock   --o ActRecordsCylinder
+
+				IActRecordsCylinderUI <|.. ActRecordBlock
+
+			}
+
+		}
+
+
+		package STrack {
+
+			class ActRecordCylinderMgr {
+				-Act.IActSequenceMgr m_acts;
+				-Act.View.ActRecordsCylinder m_recCylinder;
+				-Act.View.ContentPanelList m_doActList;
+				-GameObject DoActCanvas;
+			}
+
+			IActSequenceMgr --o ActRecordCylinderMgr
+			IActRecordsCylinder <-- ActRecordCylinderMgr
+			IActRecordsCylinder <-- ActRecordCylinderMgr
 
 		}
 
 	}
 
-	IActOperator --o CylinderOfTheDay
 }
 
 

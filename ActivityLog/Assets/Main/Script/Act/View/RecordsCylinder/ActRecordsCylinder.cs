@@ -1,0 +1,43 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+using static du.Ex.ExList;
+
+namespace Main.Act.View {
+
+    /// <summary> ActRecordの累積Cylinder </summary>
+    public interface IActRecordsCylinderUI {
+        Vector2 RectSize { get; }
+    }
+
+    public interface IActRecordsCylinder {
+        void CreateBlock(IROActRecord act);
+    }
+
+    public class ActRecordsCylinder : MonoBehaviour, IActRecordsCylinderUI, IActRecordsCylinder {
+        #region field
+        RectTransform m_rect;
+        IList<IActRecordBlock> m_blocks = new List<IActRecordBlock>();
+
+        [SerializeField]GameObject m_prefActBlock;
+        #endregion
+
+        #region getter
+        public Vector2 RectSize => m_rect.sizeDelta;
+        #endregion
+
+        #region mono
+        void Awake() { m_rect = GetComponent<RectTransform>(); }
+        void Update() { m_blocks.Back()?.RefreshSize(); }
+        #endregion
+
+        #region public
+        public void CreateBlock(IROActRecord act) {
+            IActRecordBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActRecordBlock>();
+            block.Initialize(act, this);
+            m_blocks.Back()?.RefreshSize();
+            m_blocks.Add(block);
+        }
+        #endregion
+    }
+
+}

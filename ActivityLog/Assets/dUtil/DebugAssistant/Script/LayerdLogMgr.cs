@@ -15,6 +15,7 @@ namespace du.Test {
         [SerializeField] bool m_iaBoot = true;
         [SerializeField] bool m_iAct = true;
         [SerializeField] bool m_expLog = true;
+        [SerializeField] bool m_mainBoot = true;
 
         public void InitializeLLog() {
 			LayeredLog.Initialize(m_isLogEnable);
@@ -24,6 +25,7 @@ namespace du.Test {
             LayeredLog.SetActive("IA:BOOT", m_iaBoot);
             LayeredLog.SetActive("IA:IACT", m_iAct);
             LayeredLog.SetActive("EXPLOG", m_expLog);
+            LayeredLog.SetActive("MAIN:BOOT", m_mainBoot);
         }
     }
 
