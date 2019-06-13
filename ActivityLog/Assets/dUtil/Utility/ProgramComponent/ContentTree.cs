@@ -8,14 +8,15 @@ using System.Text.RegularExpressions;
 namespace Main.Act {
 
     /// <summary> ProjectとActivityを同一のインタフェースに </summary>
-    public interface IContent : du.Cmp.IHashTreeDataType<IProject, string> {
+    public interface IContentProxy : du.Cmp.IHashTreeDataType<IProject, string> {
         IProject Proj { get; }
         IActivity Act { get; }
+
         bool IsProj { get; }
-        IROContent Data { get; }
+        IContent Data { get; }
     }
 
-    public abstract class ContentProxy : IContent {
+    public abstract class ContentProxy : IContentProxy {
         public abstract IProject Proj { get; }
         public abstract IActivity Act { get; }
         public abstract bool IsProj { get; }
@@ -23,7 +24,7 @@ namespace Main.Act {
         public IProject Parent => Data.Parent;
         public string Key => Data.Key;
 
-        public IROContent Data { get
+        public IContent Data { get
             {
                 if (IsProj) { return Proj; }
                 else { return Act; }
@@ -49,7 +50,7 @@ namespace Main.Act {
 
         private RootProjectProxy() {}
         static RootProjectProxy m_instance = new RootProjectProxy();
-        public static IContent Instance => m_instance;
+        public static IContentProxy Instance => m_instance;
     }
 
     public class ActivityProxy : ContentProxy {
@@ -64,7 +65,7 @@ namespace Main.Act {
     }
 
     public interface IContentTree
-    : du.Cmp.IRxHashTree<IContent, IProject, string>, DB.IActivityDB, DB.IProjectDB
+    : du.Cmp.IRxHashTree<IContentProxy, IProject, string>, DB.IActivityDB, DB.IProjectDB
     {
         #region getter
         /// <summary> 既存プロジェクトと重複するか </summary>
@@ -83,7 +84,7 @@ namespace Main.Act {
         /// <returns> 見つからない場合、見つかったがActivityじゃない場合は null </returns>
         IActivity AtAct(string key, IProject parent);
 
-        IEnumerable<IContent> Sorted(IProject parent);
+        IEnumerable<IContentProxy> Sorted(IProject parent);
         #endregion
 
         #region public
@@ -96,7 +97,7 @@ namespace Main.Act {
     }
 
     public class ContentTree
-    : du.Cmp.RxHashTree<IContent, IProject, string>, IContentTree
+    : du.Cmp.RxHashTree<IContentProxy, IProject, string>, IContentTree
     {
         public bool ProjHasExist(string key, IProject parent) {
             return At(parent)?.Children.At(key)?.Value.IsProj ?? false;
@@ -135,9 +136,9 @@ namespace Main.Act {
         }
 
 
-        public IEnumerable<IContent> Sorted(IProject parent) {
+        public IEnumerable<IContentProxy> Sorted(IProject parent) {
             return At(parent).Children            // parentを親に持つ
-                .Sorted()                         // 子供を指定した順番で
+                .OrderedValues()                         // 子供を指定した順番で
                 .Select(node => node.Value); // IROContentで取得
         }
 
@@ -151,7 +152,7 @@ namespace Main.Act {
 
         public IEnumerable<IActivity> ActSorted(IProject parent) {
             return At(parent).Children             // parentを親に持つ
-                .Sorted()                          // 子供を指定した順番で
+                .OrderedValues()                          // 子供を指定した順番で
                 .Where(node => !node.Value.IsProj) // Activityのみを
                 .Select(node => node.Value.Act);   // IROContentで取得
         }
@@ -160,7 +161,7 @@ namespace Main.Act {
 
         public IEnumerable<IProject> ProjSorted(IProject parent) {
             return At(parent).Children            // parentを親に持つ
-                .Sorted()                         // 子供を指定した順番で
+                .OrderedValues()                         // 子供を指定した順番で
                 .Where(node => node.Value.IsProj) // Activityのみを
                 .Select(node => node.Value.Proj); // IROContentで取得
         }

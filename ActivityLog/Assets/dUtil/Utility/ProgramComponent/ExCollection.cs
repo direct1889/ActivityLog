@@ -3,15 +3,25 @@
 
 namespace du.Ex {
 
-    public static class ExList {
+    public static class ExCollection {
 
-        public static bool IsValidIndex<T>(this IList<T> list, int index) {
+        public static bool IsValidIndex<T>(this ICollection<T> list, int index) {
+            return !(list is null) && 0 <= index && index < list.Count;
+        }
+        public static bool IsValidIndex<T>(this IReadOnlyCollection<T> list, int index) {
             return !(list is null) && 0 <= index && index < list.Count;
         }
 
-        public static bool IsEmpty<T>(this IList<T> list) {
+        public static bool IsEmpty<T>(this ICollection<T> list) {
             return list is null || list.Count == 0;
         }
+        public static bool IsEmpty<T>(this IReadOnlyCollection<T> list) {
+            return list is null || list.Count == 0;
+        }
+
+    }
+
+    public static class ExList {
 
         /// <returns> listが空の場合はnull </returns>
         public static T Back<T>(this IList<T> list) where T : class {

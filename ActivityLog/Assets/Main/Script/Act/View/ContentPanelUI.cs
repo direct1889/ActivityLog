@@ -10,7 +10,7 @@ namespace Main.Act.View {
     public interface IContentPanelUI {
         #region public
         /// <summary> IProjectに合わせてラベル/フレーム色/チェック有無 </summary>
-        void SetContent(IROContent content);
+        void SetContent(IContent content);
         /// <summary> Indentに合わせてパネルを縮小 </summary>
         void SetIndent(int indent);
         #endregion
@@ -36,7 +36,7 @@ namespace Main.Act.View {
 
         #region public
         /// <summary> IContentに合わせてラベル/フレーム色/チェック有無 </summary>
-        public void SetContent(IROContent content) {
+        public void SetContent(IContent content) {
             m_name.text = content.Name;
             m_frame.color = content.Color;
             m_effectiveCert.SetActive(content.IsEffective);

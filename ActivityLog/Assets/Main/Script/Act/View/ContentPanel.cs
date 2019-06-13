@@ -24,13 +24,13 @@ namespace Main.Act.View {
     }
 
     public interface IContentPanel : IRxContentPanel {
-        void Initialize(IContent content, IContentListAsParent parent);
+        void Initialize(IContentProxy content, IContentListAsParent parent);
     }
 
     /// <summary> ContentListを構成するPanel </summary>
     public class ContentPanel : MonoBehaviour, IContentPanel {
         #region field
-        IContent m_content;
+        IContentProxy m_content;
         ContentPanelUI m_ui;
         // UGUI.Button m_button;
         IContentListAsParent m_parent;
@@ -52,7 +52,12 @@ namespace Main.Act.View {
         #endregion
 
         #region public
-        public void Initialize(IContent content, IContentListAsParent parent) {
+        public void Initialize(IContentProxy content, IContentListAsParent parent) {
+            IReadOnlyList<string> a = new List<string>();
+            Dictionary<string, string> b = new Dictionary<string, string>();
+            IDictionary<string, string> c = b;
+            IReadOnlyDictionary<string, string> d = b;
+            c["hoge"] = "";
             if (m_content == null) {
                 m_content = content;
                 m_ui.SetContent(m_content.Data); // 内容、色

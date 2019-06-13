@@ -2,7 +2,7 @@
 namespace Main.Act {
 
     /// <summary> プロジェクト:タスクグループ </summary>
-    public interface IProject : IROContent {}
+    public interface IProject : IContent {}
 
     /// <summary> プロジェクト:タスクグループ </summary>
     public class Project : du.Cmp.EqualsComparable<Project>, IProject {
@@ -11,7 +11,7 @@ namespace Main.Act {
         public ThemeColor Color { get; }
         public bool IsEffective { get; }
         /// <value> 親を持たない場合null </value>
-        public virtual IProject Parent { get; }
+        public IProject Parent { get; }
         #endregion
 
         #region getter property
@@ -26,6 +26,7 @@ namespace Main.Act {
             Color = color;
             IsEffective = isEffective;
         }
+        #if false
         /// <param name="color"> 省略すると親から引き継ぐ </param>
         /// <param name="isEffective"> 省略すると親から引き継ぐ </param>
         public static IProject Create(string name, IProject parent, ThemeColor color)
@@ -37,24 +38,16 @@ namespace Main.Act {
         /// <summary> 親を持たないRootProjectの場合、color/isEffectiveの省略不可 </summary>
         public static IProject Create(string name, ThemeColor color, bool isEffective)
             => new Project(name, null, color, isEffective);
+        #endif
         #endregion
 
         #region override
-        // public override bool Equals(object obj) {
-            // if (obj == null || GetType() != obj.GetType()) { return false; }
-            // return GetHashCode() == ((Project)obj).GetHashCode();
-        // }
         public override int GetHashCode() => ToString().GetHashCode();
         public override string ToString() => Parent?.ToString() ?? "" + $"::{Name}";
         #endregion
 
-        // #region operator
-        // public static bool operator== (Project m, Project n) { return m.Equals(n); }
-        // public static bool operator!= (Project m, Project n) { return m.Equals(n); }
-        // #endregion
-
         #region static
-        public static string CSVLabels => "ParentName,Name,Color,IsEffective";
+        public static string CSVLabels => "IsProject,ParentGenealogy,Name,IsEffective,Color";
         #endregion
     }
 

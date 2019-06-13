@@ -59,7 +59,7 @@ namespace Main.Act.View {
                 CreatePanels(child);
             }
         }
-        private void CreatePanels(IContent content) {
+        private void CreatePanels(IContentProxy content) {
             CreatePanel(content);
             if (content.IsProj) {
                 foreach (var child in DB.ContentDB.Tree.Sorted(content.Proj)) {
@@ -67,7 +67,7 @@ namespace Main.Act.View {
                 }
             }
         }
-        private void CreatePanel(IContent content) {
+        private void CreatePanel(IContentProxy content) {
             var panel = Instantiate<GameObject>(
                 content.IsProj ? m_projPanelPref : m_actPanelPref,
                 m_panelsParent.transform);

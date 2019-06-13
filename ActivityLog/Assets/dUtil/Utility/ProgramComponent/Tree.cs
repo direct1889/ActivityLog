@@ -20,7 +20,7 @@ namespace du.Cmp {
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
         T Value { get; }
-        IOrderedMap<IHashTreeNode<T, TParent, TKey>, TKey> Children { get; }
+        IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children { get; }
     }
 
     public class HashTreeNode<T, TParent, TKey> : IHashTreeNode<T, TParent, TKey>
@@ -29,7 +29,7 @@ namespace du.Cmp {
     {
         #region public field property
         public T Value { get; }
-        public IOrderedMap<IHashTreeNode<T, TParent, TKey>, TKey> Children { get; } = new OrderedMap<IHashTreeNode<T, TParent, TKey>, TKey>();
+        public IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children { get; } = new OrderedMap<TKey, IHashTreeNode<T, TParent, TKey>>();
         #endregion
 
         #region ctor

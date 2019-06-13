@@ -3,7 +3,7 @@
 namespace Main.Act {
 
     /// <summary> アクティビティの内容 </summary>
-    public interface IROContent : du.Cmp.IHashTreeDataType<IProject, string> {
+    public interface IContent : du.Cmp.IHashTreeDataType<IProject, string> {
         string     Name        { get; }
         bool       IsEffective { get; }
 
@@ -14,7 +14,7 @@ namespace Main.Act {
         // string     Key         { get; }
     }
 
-    public interface IActivity : IROContent {}
+    public interface IActivity : IContent {}
 
     /// <summary>
     /// アクティビティの時刻/前後情報

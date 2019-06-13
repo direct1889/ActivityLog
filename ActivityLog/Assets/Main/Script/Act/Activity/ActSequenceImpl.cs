@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static du.Ex.ExCollection;
 using static du.Ex.ExList;
 
 namespace Main.Act {

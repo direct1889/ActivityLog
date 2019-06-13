@@ -13,7 +13,7 @@ namespace Main.Act.DB {
             return $"{parentGenealogy}::{name}({color},{isEffective})";
         }
 
-        public IContent Instantiate() {
+        public IContentProxy Instantiate() {
             // Root直下
             if (parentGenealogy.IsEmpty()) {
                 return new ProjectProxy(new Project(name, null, ThemeColors.Get(color), bool.Parse(isEffective)));
