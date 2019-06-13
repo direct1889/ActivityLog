@@ -35,7 +35,9 @@ namespace Main.Act.View {
     /// </summary>
     public interface IDoActListAsParent {
         /// <summary> 押されたPanelからの報告を受け取る </summary>
-        void OnChosenActivity(IActivity content);
+        void OnChosenActivity(IActivity act);
+        /// <summary> 押されたPanelからの報告を受け取る </summary>
+        void OnPressedDropDown(IContentAdapter content, bool willDropDown);
     }
 
     /// <summary>
@@ -59,8 +61,12 @@ namespace Main.Act.View {
         #endregion
 
         #region IContentPanelListAsParent
-        public void OnChosenActivity(IActivity content) {
-            m_chosenActStream.OnNext(content);
+        public void OnChosenActivity(IActivity act) {
+            m_chosenActStream.OnNext(act);
+        }
+        public void OnPressedDropDown(IContentAdapter content, bool willDropDown) {
+            if (willDropDown) { DropDown(content.Proj); }
+            else { RollUp(content.Proj); }
         }
         #endregion
 
@@ -100,6 +106,34 @@ namespace Main.Act.View {
             panel.transform.SetSiblingIndex((int)CDB.Content.SerialNumber(content));
             m_contentPanels.Add(content.Key, panel.GetComponent<ContentPanel>());
             m_contentPanels[content.Key].Initialize(content, this);
+        }
+
+        private void RollUp(IProject proj) {
+            // proj直下から走査開始
+            SetActive(CDB.Content.OrderedValues(proj), false);
+        }
+        private void DropDown(IProject proj) {
+            // proj直下から走査開始
+            SetActive(CDB.Content.OrderedValues(proj), true);
+        }
+
+        private void SetActive(IEnumerable<IContentAdapter> contents, bool value) {
+            // Content群を走査、それぞれ設定
+            foreach (var cnt in contents) {
+                SetActive(cnt, value);
+            }
+        }
+        private void SetActive(IContentAdapter content, bool value) {
+            // nullだったら何もしない
+            if (content is null) { return; }
+            else {
+                // 自分自身を設定
+                m_contentPanels[content.Key].SetActive(value);
+                // Projectだったらさらに子供にも設定
+                if (content.IsProj) {
+                    SetActive(CDB.Content.OrderedValues(content.Proj), value);
+                }
+            }
         }
         #endregion
     }

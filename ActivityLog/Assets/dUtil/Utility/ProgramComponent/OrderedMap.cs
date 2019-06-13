@@ -16,8 +16,6 @@ namespace du.Cmp {
         int? IndexOf(TKey key);
         /// <summary> 該当するキーが登録されているか </summary>
         bool ContainsKey(TKey key);
-        /// <summary> 値のみをEnumerableで一括取得 </summary>
-        IEnumerable<TValue> OrderedValues();
     }
 
     /// <summary>

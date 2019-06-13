@@ -21,6 +21,9 @@ namespace Main.Act.View {
 
     /// <summary> ContentPanelListを構成するPanel </summary>
     public interface IContentPanel {
+        /// <summary> GameObjectの有効/無効を切り替える </summary>
+        void SetActive(bool value);
+        /// <summary> 初期化 </summary>
         void Initialize(IContentAdapter content, IDoActListAsParent parent);
     }
 
@@ -30,6 +33,7 @@ namespace Main.Act.View {
         IContentAdapter m_content;
         ContentPanelUI m_ui;
         IDoActListAsParent m_parent;
+        bool m_isDropDown = true;
         #endregion
 
         #region mono
@@ -38,9 +42,16 @@ namespace Main.Act.View {
         }
         /// <summary> UGUI.Buttonから呼ばれる </summary>
         public void OnClicked() => m_parent.OnChosenActivity(m_content.Act);
+        public void OnClickedDropDonw() {
+            m_parent.OnPressedDropDown(m_content, !m_isDropDown);
+            m_isDropDown = !m_isDropDown;
+        }
         #endregion
 
         #region public
+        public void SetActive(bool value) {
+            gameObject.SetActive(value);
+        }
         public void Initialize(IContentAdapter content, IDoActListAsParent parent) {
             if (m_content == null) {
                 m_content = content;
@@ -52,8 +63,9 @@ namespace Main.Act.View {
         #endregion
 
         #region private
+        private void RollUp() {
+        }
         private void DropDown() {
-
         }
         #endregion
     }

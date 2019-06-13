@@ -60,8 +60,6 @@ namespace du.Cmp {
         }
         /// <summary> 該当するキーが登録されているか </summary>
         public bool ContainsKey(TKey key) => Data.ContainsKey(key);
-        /// <summary> ActivityをEnumerableで一括取得 </summary>
-        public IEnumerable<TValue> OrderedValues() => Order.Select(name => Data[name]);
         #endregion
 
         #region IOrderedMap

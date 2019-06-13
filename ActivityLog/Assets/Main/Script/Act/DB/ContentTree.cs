@@ -11,6 +11,7 @@ namespace Main.Act.DB {
     public class ContentTree
     : du.Cmp.RxHashTree<IContentAdapter, IProject, string>, IContentDB
     {
+
         #region IProjectDB
         public IProject AtProj(IProject proj) => AtProj(proj.Key, proj.Parent);
         public IProject AtProj(string key, IProject parent) {
@@ -29,14 +30,14 @@ namespace Main.Act.DB {
         }
 
         public IEnumerable<IProject> OrderedProjects(IProject parent) {
-            return At(parent).Children?           // parentを親に持つ
-                .OrderedValues()                  // 子供を指定した順番で
+            return At(parent).Children?           // parentを親に持つ子供を
                 .Where(node => node.Value.IsProj) // Activityのみを
                 .Select(node => node.Value.Proj); // IROContentで取得
         }
 
         public void Add(IProject proj) => Add(new ProjectAdapter(proj));
         #endregion
+
 
         #region IActivityDB
         public IActivity AtAct(IActivity act) => AtAct(act.Key, act.Parent);
@@ -55,8 +56,7 @@ namespace Main.Act.DB {
         }
 
         public IEnumerable<IActivity> OrderedActivities(IProject parent) {
-            return At(parent).Children?            // parentを親に持つ
-                .OrderedValues()                   // 子供を指定した順番で
+            return At(parent).Children?            // parentを親に持つ子供を
                 .Where(node => !node.Value.IsProj) // Activityのみを
                 .Select(node => node.Value.Act);   // IROContentで取得
         }
@@ -64,10 +64,10 @@ namespace Main.Act.DB {
         public void Add(IActivity act) => Add(new ActivityAdapter(act));
         #endregion
 
+
         #region IContentDB
         public IEnumerable<IContentAdapter> OrderedValues(IProject parent) {
-            return At(parent).Children?      // parentを親に持つ
-                .OrderedValues()             // 子供を指定した順番で
+            return At(parent)?.Children?      // parentを親に持つ子供を
                 .Select(node => node.Value); // IContentAdapterで取得
         }
         public int? SerialNumber(IContentAdapter content) {
@@ -76,6 +76,7 @@ namespace Main.Act.DB {
 
         public void Initialize() { Load(); }
         #endregion
+
 
         #region private
         private void Load() {
@@ -87,13 +88,15 @@ namespace Main.Act.DB {
             }
         }
 
-        static Regex Genealogy { get; } = new Regex("(::([^:]+))+");
+        static Regex Genealogy { get; } = new Regex("(::[^:]+)+");
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         private IContentAdapter FromGenealogy(string genealogy) {
             var matched = Genealogy.Match(genealogy);
             var it = Root;
-            for (int i = 0; i < matched.Groups[2].Captures.Count && !(it is null); ++i) {
-                it = it.Children?.At(matched.Groups[2].Captures[i].Value);
+            string key = "";
+            for (int i = 0; i < matched.Groups[1].Captures.Count && !(it is null); ++i) {
+                key += matched.Groups[1].Captures[i].Value;
+                it = it.Children?.At(key);
             }
             return it?.Value;
         }

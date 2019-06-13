@@ -48,7 +48,8 @@ namespace Main.Act.DB {
         /// <summary> 既存プロジェクトと重複するか </summary>
         bool ProjHasExist(IProject proj);
 
-        /// <summary> ProjectをEnumerableで一括取得 </summary>
+        /// <summary> Parent直下のProjectをEnumerableで一括取得 </summary>
+        /// <param name="parent"> nullを渡すとRoot直下の要素を返す </param>
         IEnumerable<IProject> OrderedProjects(IProject parent);
         #endregion
 
@@ -73,7 +74,7 @@ namespace Main.Act.DB {
         bool ActHasExist(IActivity act);
         #endregion
 
-        /// <summary> ActivityをEnumerableで一括取得 </summary>
+        /// <summary> Parent直下のActivityをEnumerableで一括取得 </summary>
         IEnumerable<IActivity> OrderedActivities(IProject parent);
         // TODO: OVERLAP
         /// <summary> Activityを新たに登録 </summary>
@@ -85,7 +86,12 @@ namespace Main.Act.DB {
     : du.Cmp.IRxHashTree<IContentAdapter, IProject, string>, IActivityDB, IProjectDB
     {
         #region getter
+        /// <summary> Parent直下のContentをEnumerableで一括取得 </summary>
+        /// <param name="parent"> nullを渡すとRoot直下の要素を返す </param>
         IEnumerable<IContentAdapter> OrderedValues(IProject parent);
+
+        /// <summary> contentがRoot(0)から数えて何番目か </summary>
+        /// <returns> contentがnullでなく、見つからないときはnull </returns>
         int? SerialNumber(IContentAdapter content);
         #endregion
 
