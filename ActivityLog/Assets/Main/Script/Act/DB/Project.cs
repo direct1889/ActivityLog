@@ -47,6 +47,7 @@ namespace Main.Act {
         #endregion
 
         #region static
+        /// <value> CSVファイルのラベル行 </value>
         public static string CSVLabels => "IsProject,ParentGenealogy,Name,IsEffective,Color";
         #endregion
     }

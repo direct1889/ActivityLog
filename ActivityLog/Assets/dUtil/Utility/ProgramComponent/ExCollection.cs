@@ -33,17 +33,17 @@ namespace du.Ex {
 
     public static class ExDictionary {
 
-        //! 指定したキーが存在しなければAdd、存在すればSet
+        /// <summary> 指定したキーが存在しなければAdd、存在すればSet </summary>
         public static void AddSet<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key, TValue value) {
             if (dic.ContainsKey(key)) { dic[key] = value; }
             else { dic.Add(key, value); }
         }
 
-        //! 指定したキーが存在しなければnullを返すAt
+        /// <summary> 指定したキーが存在しなければnullを返すAt </summary>
         public static TValue At<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key) where TValue : class {
             return dic.ContainsKey(key) ? dic[key] : null;
         }
-        //! 指定したキーが存在しなかった場合の返り値を指定するAt
+        /// <summary> 指定したキーが存在しなかった場合の返り値を指定するAt </summary>
         public static TValue At<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key, TValue defaultValue) {
             return dic.ContainsKey(key) ? dic[key] : defaultValue;
         }

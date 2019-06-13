@@ -14,7 +14,7 @@ namespace Main.Act {
         #region getter
         public ThemeColor Color       => Parent.Color;
         public int        ParentCount => Parent.ParentCount + 1;
-        public string     Key         => Name;
+        public string     Key         => $"{Parent.Key}::{Name}";
         #endregion
 
         #region ctor/dtor
@@ -59,10 +59,6 @@ namespace Main.Act {
         #endregion
 
         #region public
-        /// <summary> アクティビティを終了させる </summary>
-        // public void Finish(IActivity nextAct) {
-            // if (!HasEnded) { NextAct = nextAct; }
-        // }
         public void ResetPrecedeAct(IIndependentActRecord precedeAct) {
             BeginTime = precedeAct.IndependentContext.EndTime;
         }
@@ -107,7 +103,7 @@ namespace Main.Act {
         #endregion
     }
 
-    /// <summary> アクティビティ </summary>
+    /// <summary> アクティビティ実績 </summary>
     public class ActRecord : IActRecord {
 
         #region property
@@ -134,7 +130,7 @@ namespace Main.Act {
         #endregion
     }
 
-    /// <summary> アクティビティ </summary>
+    /// <summary> アクティビティ実績 </summary>
     public class IndependentActRecord : IIndependentActRecord {
 
         #region property

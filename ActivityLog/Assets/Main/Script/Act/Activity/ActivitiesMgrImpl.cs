@@ -3,12 +3,15 @@ namespace Main.Act {
 
     /// <summary> アクティビティ系列/日を操作する </summary>
     public class ActivitiesMgr : IActivitiesMgr {
-        #region property
-        public IROActRecordSequence Activities => Acts;
+        #region field-property
         protected IActRecordSequence Acts { get; }
         #endregion
 
-        #region ctor/dtor
+        #region getter
+        public IROActRecordSequence Activities => Acts;
+        #endregion
+
+        #region ctor
         public ActivitiesMgr() { Acts = new ActRecordSequence(); }
         #endregion
 

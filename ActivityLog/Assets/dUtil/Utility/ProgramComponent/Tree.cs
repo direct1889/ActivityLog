@@ -4,6 +4,7 @@ using UniRx;
 
 namespace du.Cmp {
 
+    /// <summary> HashTreeの実データ要件 </summary>
     public interface IHashTreeDataType<T, TKey>
         where T : class, IHashTreeDataType<T, TKey>
     {

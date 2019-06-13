@@ -3,16 +3,30 @@ using static du.Ex.ExString;
 
 namespace Main.Act.DB {
 
+    /// <summary> CSVを読み込みContent(Proj/Act)に変換 </summary>
     public class ContentDesc {
-        [du.File.CSVColAttr(0,0)] public int isProject; // 1:Proj / 0:Act
+        #region field
+        /// <value> 1:Project / 0:Activity </value>
+        [du.File.CSVColAttr(0,0)] public int isProject;
+        /// <value>
+        /// e.g. ::Dev::Unity::AcTrack
+        /// - 空欄ならRoot直下 (Projectのみ許可)
+        /// </value>
         [du.File.CSVColAttr(1,null)] public string parentGenealogy;
+        /// <value> 名称 </value>
         [du.File.CSVColAttr(2,null)] public string name;
+        /// <value> 空欄なら親と同じ </value>
         [du.File.CSVColAttr(3,null)] public string isEffective;
+        /// <value> 空欄なら親と同じ </value>
         [du.File.CSVColAttr(4,null)] public string color;
+        #endregion
+
+        #region getter
         public override string ToString() {
             return $"{parentGenealogy}::{name}({color},{isEffective})";
         }
 
+        /// <summary> CSVを読み込みContent(Proj/Act)に変換 </summary>
         public IContentProxy Instantiate() {
             // Root直下
             if (parentGenealogy.IsEmpty()) {
@@ -30,14 +44,19 @@ namespace Main.Act.DB {
                 }
             }
         }
+        #endregion
     }
 
     public static class ExContentCSV {
-        public static string ToCSV(this IProject proj) {
-            return proj.Parent is null ? "" : proj.Parent.Name + $",{proj.Name},{proj.Color},{proj.IsEffective}";
+        /// <summary> CSV出力形式に変換 </summary>
+        public static string ToCSV(this IContentProxy content) {
+            return content.IsProj ? content.Proj.ToCSV() : content.Act.ToCSV();
         }
-        public static string ToCSV(this IActivity content) {
-            return $"{content.Parent.Name},{content.Name},{content.IsEffective}";
+        private static string ToCSV(this IProject proj) {
+            return "1" + (proj.Parent is null ? "" : proj.Parent.Key) + $",{proj.Name},{proj.IsEffective},{proj.Color}";
+        }
+        private static string ToCSV(this IActivity content) {
+            return $"0,{content.Parent.Key},{content.Name},{content.IsEffective},";
         }
     }
 

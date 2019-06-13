@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 // using UImage = UnityEngine.UI.Image;
 using System.Collections.Generic;
-using static du.Ex.ExList;
+using static du.Ex.ExCollection;
 using System.Linq;
 using System;
 using UniRx;
