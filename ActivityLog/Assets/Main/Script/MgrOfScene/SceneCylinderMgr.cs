@@ -7,7 +7,7 @@ namespace Main.STrack {
     /// Activity系列の最上位
     /// - ActRecordの実データ系列IActSequenceMgrを持ち、Cylinder/doActListとの橋渡しを担う
     /// </summary>
-    public class ActRecordCylinderMgr : MonoBehaviour {
+    public class SceneCylinderMgr : MonoBehaviour {
         #region field
         /// <summary> アクティビティの実データ系列 </summary>
         Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr4Test();

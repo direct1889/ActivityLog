@@ -712,7 +712,7 @@ GameObject:
   - component: {fileID: 593583358}
   - component: {fileID: 593583359}
   m_Layer: 0
-  m_Name: MainManager
+  m_Name: SceneCylinderManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
