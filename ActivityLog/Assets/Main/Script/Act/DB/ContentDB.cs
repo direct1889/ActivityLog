@@ -23,7 +23,10 @@ namespace Main.Act {
         #region public
         public static void Initialize() {
             du.Test.LLog.MBoot.Log("Initialized ContentDB.");
-            m_content.Initialize();
+            m_content.Load();
+        }
+        public static void Save() {
+            m_content.Save();
         }
         #endregion
     }
@@ -96,8 +99,10 @@ namespace Main.Act.DB {
         #endregion
 
         #region public
-        /// <summary> 登録済みActivity一覧の生成 </summary>
-        void Initialize();
+        /// <summary> CSVからの読み込み </summary>
+        void Load();
+        /// <summary> CSVへの書き出し </summary>
+        void Save();
         #endregion
     }
 

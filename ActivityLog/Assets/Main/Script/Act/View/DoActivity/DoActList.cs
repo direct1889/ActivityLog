@@ -103,7 +103,8 @@ namespace Main.Act.View {
             var panel = Instantiate<GameObject>(
                 content.IsProj ? m_projPanelPref : m_actPanelPref,
                 m_panelsParent.transform);
-            panel.transform.SetSiblingIndex((int)CDB.Content.SerialNumber(content));
+            // SiblingIndexが要素の配置順にそのまま反映される
+            panel.transform.SetSiblingIndex((int)CDB.Content.SerialNumber(content) - 1); // RootのPanelは無いので-1
             m_contentPanels.Add(content.Key, panel.GetComponent<ContentPanel>());
             m_contentPanels[content.Key].Initialize(content, this);
         }

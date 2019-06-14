@@ -53,7 +53,7 @@ namespace Main.Act.DB {
             return content.IsProj ? content.Proj.ToCSV() : content.Act.ToCSV();
         }
         private static string ToCSV(this IProject proj) {
-            return "1" + (proj.Parent is null ? "" : proj.Parent.Key) + $",{proj.Name},{proj.IsEffective},{proj.Color}";
+            return "1," + (proj.Parent?.Key ?? "") + $",{proj.Name},{proj.IsEffective},{proj.Color}";
         }
         private static string ToCSV(this IActivity content) {
             return $"0,{content.Parent.Key},{content.Name},{content.IsEffective},";

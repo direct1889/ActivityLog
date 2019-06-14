@@ -26,8 +26,9 @@ namespace Main.Act.View {
         #endregion
 
         #region mono
-        void Awake() { m_rect = GetComponent<RectTransform>(); }
-        void Update() { m_blocks.Back()?.RefreshSize(); }
+        private void Awake() { m_rect = GetComponent<RectTransform>(); }
+        private void Update() { m_blocks.Back()?.RefreshSize(); }
+        private void OnApplicationQuit() { CDB.Save(); }
         #endregion
 
         #region public

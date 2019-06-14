@@ -74,12 +74,7 @@ namespace Main.Act.DB {
             return base.SerialNumber(content);
         }
 
-        public void Initialize() { Load(); }
-        #endregion
-
-
-        #region private
-        private void Load() {
+        public void Load() {
             du.Test.LLog.MBoot.Log("Tree load.");
             using (var reader = new du.File.CSVReader<DB.ContentDesc>(du.App.AppManager.DataPath + "System/Contents", true)) {
                 foreach (var desc in reader) {
@@ -88,15 +83,23 @@ namespace Main.Act.DB {
             }
         }
 
-        private void Save() {
+        public void Save() {
             du.Test.LLog.MBoot.Log("Tree save.");
             using (du.File.IFWriter writer = du.File.FWriter.OpenFile4Rewrite(
-                du.App.AppManager.DataPath + "System/Contents"))
+                du.App.AppManager.DataPath + "System/Contents.csv"))
             {
                 writer.Write(Project.CSVLabels);
+                foreach (var content in this) {
+                    if (!(content is null)) {
+                        writer.Write(content.ToCSV());
+                    }
+                }
             }
         }
+        #endregion
 
+
+        #region private
         static Regex Genealogy { get; } = new Regex("(::[^:]+)+");
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         private IContentAdapter FromGenealogy(string genealogy) {
