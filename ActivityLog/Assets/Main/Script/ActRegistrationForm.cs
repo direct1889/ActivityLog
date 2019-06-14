@@ -26,7 +26,7 @@ namespace Main.Act.View {
         private void Start() {
             m_bnCreate
                 .OnClickAsObservable()
-                .Subscribe(_ => OnButtonPressed())
+                .Subscribe(_ => Register())
                 .AddTo(this);
             m_IFProject.OnValueChangedAsObservable()
                 .Subscribe(_ => UpdateButtonStatus())
@@ -35,19 +35,9 @@ namespace Main.Act.View {
                 .Subscribe(_ => UpdateButtonStatus())
                 .AddTo(this);
         }
-        public void OnButtonPressed() {
-            if (!ProjText.IsEmpty()) {
-                Register();
-            }
-        }
         #endregion
 
         #region private
-        // TODO:
-        private static IProject Convert(string projText) {
-            return null;
-        }
-
         private void UpdateButtonStatus() {
             if (m_bnCreate.IsInteractable()) {
                 if (!IsReady()) { m_bnCreate.interactable = false; }
