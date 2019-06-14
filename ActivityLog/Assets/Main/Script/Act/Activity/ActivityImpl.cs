@@ -25,9 +25,7 @@ namespace Main.Act {
         #endregion
 
         #region override
-        public override string ToString() {
-            return Parent.ToString() + $"::{Name}({IsEffective})";
-        }
+        public override string ToString() => $"{Key}({IsEffective})";
         #endregion
     }
 

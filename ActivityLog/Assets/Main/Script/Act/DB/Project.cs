@@ -16,7 +16,7 @@ namespace Main.Act {
 
         #region getter property
         public int ParentCount => (Parent is null ? 0 : Parent.ParentCount + 1);
-        public string Key => (Parent is null ? "" : Parent.Key) + $"::{Name}";
+        public string Key => (Parent?.Key ?? "") + $"::{Name}";
         #endregion
 
         #region ctor/dtor
@@ -42,8 +42,8 @@ namespace Main.Act {
         #endregion
 
         #region override
-        public override int GetHashCode() => ToString().GetHashCode();
-        public override string ToString() => Parent?.ToString() ?? "" + $"::{Name}";
+        public override int GetHashCode() => Key.GetHashCode();
+        public override string ToString() => Key;
         #endregion
 
         #region static

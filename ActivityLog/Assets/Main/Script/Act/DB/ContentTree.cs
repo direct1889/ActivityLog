@@ -88,6 +88,15 @@ namespace Main.Act.DB {
             }
         }
 
+        private void Save() {
+            du.Test.LLog.MBoot.Log("Tree save.");
+            using (du.File.IFWriter writer = du.File.FWriter.OpenFile4Rewrite(
+                du.App.AppManager.DataPath + "System/Contents"))
+            {
+                writer.Write(Project.CSVLabels);
+            }
+        }
+
         static Regex Genealogy { get; } = new Regex("(::[^:]+)+");
         /// <returns> 見つからない場合、見つかったがProjectじゃない場合は null </returns>
         private IContentAdapter FromGenealogy(string genealogy) {
@@ -103,6 +112,7 @@ namespace Main.Act.DB {
         #endregion
 
     }
+
 
 }
 

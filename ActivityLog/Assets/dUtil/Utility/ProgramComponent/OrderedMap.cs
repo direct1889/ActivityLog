@@ -16,6 +16,12 @@ namespace du.Cmp {
         int? IndexOf(TKey key);
         /// <summary> 該当するキーが登録されているか </summary>
         bool ContainsKey(TKey key);
+        /// <returns> 空ならtrue </returns>
+        bool IsEmpty { get; }
+        /// <returns> 空ならnull </returns>
+        TValue Front { get; }
+        /// <returns> 空ならnull </returns>
+        TValue Back { get; }
     }
 
     /// <summary>

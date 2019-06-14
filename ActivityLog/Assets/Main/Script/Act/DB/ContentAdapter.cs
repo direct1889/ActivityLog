@@ -25,6 +25,8 @@ namespace Main.Act {
         public string Key => Data.Key;
 
         public IContent Data => IsProj ? Proj as IContent : Act as IContent;
+
+        public override string ToString() => Data.ToString();
     }
 
     public class ProjectAdapter : ContentAdapter {

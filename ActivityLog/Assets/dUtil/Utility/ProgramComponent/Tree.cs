@@ -24,13 +24,16 @@ namespace du.Cmp {
     {
         T Value { get; }
         IOrderedMap<TKey, IHashTreeNode<T, TParent, TKey>> Children { get; }
+        bool HasChildren { get; }
         void Add(T value);
         void Add(T value, int index);
+        /// <summary> 子孫の数 </summary>
         int DescendantCount();
     }
 
 
     public interface IHashTree<T, TParent, TKey>
+        : IReadOnlyCollection<T>
         where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {
@@ -39,6 +42,9 @@ namespace du.Cmp {
         /// <param name="proj"> nullのときはRootNodeを返す </param>
         /// <returns> projがnullでなく、見つからないときはnull </returns>
         du.Cmp.IHashTreeNode<T, TParent, TKey> At(IHashTreeDataType<TParent, TKey> value);
+        /// <summary> SerialNumberから要素を引く </summary>
+        /// <returns> 見つからないときはnull </returns>
+        T AtBySerialNumber(int sn);
         /// <summary> valueがRoot(0)から数えて何番目か </summary>
         /// <returns> valueがnullでなく、見つからないときはnull </returns>
         int? SerialNumber(IHashTreeDataType<TParent, TKey> value);
@@ -46,7 +52,7 @@ namespace du.Cmp {
 
 
     /// <summary> 要素の追加/削除/変更時に通知を流す </summary>
-    public interface IRxHashTree<T, TParent, TKey>// : IHashTree<T, TParent, TKey>
+    public interface IRxHashTree<T, TParent, TKey> : IHashTree<T, TParent, TKey>
         where T : class, IHashTreeDataType<TParent, TKey>
         where TParent : class, IHashTreeDataType<TParent, TKey>
     {

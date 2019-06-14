@@ -60,6 +60,12 @@ namespace du.Cmp {
         }
         /// <summary> 該当するキーが登録されているか </summary>
         public bool ContainsKey(TKey key) => Data.ContainsKey(key);
+        /// <returns> 空ならtrue </returns>
+        public bool IsEmpty => Count == 0;
+        /// <returns> 空ならnull </returns>
+        public TValue Front => At(0);
+        /// <returns> 空ならnull </returns>
+        public TValue Back => At(Count - 1);
         #endregion
 
         #region IOrderedMap

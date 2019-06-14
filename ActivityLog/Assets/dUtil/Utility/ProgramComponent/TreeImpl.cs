@@ -23,6 +23,7 @@ namespace du.Cmp {
         #endregion
 
         #region getter
+        public bool HasChildren => !(Children is null || Children.IsEmpty);
         /// <returns> 見つからなければ null </returns>
         public int DescendantCount() {
             if (Children is null) { return 0; }
@@ -30,6 +31,7 @@ namespace du.Cmp {
                 return Children.Select(node => node.DescendantCount()).Sum() + Children.Count;
             }
         }
+        public override string ToString() =>  $"{Value} with {DescendantCount()} children.";
         #endregion
 
         #region public
@@ -57,6 +59,35 @@ namespace du.Cmp {
         protected IHashTreeNode<T, TParent, TKey> Root { get; }
         #endregion
 
+
+        #region IEnumerable
+        /// <summary> 順序付きで走査する </summary>
+        public class HTEnumerator : IEnumerator<T> {
+            IHashTree<T, TParent, TKey> Source { get; }
+            int serialNumber = -1;
+
+            public HTEnumerator(IHashTree<T, TParent, TKey> source) {
+                Source = source;
+            }
+            public bool MoveNext() {
+                if (serialNumber > Source.Count) { return false; }
+                return Source.Count > ++serialNumber;
+            }
+            public T Current => Source.AtBySerialNumber(serialNumber);
+            object System.Collections.IEnumerator.Current => Current;
+            public void Dispose() {}
+            public void Reset() { serialNumber = -1; }
+        }
+
+        public IEnumerator<T> GetEnumerator() => new HTEnumerator(this);
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+        #endregion
+
+        #region IReadOnlyCollection
+        public int Count => Root.DescendantCount() + 1;
+        #endregion
+
+
         #region ctor
         public HashTree() {
             Root = new HashTreeNode<T, TParent, TKey>(null);
@@ -75,6 +106,30 @@ namespace du.Cmp {
             else { return At(value.Parent)?.Children?.At(value.Key); }
         }
 
+        public T AtBySerialNumber(int sn) {
+            return AtBySerialNumberImpl(sn, Root);
+        }
+        /// <summary> SerialNumber==snのNodeをnode家族内で探す </summary>
+        private T AtBySerialNumberImpl(int sn, IHashTreeNode<T, TParent, TKey> node) {
+            // node自身を調べる
+            int? nodeSN = SerialNumber(node.Value);
+            if (sn == nodeSN) { return node.Value; }
+            // nodeの子孫を調べる
+            else if (sn > nodeSN) {
+                if (node.HasChildren) {
+                    // sn番がchildの家族にいる ならば
+                    // child.SN <= sn <= child.SN+child.DescendantCount
+                    foreach (var child in node.Children) {
+                        if (sn <= SerialNumber(child.Value)+child.DescendantCount()) {
+                            return AtBySerialNumberImpl(sn, child);
+                        }
+                    }
+                }
+            }
+            // snはnodeの家族にはいない
+            return null;
+        }
+
         public int? SerialNumber(IHashTreeDataType<TParent, TKey> value) {
             // value is null ならRootとみなす
             if (value is null) { return 0; }
@@ -82,7 +137,7 @@ namespace du.Cmp {
             int? siblingNum = parentNode?.Children?.IndexOf(value.Key);
             int? sum = SerialNumber(value.Parent) + siblingNum + 1;
             for (int i = 0; i < siblingNum; ++i) {
-                sum += parentNode?.Children?.At(i).DescendantCount();
+                sum += parentNode.Children.At(i).DescendantCount();
             }
             // SN(node) == SN(node.Parent) + 第n兄弟 + 第n-1兄弟目までの子
             return sum;
