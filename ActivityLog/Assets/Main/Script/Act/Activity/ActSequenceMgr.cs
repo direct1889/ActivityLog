@@ -26,9 +26,9 @@ namespace Main.Act {
         void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute);
 
         /// <summary> ある日の系列をファイルから読み込み </summary>
-        void Load(int year, int month, int date);
+        void Load(YMD ymd);
         /// <summary> 保持している系列をファイルへ書き出し </summary>
-        void Save(int year, int month, int date);
+        void Save(YMD ymd);
     }
 
 

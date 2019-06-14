@@ -41,17 +41,19 @@ namespace Main.Act {
             }
         }
 
-        public void Load(int year, int month, int date) {
-            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{year}/{month}/{date}";
+        public void Load(YMD ymd) {
+            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{ymd}";
+            if (!System.IO.File.Exists(filePath + ".csv")) { return; }
             using (var r = new du.File.CSVReader<ActRecordDesc>(filePath, true)) {
                 foreach (var desc in r) {
                     Acts.PushBack(desc.Instantiate());
                 }
             }
         }
-        public void Save(int year, int month, int date) {
-            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{year}/{month}/{date}";
+        public void Save(YMD ymd) {
+            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{ymd}";
             using (du.File.IFWriter w = du.File.FWriter.OpenFile4Rewrite(filePath + ".csv")) {
+                w.Write(ActRecord.CSVLabels);
                 for (int i = 0; i < Acts.Count; ++i) {
                     w.Write(Acts[i].ToCSV());
                 }

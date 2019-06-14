@@ -126,6 +126,11 @@ namespace Main.Act {
         #region public
         public void ResetAct(IActivity cnt) { Activity = cnt; }
         #endregion
+
+        #region public
+        /// <value> CSVファイルのラベル行 </value>
+        public static string CSVLabels => "SN,BeginTime";
+        #endregion
     }
 
     /// <summary> アクティビティ実績 </summary>

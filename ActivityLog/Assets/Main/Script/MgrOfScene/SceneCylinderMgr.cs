@@ -35,7 +35,7 @@ namespace Main.STrack {
                 .Subscribe(act => BeginNewAct(act))
                 .AddTo(this);
             DoActCanvas.SetActive(false);
-            Acts.Load(2019, 6, 14);
+            Acts.Load(YMD.Today);
         }
         private void Start() {
             for (int i = 0; i < Acts.Activities.Count; ++i) {
@@ -46,7 +46,7 @@ namespace Main.STrack {
                 .AddTo(this);
         }
         private void OnApplicationQuit() {
-            Acts.Save(2019, 6, 14);
+            Acts.Save(YMD.Today);
         }
         #endregion
 
