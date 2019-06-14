@@ -56,7 +56,8 @@ namespace Main {
 
         #region static
         // public static MinuteOfDay Now   => new MinuteOfDay(System.DateTime.Now);
-        public static MinuteOfDay Now   => Dev.VirtualChronos.Now;
+        // public static MinuteOfDay Now   => Dev.VirtualChronos.Now;
+        public static MinuteOfDay Now   => End;
         public static MinuteOfDay Begin => new MinuteOfDay(0);
         public static MinuteOfDay End   => new MinuteOfDay(24, 0);
         #endregion

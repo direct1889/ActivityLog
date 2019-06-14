@@ -1,5 +1,4 @@
-﻿using UColor = UnityEngine.Color;
-using static du.Ex.ExString;
+﻿using static du.Ex.ExString;
 
 namespace Main.Act.DB {
 
@@ -57,6 +56,11 @@ namespace Main.Act.DB {
         }
         private static string ToCSV(this IActivity content) {
             return $"0,{content.Parent.Key},{content.Name},{content.IsEffective},";
+        }
+
+        /// <summary> CSV出力形式に変換 </summary>
+        public static string ToCSV(this IROActRecord record) {
+            return $"{CDB.Content.SerialNumber(record.Activity)},{record.Context.BeginTime.EnsuiteMinute}";
         }
     }
 

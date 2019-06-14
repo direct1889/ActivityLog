@@ -1,7 +1,11 @@
-﻿
+﻿using static Main.Act.DB.ExContentCSV;
+
 namespace Main.Act {
 
-    /// <summary> アクティビティ系列/日を操作する </summary>
+    /// <summary>
+    /// ActRecord系列(/日)の操作IFを提供するラッパー
+    /// - 実データ系列(<see>IActSequence</see>)を保持
+    /// </summary>
     public class ActSequenceMgr : IActSequenceMgr {
         #region field-property
         protected IActRecordSequence Acts { get; }
@@ -28,13 +32,51 @@ namespace Main.Act {
         public void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute) {
             if (indexJustAfterBorder <= 0) { return; }
             else if (Acts[indexJustAfterBorder].Context.BeginTime > newMinute) {
-                // Border を過去に移動 -> 直後のアクティビティを過去に伸ばす
+                // Border を過去に移動 -> 直後のActRecordを過去に伸ばす
                 Acts.OverwriteBeginTime(indexJustAfterBorder, newMinute);
             }
             else if (Acts[indexJustAfterBorder].Context.BeginTime < newMinute) {
-                // Border を未来に移動 -> 直前のアクティビティを未来に伸ばす
+                // Border を未来に移動 -> 直前のActRecordを未来に伸ばす
                 Acts.OverwriteEndTime(indexJustAfterBorder - 1, newMinute);
             }
+        }
+
+        public void Load(int year, int month, int date) {
+            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{year}/{month}/{date}";
+            using (var r = new du.File.CSVReader<ActRecordDesc>(filePath, true)) {
+                foreach (var desc in r) {
+                    Acts.PushBack(desc.Instantiate());
+                }
+            }
+        }
+        public void Save(int year, int month, int date) {
+            var filePath = du.App.AppManager.DataPath + $"System/TrackLog/{year}/{month}/{date}";
+            using (du.File.IFWriter w = du.File.FWriter.OpenFile4Rewrite(filePath + ".csv")) {
+                for (int i = 0; i < Acts.Count; ++i) {
+                    w.Write(Acts[i].ToCSV());
+                }
+            }
+        }
+        #endregion
+    }
+
+    /// <summary> CSVを読み込みActRecordに変換 </summary>
+    public class ActRecordDesc {
+        #region field
+        /// <value> SerialNumber </value>
+        [du.File.CSVColAttr(0,0)] public int serialNumber;
+        /// <value> BeginTime as ensuiteTime </value>
+        [du.File.CSVColAttr(1,0)] public int beginTime;
+        #endregion
+
+        #region getter
+        public override string ToString() {
+            return $"{serialNumber}({beginTime})";
+        }
+
+        /// <summary> CSVを読み込みIActRecordに変換 </summary>
+        public IActRecord Instantiate() {
+            return new ActRecord(CDB.Content.AtBySerialNumber(serialNumber).Act, new Context(new MinuteOfDay(beginTime)));
         }
         #endregion
     }

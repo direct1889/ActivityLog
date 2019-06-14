@@ -35,11 +35,18 @@ namespace Main.STrack {
                 .Subscribe(act => BeginNewAct(act))
                 .AddTo(this);
             DoActCanvas.SetActive(false);
+            Acts.Load(2019, 6, 14);
         }
         private void Start() {
+            for (int i = 0; i < Acts.Activities.Count; ++i) {
+                RecCylinder.CreateBlock(Acts.Activities[i]);
+            }
             du.dui.RxButtonMgr.OnClickAsObservable("DoActivity")
                 .Subscribe(_ => DoActCanvas.SetActive(!DoActCanvas.activeSelf))
                 .AddTo(this);
+        }
+        private void OnApplicationQuit() {
+            Acts.Save(2019, 6, 14);
         }
         #endregion
 
