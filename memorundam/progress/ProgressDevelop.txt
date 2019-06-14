@@ -2,7 +2,5 @@
 2019.05.31 ActivityGraph
 2019.06.11 ContentList
 2019.06.14 DoActListほぼ完成
-
-次
-ActRecordCylinder.Save()
+2019.06.15 ActRecordCylinder.Save()/.Package()
 
