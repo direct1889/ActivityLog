@@ -4,15 +4,17 @@ using static du.Ex.ExList;
 
 namespace Main.Act.View {
 
-    /// <summary> ActRecordの累積Cylinder </summary>
+    /// <summary> ActRecordの累積CylinderのUI詳細 </summary>
     public interface IActRecordsCylinderUI {
         Vector2 RectSize { get; }
     }
 
+    /// <summary> ActRecordの累積Cylinder </summary>
     public interface IActRecordsCylinder {
         void CreateBlock(IROActRecord act);
     }
 
+    /// <summary> ActRecordの累積Cylinder </summary>
     public class ActRecordsCylinder : MonoBehaviour, IActRecordsCylinderUI, IActRecordsCylinder {
         #region field
         RectTransform m_rect;

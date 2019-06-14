@@ -4,13 +4,14 @@ using UniRx;
 namespace Main.STrack {
 
     /// <summary>
-    /// Activity系列の最上位
+    /// CylinderシーンのTopManager
     /// - ActRecordの実データ系列IActSequenceMgrを持ち、Cylinder/doActListとの橋渡しを担う
     /// </summary>
     public class SceneCylinderMgr : MonoBehaviour {
         #region field
         /// <summary> アクティビティの実データ系列 </summary>
-        Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr4Test();
+        Act.IActSequenceMgr Acts { get; } = new Dev.ActSequenceMgrBasedOnVirtualChronos();
+        // Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr4Test();
 
         /// <summary> アクティビティのグラフ </summary>
         [SerializeField] Act.View.ActRecordsCylinder m_recCylinder = null;

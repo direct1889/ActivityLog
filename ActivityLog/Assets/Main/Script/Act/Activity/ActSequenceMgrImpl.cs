@@ -16,8 +16,8 @@ namespace Main.Act {
         #endregion
 
         #region public
-        public virtual void BeginNewAct(IActivity content) {
-            Acts.PushBack(new ActRecord(content, Context.BeginFromNow));
+        public virtual void BeginNewAct(IActivity act) {
+            Acts.PushBack(new ActRecord(act, Context.BeginFromNow));
         }
         public virtual void BeginNewAct(IProject proj, string name, bool isEffective) {
             BeginNewAct(new Activity(proj, name, isEffective));
@@ -37,24 +37,6 @@ namespace Main.Act {
             }
         }
         #endregion
-    }
-
-    public class ActSequenceMgr4Test : ActSequenceMgr {
-        MinuteOfDay m_tempTimeSign = MinuteOfDay.Begin;
-        int duration = 100;
-
-        public override void BeginNewAct(IActivity content) {
-            Acts.PushBack(new ActRecord(content, m_tempTimeSign));
-            m_tempTimeSign.EnsuiteMinute += duration;
-        }
-        public override void BeginNewAct(IProject proj, string name, bool isEffective) {
-            Acts.PushBack(new ActRecord(proj, name, isEffective, m_tempTimeSign));
-            m_tempTimeSign.EnsuiteMinute += duration;
-        }
-        public override void BeginNewAct(IProject proj, string name) {
-            Acts.PushBack(new ActRecord(proj, name, m_tempTimeSign));
-            m_tempTimeSign.EnsuiteMinute += duration;
-        }
     }
 
 }
