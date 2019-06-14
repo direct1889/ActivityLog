@@ -33,8 +33,8 @@ Material:
     - _Float: 1
     - _MagnifyingPower: 1.2
     - _Range: 0.5
-    - _UVx: 0.42407408
-    - _UVy: 0.36614585
+    - _UVx: -0.00039544754
+    - _UVy: 0.99930286
     - _WUVx: 0.5
     - _WUVy: 0.5
     m_Colors:

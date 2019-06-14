@@ -44,7 +44,7 @@ namespace Main.Act {
         /// <summary> まだ終了していなければ null </summary>
         public MinuteOfDay? EndTime => NextAct?.Context?.BeginTime;
         /// <summary> 未終了のときは現在時刻まで </summary>
-        public int Duration => (EndTime ?? MinuteOfDay.Now) - BeginTime;
+        public int Duration => (EndTime ?? Sys.Chronos.Now) - BeginTime;
         public bool HasEnded => NextAct != null;
         #endregion
 
@@ -72,7 +72,7 @@ namespace Main.Act {
         #endregion
 
         #region static
-        public static IContext BeginFromNow => new Context(MinuteOfDay.Now);
+        public static IContext BeginFromNow => new Context(Sys.Chronos.Now);
         #endregion
     }
 

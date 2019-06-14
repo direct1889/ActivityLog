@@ -18,7 +18,7 @@ namespace Main.Act {
         public IROActRecord Back => m_acts.Back();
 
         public int IndexOf(MinuteOfDay time) {
-            if (MinuteOfDay.Now < time) {
+            if (Sys.Chronos.Now < time) {
                 throw new System.ArgumentException("Argument is future.");
             }
             for (int i = m_acts.Count - 1; i >= 0; --i) {

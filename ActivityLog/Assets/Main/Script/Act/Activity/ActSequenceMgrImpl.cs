@@ -8,7 +8,7 @@ namespace Main.Act {
     /// </summary>
     public class ActSequenceMgr : IActSequenceMgr {
         #region field-property
-        protected IActRecordSequence Acts { get; }
+        private IActRecordSequence Acts { get; set; }
         #endregion
 
         #region getter
@@ -39,6 +39,13 @@ namespace Main.Act {
                 // Border を未来に移動 -> 直前のActRecordを未来に伸ばす
                 Acts.OverwriteEndTime(indexJustAfterBorder - 1, newMinute);
             }
+        }
+
+        public void Package(YMD ymd) {
+            IActivity currentAct = Acts.Back.Activity;
+            Save(ymd);
+            Acts = new ActRecordSequence();
+            Acts.PushBack(new ActRecord(currentAct, new Context(MinuteOfDay.Begin)));
         }
 
         public void Load(YMD ymd) {

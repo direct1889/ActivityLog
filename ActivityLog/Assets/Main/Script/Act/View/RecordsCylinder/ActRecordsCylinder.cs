@@ -12,6 +12,7 @@ namespace Main.Act.View {
     /// <summary> ActRecordの累積Cylinder </summary>
     public interface IActRecordsCylinder {
         void CreateBlock(IROActRecord act);
+        void Clear();
     }
 
     /// <summary> ActRecordの累積Cylinder </summary>
@@ -39,6 +40,10 @@ namespace Main.Act.View {
             block.Initialize(act, this);
             m_blocks.Back()?.RefreshSize();
             m_blocks.Add(block);
+        }
+        public void Clear() {
+            foreach (var b in m_blocks) { b.Destroy(); }
+            m_blocks = new List<IActRecordBlock>();
         }
         #endregion
     }

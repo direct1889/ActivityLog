@@ -10,7 +10,7 @@ namespace Main.STrack {
     public class SceneCylinderMgr : MonoBehaviour {
         #region field
         /// <summary> アクティビティの実データ系列 </summary>
-        Act.IActSequenceMgr Acts { get; } = new Dev.ActSequenceMgrBasedOnVirtualChronos();
+        Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr();
         // Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr4Test();
 
         /// <summary> アクティビティのグラフ </summary>
@@ -34,10 +34,23 @@ namespace Main.STrack {
             DoActList.ActivityChosen
                 .Subscribe(act => BeginNewAct(act))
                 .AddTo(this);
+
             DoActCanvas.SetActive(false);
             Acts.Load(YMD.Today);
         }
         private void Start() {
+            // 日付が変わったら
+            Sys.Chronos.Instance.OnDateHasChanged
+                .Subscribe(_ => {
+                    // 前日の分をパッケージ
+                    Acts.Package(YMD.Yesterday);
+                    // Cylinderを一旦空っぽに
+                    RecCylinder.Clear();
+                    // 日付変更時に行っていたActivityを改めて00:00から開始
+                    RecCylinder.CreateBlock(Acts.Activities.Back);
+                })
+                .AddTo(this);
+
             for (int i = 0; i < Acts.Activities.Count; ++i) {
                 RecCylinder.CreateBlock(Acts.Activities[i]);
             }

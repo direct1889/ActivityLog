@@ -25,6 +25,12 @@ namespace Main.Act {
         /// </param>
         void ChangeBorder(int indexJustAfterBorder, MinuteOfDay newMinute);
 
+        /// <summary>
+        /// ymd日のActRecord系列をパッケージ
+        /// 日付変更時に行っていたActivityを改めて00:00から開始
+        /// </summary>
+        void Package(YMD ymd);
+
         /// <summary> ある日の系列をファイルから読み込み </summary>
         void Load(YMD ymd);
         /// <summary> 保持している系列をファイルへ書き出し </summary>

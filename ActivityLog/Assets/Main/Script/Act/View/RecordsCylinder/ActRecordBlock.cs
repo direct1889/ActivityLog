@@ -14,6 +14,8 @@ namespace Main.Act.View {
         /// - 毎フレーム呼ぶと無駄なため、
         /// </summary>
         void RefreshSize();
+        /// <summary> オブジェクト削除 </summary>
+        void Destroy();
     }
 
     public class ActRecordBlock : MonoBehaviour, IActRecordBlock {
@@ -52,9 +54,10 @@ namespace Main.Act.View {
         public void RefreshSize() {
             m_recT.Set(0f, 0f,
                 Time2LocalYinCylinder(Act.Context.BeginTime),
-                Time2LocalYinCylinder(Act.Context.EndTime ?? MinuteOfDay.Now) - Time2LocalYinCylinder(Act.Context.BeginTime)
+                Time2LocalYinCylinder(Act.Context.EndTime ?? Sys.Chronos.Now) - Time2LocalYinCylinder(Act.Context.BeginTime)
                 );
         }
+        public void Destroy() => Destroy(gameObject);
         #endregion
 
         #region private
