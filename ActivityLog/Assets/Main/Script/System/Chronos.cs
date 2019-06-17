@@ -56,7 +56,8 @@ namespace Main.Sys {
     /// <summary> 正確な時計 </summary>
     public class Chronometer : IChronometer {
         #region getter
-        public MinuteOfDay Now => new MinuteOfDay(System.DateTime.Now);
+        // public MinuteOfDay Now => new MinuteOfDay(System.DateTime.Now);
+        public MinuteOfDay Now => MinuteOfDay.End;
         #endregion
     }
 

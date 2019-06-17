@@ -2,11 +2,28 @@
 using UGUI = UnityEngine.UI;
 using du.Cmp.RecT;
 using UTMP = TMPro.TextMeshProUGUI;
+using System;
+using UniRx;
+
+namespace Dev {
+    public class Tuple_RecAndMOD {
+        public Main.Act.IROActRecord act;
+        public Main.MinuteOfDay minute;
+        public Tuple_RecAndMOD(Main.Act.IROActRecord act, Main.MinuteOfDay minute) {
+            this.act = act;
+            this.minute = minute;
+        }
+    }
+}
 
 namespace Main.Act.View {
 
     /// <summary> ActRecordを表す Block UI </summary>
     public interface IActRecordBlock {
+        /// <summary> 開始時刻変更申請 </summary>
+        // IObservable<float> OnWantToChangeBeginTime { get; }
+        IObservable<Dev.Tuple_RecAndMOD> OnWantToChangeBeginTime { get; }
+        // IObservable<(Main.Act.IROActRecord, Main.MinuteOfDay)> OnWantToChangeBeginTime { get; }
         /// <summary> 初期化 </summary>
         void Initialize(IROActRecord act, IActRecordsCylinderUI cylinder);
         /// <summary>
@@ -23,18 +40,29 @@ namespace Main.Act.View {
         #region field
         RecTHorStretchBottom m_recT;
         IActRecordsCylinderUI m_cylinder;
+        IActBlockBeginMarker m_beginMarker;
 
         [SerializeField] UTMP m_text;
         #endregion
 
         #region property
         public IROActRecord Act { get; private set; }
+        // public IObservable<float> OnWantToChangeBeginTime {
+        public IObservable<Dev.Tuple_RecAndMOD> OnWantToChangeBeginTime {
+        // public IObservable<(Main.Act.IROActRecord, Main.MinuteOfDay)> OnWantToChangeBeginTime {
+            get {
+                return m_beginMarker.OnTransformComplete
+                    .Select(localY => new Dev.Tuple_RecAndMOD(Act, LocalYinCylinder2Time(m_recT.PosY + localY)));
+                    // .Select(_ => new Dev.Tuple_RecAndMOD(Act, LocalYinCylinder2Time(m_recT.PosY)));
+            }
+        }
         #endregion
 
         #region mono
         private void Awake() {
             gameObject.SetActive(false);
             m_recT = new RecTHorStretchBottom(GetComponent<RectTransform>());
+            m_beginMarker = GetComponentInChildren<ActBlockBeginMarker>();
         }
         #endregion
 
@@ -64,6 +92,10 @@ namespace Main.Act.View {
         /// <summary> 時刻をCylinder上でのy座標値に変換 </summary>
         private float Time2LocalYinCylinder(MinuteOfDay time) {
             return m_cylinder.RectSize.y * time.EnsuiteMinute / MinuteOfDay.End.EnsuiteMinute;
+        }
+        /// <summary> Cylinder上でのy座標値を時刻に変換 </summary>
+        private MinuteOfDay LocalYinCylinder2Time(float y) {
+            return new MinuteOfDay((int)(MinuteOfDay.End.EnsuiteMinute * y / m_cylinder.RectSize.y));
         }
         #endregion
 

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using static du.Ex.ExList;
+using System;
+using UniRx;
 
 namespace Main.Act.View {
 
@@ -11,6 +13,7 @@ namespace Main.Act.View {
 
     /// <summary> ActRecordの累積Cylinder </summary>
     public interface IActRecordsCylinder {
+        void RefreshSizeAll();
         void CreateBlock(IROActRecord act);
         void Clear();
     }
@@ -21,6 +24,7 @@ namespace Main.Act.View {
         RectTransform m_rect;
         IList<IActRecordBlock> m_blocks = new List<IActRecordBlock>();
 
+        [SerializeField]STrack.SceneCylinderMgr m_mgr;
         [SerializeField]GameObject m_prefActBlock;
         #endregion
 
@@ -35,11 +39,21 @@ namespace Main.Act.View {
         #endregion
 
         #region public
+        public void RefreshSizeAll() {
+            foreach (var b in m_blocks) {
+                b.RefreshSize();
+            }
+        }
         public void CreateBlock(IROActRecord act) {
             IActRecordBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActRecordBlock>();
             block.Initialize(act, this);
             m_blocks.Back()?.RefreshSize();
             m_blocks.Add(block);
+            m_blocks.Back().OnWantToChangeBeginTime
+                // .Subscribe((act, newBegin) => m_mgr.ChangeBorder(act, newBegin));
+                .Subscribe(tuple => {
+                    m_mgr.ChangeBorder(tuple.act, tuple.minute);
+                });
         }
         public void Clear() {
             foreach (var b in m_blocks) { b.Destroy(); }

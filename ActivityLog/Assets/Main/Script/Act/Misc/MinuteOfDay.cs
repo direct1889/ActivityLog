@@ -13,7 +13,7 @@ namespace Main {
                     m_ensuiteMinute = value;
                 }
                 else {
-                    UnityEngine.Debug.LogError($"ArgumentException:Value must be between 0 to {24*60} (but value == {value}).");
+                    UnityEngine.Debug.LogError($"ArgumentError:Value must be between 0 to {24*60} (but value == {value}).");
                 }
             }
         }

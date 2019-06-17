@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using UniRx;
+using System.Linq;
 
 namespace Main.STrack {
+
+    public interface ISceneCylinderMgrAsParent {
+        void ChangeBorder(Act.IROActRecord act, MinuteOfDay newMinute);
+    }
 
     /// <summary>
     /// CylinderシーンのTopManager
     /// - ActRecordの実データ系列IActSequenceMgrを持ち、Cylinder/doActListとの橋渡しを担う
     /// </summary>
-    public class SceneCylinderMgr : MonoBehaviour {
+    public class SceneCylinderMgr : MonoBehaviour, ISceneCylinderMgrAsParent {
         #region field
         /// <summary> アクティビティの実データ系列 </summary>
         Act.IActSequenceMgr Acts { get; } = new Act.ActSequenceMgr();
@@ -37,6 +42,11 @@ namespace Main.STrack {
 
             DoActCanvas.SetActive(false);
             Acts.Load(YMD.Today);
+            string s = "// Borders";
+            for (int i = 0; i < Acts.Activities.Count; ++i) {
+                s += "\n" + Acts.Activities[i].Context.BeginTime;
+            }
+            Debug.LogAssertion(s);
         }
         private void Start() {
             // 日付が変わったら
@@ -59,9 +69,21 @@ namespace Main.STrack {
                 .AddTo(this);
         }
         private void OnApplicationQuit() {
-            Acts.Save(YMD.Today);
+            // Acts.Save(YMD.Today);
         }
         #endregion
+
+        public void ChangeBorder(Act.IROActRecord act, MinuteOfDay newMinute) {
+            Acts.ChangeBorder(
+                du.Test.Log.TL(Acts.Activities.IndexOf(act.Context.BeginTime), "index is "),
+                newMinute);
+            m_recCylinder.RefreshSizeAll();
+            string s = "// Borders";
+            for (int i = 0; i < Acts.Activities.Count; ++i) {
+                s += "\n" + Acts.Activities[i].Context.BeginTime;
+            }
+            Debug.LogAssertion(s);
+        }
 
         #region private
         /// <summary>

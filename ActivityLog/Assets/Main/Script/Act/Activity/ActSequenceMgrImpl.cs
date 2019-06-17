@@ -33,10 +33,12 @@ namespace Main.Act {
             if (indexJustAfterBorder <= 0) { return; }
             else if (Acts[indexJustAfterBorder].Context.BeginTime > newMinute) {
                 // Border を過去に移動 -> 直後のActRecordを過去に伸ばす
+                // 直前のActRecordは消滅する可能性があるため、確実に残る直後のBeginを変える
                 Acts.OverwriteBeginTime(indexJustAfterBorder, newMinute);
             }
             else if (Acts[indexJustAfterBorder].Context.BeginTime < newMinute) {
                 // Border を未来に移動 -> 直前のActRecordを未来に伸ばす
+                // 直後のActRecordは消滅する可能性があるため、確実に残る直前のEndを変える
                 Acts.OverwriteEndTime(indexJustAfterBorder - 1, newMinute);
             }
         }

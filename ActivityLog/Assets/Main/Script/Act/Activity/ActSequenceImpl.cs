@@ -22,7 +22,7 @@ namespace Main.Act {
                 throw new System.ArgumentException("Argument is future.");
             }
             for (int i = m_acts.Count - 1; i >= 0; --i) {
-                if (m_acts[i].Context.BeginTime < time) { return i; }
+                if (m_acts[i].Context.BeginTime <= time) { return i; }
             }
             // ここには本来到達し得ない
             throw new System.Exception("");
