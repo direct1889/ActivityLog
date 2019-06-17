@@ -1,0 +1,3 @@
+[submodule "ActivityLog/Assets/Lib/dUtility"]
+	path = ActivityLog/Assets/Lib/dUtility
+	url = https://github.com/direct1889/dUtility.git
