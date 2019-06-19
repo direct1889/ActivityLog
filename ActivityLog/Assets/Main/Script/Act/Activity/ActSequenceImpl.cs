@@ -115,7 +115,6 @@ namespace Main.Act {
             for (int i = index - 1; i > justBefore; --i) {
                 RemoveAt(i); // 後ろから消さないとindexがずれる
             }
-            justBefore = index - 1;
             // (2)直前のアクティビティ -> Follow を書き換え
             // e.g.        |------ NEW ---------------|
             // |- justBefore -----------------|- OLD -|-- justAfter --| の場合

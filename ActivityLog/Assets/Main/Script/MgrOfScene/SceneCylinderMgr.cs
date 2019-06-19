@@ -82,14 +82,9 @@ namespace Main.STrack {
 
         public void ChangeBorder(Act.IROActRecord act, MinuteOfDay newMinute) {
             Acts.ChangeBorder(
-                du.Test.Log.TL(Acts.Activities.IndexOf(act.Context.BeginTime), "index is "),
+                Acts.Activities.IndexOf(act.Context.BeginTime),
                 newMinute);
             m_recCylinder.RefreshSizeAll();
-            string s = "// Borders";
-            for (int i = 0; i < Acts.Activities.Count; ++i) {
-                s += "\n" + Acts.Activities[i].Context.BeginTime;
-            }
-            Debug.LogAssertion(s);
         }
 
         #region private
