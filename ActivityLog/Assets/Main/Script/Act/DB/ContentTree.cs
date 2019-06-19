@@ -76,7 +76,7 @@ namespace Main.Act.DB {
 
         public void Load() {
             du.Test.LLog.MBoot.Log("Tree load.");
-            using (var reader = new du.File.CSVReader<DB.ContentDesc>(du.App.AppManager.DataPath + "System/Contents", true)) {
+            using (var reader = new du.File.CSVReader<DB.ContentDesc>("System/Contents", true)) {
                 foreach (var desc in reader) {
                     Add(desc.Instantiate());
                 }
@@ -85,8 +85,7 @@ namespace Main.Act.DB {
 
         public void Save() {
             du.Test.LLog.MBoot.Log("Tree save.");
-            using (du.File.IFWriter writer = du.File.FWriter.OpenFile4Rewrite(
-                du.App.AppManager.DataPath + "System/Contents.csv"))
+            using (du.File.IFWriter writer = du.File.FWriter.OpenFile4Rewrite("System/Contents.csv"))
             {
                 writer.Write(Project.CSVLabels);
                 foreach (var content in this) {

@@ -59,10 +59,13 @@ namespace Main.Act {
         IActivity Activity { get; }
         /// <summary> 時系列情報 </summary>
         IROContext Context { get; }
+        /// <summary> 無効か </summary>
+        bool IsInvalid { get; }
     }
     /// <summary> アクティビティ実績 </summary>
     public interface IActRecord : IROActRecord {
         IContext MutableContext { get; }
+        /// <summary> 内容を再設定、nullを渡すとRecordを無効化 </summary>
         void ResetAct(IActivity cnt);
     }
     /// <summary> 自己完結型アクティビティ実績 </summary>

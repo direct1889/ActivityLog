@@ -27,6 +27,15 @@ namespace Main.Act {
             // ここには本来到達し得ない
             throw new System.Exception("");
         }
+        public string Dump() {
+            string s = "";
+            for (int i = 0; i < m_acts.Count; ++i) {
+                s += $"// {m_acts[i].Context}------------\n";
+                s += m_acts[i].Activity + "\n";
+            }
+            s += m_acts.Back().Context.EndTime?.ToString() ?? $"// cont. ~~~~~~~~~~~~\n";
+            return s;
+        }
         #endregion
 
         #region public
@@ -81,22 +90,65 @@ namespace Main.Act {
             else {
                 m_acts[index + 1].MutableContext.ResetPrecedeAct(MinuteOfDay.Begin);
             }
+            m_acts[index].ResetAct(null);
             m_acts.RemoveAt(index);
         }
         public void Move(int index, MinuteOfDay newBegin, MinuteOfDay? newEnd) {
             var act = m_acts[index];
+            Debug.LogError($"{act} --MOVE--> [{newBegin}, {newEnd}]");
             RemoveAt(index);
-            if (newEnd != null) { Insert(newBegin, (MinuteOfDay)newEnd, act.Activity); }
-            else { PushBack(act); }
+            if (newEnd is null) { PushBack(act); } // 継続中 ∴PushBack
+            else { Insert(newBegin, (MinuteOfDay)newEnd, act.Activity); }
         }
         public void OverwriteCnt(int index, IActivity newContent) {
             m_acts[index].ResetAct(newContent);
         }
         public void OverwriteBeginTime(int index, MinuteOfDay newBegin) {
-            Move(index, newBegin, m_acts[index].Context.EndTime);
+            IActRecord act = m_acts[index];
+            int justBefore = IndexOf(newBegin);
+            // e.g.        |------ NEW ---------------|
+            // |- justBefore -|- In0 -|- In1 -|- OLD -|-- justAfter --| の場合
+
+            // (1)包含アクティビティを削除
+            // e.g.        |------ NEW ---------------|
+            // |- justBefore -|               |- OLD -|-- justAfter --| の場合
+            for (int i = index - 1; i > justBefore; --i) {
+                RemoveAt(i); // 後ろから消さないとindexがずれる
+            }
+            justBefore = index - 1;
+            // (2)直前のアクティビティ -> Follow を書き換え
+            // e.g.        |------ NEW ---------------|
+            // |- justBefore -----------------|- OLD -|-- justAfter --| の場合
+            m_acts[justBefore].MutableContext.ResetFollowAct(act);
+            // (3)変更対象のアクティビティ -> Begin を書き換え
+            // e.g.        |------ NEW ---------------|
+            // |- jB ------|-------------------- OLD -|-- justAfter --| の場合
+            act.MutableContext.ResetPrecedeAct(newBegin);
         }
         public void OverwriteEndTime(int index, MinuteOfDay? newEnd) {
-            Move(index, m_acts[index].Context.BeginTime, newEnd);
+            // Move(index, m_acts[index].Context.BeginTime, newEnd);
+            if (newEnd is null) {}
+            MinuteOfDay newEnd0 = (MinuteOfDay)newEnd;
+            IActRecord act = m_acts[index];
+            int justAfter = IndexOf(newEnd0);
+            // e.g.           |------ NEW ---------------|
+            // |- justBefore -|- OLD -|- In0 -|- In1 -|-- justAfter --| の場合
+
+            // (1)包含アクティビティを削除
+            // e.g.           |------ NEW ---------------|
+            // |- justBefore -|- OLD -|               |-- justAfter --| の場合
+            for (int i = justAfter - 1; i > index; --i) {
+                RemoveAt(i); // 後ろから消さないとindexがずれる
+            }
+            justAfter = index + 1;
+            // (2)直後のアクティビティ -> Precede を書き換え
+            // e.g.           |------ NEW ---------------|
+            // |- justBefore -|- OLD -|                  |---- jA ----| の場合
+            m_acts[justAfter].MutableContext.ResetPrecedeAct(newEnd0);
+            // (2)変更対象のアクティビティ -> Follow を書き換え
+            // e.g.           |------ NEW ---------------|
+            // |- justBefore -|- OLD --------------------|---- jA ----| の場合
+            act.MutableContext.ResetFollowAct(m_acts[justAfter]);
         }
         #endregion
     }

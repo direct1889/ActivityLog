@@ -71,6 +71,13 @@ namespace Main.STrack {
         private void OnApplicationQuit() {
             // Acts.Save(YMD.Today);
         }
+        private void Update () {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Return)) {
+                Debug.LogError("RefreshAllBlocks");
+                m_recCylinder.RefreshSizeAll();
+                Debug.LogError(Acts.Activities.Dump());
+            }
+        }
         #endregion
 
         public void ChangeBorder(Act.IROActRecord act, MinuteOfDay newMinute) {

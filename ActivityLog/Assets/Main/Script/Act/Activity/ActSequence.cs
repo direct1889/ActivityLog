@@ -19,6 +19,9 @@ namespace Main.Act {
 
         /// <summary> 末尾のActRecord </summary>
         IROActRecord Back { get; }
+
+        /// <summary> 内容詳細文字列 </summary>
+        string Dump();
     }
 
     /// <summary> ActRecordの系列(日毎) </summary>

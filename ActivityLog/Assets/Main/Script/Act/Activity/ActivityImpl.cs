@@ -48,6 +48,10 @@ namespace Main.Act {
         public bool HasEnded => NextAct != null;
         #endregion
 
+        #region getter
+        public override string ToString() => $"[{BeginTime}, " + (EndTime?.ToString() ?? "cont.") + "]";
+        #endregion
+
         #region ctor/dtor
         public Context(MinuteOfDay beginTime) { BeginTime = beginTime; }
         public Context(MinuteOfDay beginTime, IROActRecord followAct) {
@@ -108,6 +112,7 @@ namespace Main.Act {
         public IActivity Activity { get; private set; }
         public IROContext Context => MutableContext;
         public IContext MutableContext { get; private set; }
+        public bool IsInvalid => Activity is null;
         #endregion
 
         #region ctor/dtor
@@ -127,7 +132,8 @@ namespace Main.Act {
         public void ResetAct(IActivity cnt) { Activity = cnt; }
         #endregion
 
-        #region public
+        #region getter
+        public override string ToString() => $"{Activity}{Context}";
         /// <value> CSVファイルのラベル行 </value>
         public static string CSVLabels => "SN,BeginTime";
         #endregion

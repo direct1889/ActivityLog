@@ -30,7 +30,8 @@ namespace Main.Act.View {
         /// UIサイズを更新
         /// - 毎フレーム呼ぶと無駄なため、
         /// </summary>
-        void RefreshSize();
+        /// <returns> 参照先のActRecordが無効な場合false </returns>
+        bool Refresh();
         /// <summary> オブジェクト削除 </summary>
         void Destroy();
     }
@@ -74,16 +75,22 @@ namespace Main.Act.View {
 
                 GetComponent<UGUI.Image>().color = Act.Activity.Parent.Color;
                 m_text.text = Act.Activity.Name;
-                RefreshSize();
+                Refresh();
 
                 gameObject.SetActive(true);
             }
         }
-        public void RefreshSize() {
-            m_recT.Set(0f, 0f,
-                Time2LocalYinCylinder(Act.Context.BeginTime),
-                Time2LocalYinCylinder(Act.Context.EndTime ?? Sys.Chronos.Now) - Time2LocalYinCylinder(Act.Context.BeginTime)
-                );
+        public bool Refresh() {
+            if (Act.IsInvalid) { return false; }
+            else {
+                m_recT.Set(0f, 0f,
+                    Time2LocalYinCylinder(Act.Context.BeginTime),
+                    Time2LocalYinCylinder(Act.Context.EndTime ?? Sys.Chronos.Now) - Time2LocalYinCylinder(Act.Context.BeginTime)
+                    );
+                // Debug.LogError($"Refresh by {Act}({LocalYinCylinder2Time(m_recT.PosY)}, {LocalYinCylinder2Time(m_recT.PosY + m_recT.Height)})");
+                m_beginMarker.ResetPos();
+                return true;
+            }
         }
         public void Destroy() => Destroy(gameObject);
         #endregion

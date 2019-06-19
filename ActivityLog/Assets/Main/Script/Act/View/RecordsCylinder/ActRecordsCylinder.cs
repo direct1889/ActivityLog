@@ -34,20 +34,23 @@ namespace Main.Act.View {
 
         #region mono
         private void Awake() { m_rect = GetComponent<RectTransform>(); }
-        private void Update() { m_blocks.Back()?.RefreshSize(); }
+        private void Update() { m_blocks.Back()?.Refresh(); }
         private void OnApplicationQuit() { CDB.Save(); }
         #endregion
 
         #region public
         public void RefreshSizeAll() {
-            foreach (var b in m_blocks) {
-                b.RefreshSize();
+            for (int i = m_blocks.Count - 1; i >= 0; --i) {
+                if (!m_blocks[i].Refresh()) {
+                    m_blocks[i].Destroy();
+                    m_blocks.RemoveAt(i);
+                }
             }
         }
         public void CreateBlock(IROActRecord act) {
             IActRecordBlock block = Instantiate(m_prefActBlock, transform).GetComponent<ActRecordBlock>();
             block.Initialize(act, this);
-            m_blocks.Back()?.RefreshSize();
+            m_blocks.Back()?.Refresh();
             m_blocks.Add(block);
             m_blocks.Back().OnWantToChangeBeginTime
                 // .Subscribe((act, newBegin) => m_mgr.ChangeBorder(act, newBegin));
