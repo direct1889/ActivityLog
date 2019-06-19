@@ -3545,17 +3545,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8104438502047991145, guid: 993635e03156e47408a2b49dc7f33a87,
         type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8104438502047991145, guid: 993635e03156e47408a2b49dc7f33a87,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8104438502047991145, guid: 993635e03156e47408a2b49dc7f33a87,
-        type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996062874033181009, guid: 993635e03156e47408a2b49dc7f33a87,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

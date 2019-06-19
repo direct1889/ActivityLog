@@ -299,10 +299,10 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Activity Name
+  m_text: "\u3053\u3093\u306B\u3061\u306F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a93e2c1a6f49f47b987b9d3fb2814f55, type: 2}
-  m_sharedMaterial: {fileID: -1363931160610093328, guid: a93e2c1a6f49f47b987b9d3fb2814f55,
+  m_fontAsset: {fileID: 11400000, guid: 7ff8673136adf47f8a3d80f2bf11c968, type: 2}
+  m_sharedMaterial: {fileID: 2940205516457604456, guid: 7ff8673136adf47f8a3d80f2bf11c968,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -369,14 +369,14 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 8996062874033181009}
-    characterCount: 13
+    characterCount: 5
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
-    materialCount: 2
+    materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
