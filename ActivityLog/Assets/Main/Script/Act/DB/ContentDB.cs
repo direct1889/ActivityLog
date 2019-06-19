@@ -89,6 +89,13 @@ namespace Main.Act.DB {
     : du.Cmp.IRxHashTree<IContentAdapter, IProject, string>, IActivityDB, IProjectDB
     {
         #region getter
+        /// <summary> Parent直下にContentが一つ以上あるか </summary>
+        /// <param name="parent">
+        /// nullを渡すとRoot直下について調べる
+        /// 存在しないProjectを指定するとfalse
+        /// </param>
+        bool HasChildren(IProject parent);
+
         /// <summary> Parent直下のContentをEnumerableで一括取得 </summary>
         /// <param name="parent"> nullを渡すとRoot直下の要素を返す </param>
         IEnumerable<IContentAdapter> OrderedValues(IProject parent);

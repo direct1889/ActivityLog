@@ -66,6 +66,9 @@ namespace Main.Act.DB {
 
 
         #region IContentDB
+        public bool HasChildren(IProject parent) {
+            return At(parent)?.HasChildren ?? false;
+        }
         public IEnumerable<IContentAdapter> OrderedValues(IProject parent) {
             return At(parent)?.Children?      // parentを親に持つ子供を
                 .Select(node => node.Value); // IContentAdapterで取得

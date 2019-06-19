@@ -89,7 +89,7 @@ namespace Main.Act.View {
         /// <summary> 再帰的にPanelを生成 </summary>
         private void CreatePanels(IContentAdapter content) {
             CreatePanel(content);
-            if (content.IsProj) {
+            if (content.IsProj && CDB.Content.HasChildren(content.Proj)) {
                 foreach (var child in CDB.Content.OrderedValues(content.Proj)) {
                     CreatePanels(child);
                 }
@@ -111,11 +111,15 @@ namespace Main.Act.View {
 
         private void RollUp(IProject proj) {
             // proj直下から走査開始
-            SetActive(CDB.Content.OrderedValues(proj), false);
+            if (CDB.Content.HasChildren(proj)) {
+                SetActive(CDB.Content.OrderedValues(proj), false);
+            }
         }
         private void DropDown(IProject proj) {
             // proj直下から走査開始
-            SetActive(CDB.Content.OrderedValues(proj), true);
+            if (CDB.Content.HasChildren(proj)) {
+                SetActive(CDB.Content.OrderedValues(proj), true);
+            }
         }
 
         private void SetActive(IEnumerable<IContentAdapter> contents, bool value) {
@@ -131,7 +135,7 @@ namespace Main.Act.View {
                 // 自分自身を設定
                 m_contentPanels[content.Key].SetActive(value);
                 // Projectだったらさらに子供にも設定
-                if (content.IsProj) {
+                if (content.IsProj && CDB.Content.HasChildren(content.Proj)) {
                     SetActive(CDB.Content.OrderedValues(content.Proj), value);
                 }
             }

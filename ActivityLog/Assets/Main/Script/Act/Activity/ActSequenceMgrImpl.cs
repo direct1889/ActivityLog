@@ -82,7 +82,7 @@ namespace Main.Act {
 
         #region getter
         public override string ToString() {
-            return $"{serialNumber}({beginTime})";
+            return $"SN:{serialNumber}({new MinuteOfDay(beginTime)}〜)";
         }
 
         /// <summary> CSVを読み込みIActRecordに変換 </summary>

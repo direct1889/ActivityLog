@@ -133,7 +133,7 @@ namespace Main.Act {
         #endregion
 
         #region getter
-        public override string ToString() => $"{Activity}{Context}";
+        public override string ToString() => (Activity?.ToString() ?? "Invalid") + Context;
         /// <value> CSVファイルのラベル行 </value>
         public static string CSVLabels => "SN,BeginTime";
         #endregion
