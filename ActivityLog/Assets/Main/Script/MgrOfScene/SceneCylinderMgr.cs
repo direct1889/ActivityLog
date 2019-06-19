@@ -42,11 +42,6 @@ namespace Main.STrack {
 
             DoActCanvas.SetActive(false);
             Acts.Load(YMD.Today);
-            string s = "// Borders";
-            for (int i = 0; i < Acts.Activities.Count; ++i) {
-                s += "\n" + Acts.Activities[i].Context.BeginTime;
-            }
-            Debug.LogAssertion(s);
         }
         private void Start() {
             // 日付が変わったら

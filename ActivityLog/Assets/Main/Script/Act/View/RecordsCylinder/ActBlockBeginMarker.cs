@@ -4,6 +4,7 @@ using TouchScript.Gestures.TransformGestures;
 using static UniRx.UnityEventExtensions;
 using System;
 using UniRx;
+using GestureState = TouchScript.Gestures.Gesture.GestureState;
 
 namespace Main.Act.View {
 
@@ -13,33 +14,42 @@ namespace Main.Act.View {
     }
 
     public class ActBlockBeginMarker : MonoBehaviour, IActBlockBeginMarker {
-        float localX;
+        #region const
+        static Vector3 DefaultLocalPos { get; } = new Vector3(250f, 0f, 0f);
+        #endregion
+
+        #region field
         RectTransform m_recT;
         TransformGesture m_gesture;
+        #endregion
 
-        static readonly Vector3 s_defaultLocalPos = new Vector3(250f, 0f, 0f);
-
-        public Transform Transform { get { return transform; } }
+        #region getter
         public IObservable<float> OnTransformComplete {
-        // public IObservable<TouchScript.Gestures.Gesture> OnTransformComplete {
             get => m_gesture.OnTransformComplete.AsObservable().Select(_ => transform.localPosition.y);
-            // get => m_gesture.OnTransformComplete.AsObservable();
         }
+        #endregion
 
+        #region public
         public void ResetPos() {
             if (!(m_recT is null)) {
-                m_recT.localPosition = s_defaultLocalPos;
+                if (m_gesture.State != GestureState.Changed) {
+                    m_recT.localPosition = DefaultLocalPos;
+                }
             }
         }
+        #endregion
 
+        #region mono
         private void Awake() {
             m_recT = GetComponent<RectTransform>();
-            localX = m_recT.localPosition.x;
             m_gesture = GetComponent<TransformGesture>();
         }
         private void Update() {
-            m_recT.localPosition = m_recT.localPosition.ReX(localX);
+            if (m_gesture.State == GestureState.Changed) {
+                m_recT.localPosition = m_recT.localPosition.ReX(DefaultLocalPos.x);
+            }
         }
+        #endregion
     }
 
 }
